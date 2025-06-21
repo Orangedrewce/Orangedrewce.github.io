@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Multi-Day Climbing Training Tracker</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
@@ -469,6 +469,15 @@
                 gap: 10px;
                 margin-bottom: 15px;
             }
+            
+            .date-selector label {
+                font-weight: 600;
+                color: #2c3e50;
+            }
+            
+            .date-selector button {
+                flex: 0 0 auto;
+            }
         }
         
         .date-selector input[type="date"] {
@@ -838,7 +847,12 @@
         class MultiDayTracker {
             constructor() {
                 this.trainingData = this.loadData();
-                this.currentDate = new Date().toISOString().split('T')[0];
+                // Get local date properly adjusted for timezone
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+                this.currentDate = `${year}-${month}-${day}`;
                 document.getElementById('currentDate').value = this.currentDate;
                 this.weeklyChart = null;
 
