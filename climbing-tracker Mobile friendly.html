@@ -174,27 +174,48 @@
             }
         }
         
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 10px;
             border: 2px solid #ecf0f1;
             border-radius: 8px;
             font-size: 14px;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
             background-color: white;
+            font-family: inherit;
             -webkit-appearance: none;
         }
         
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        
         @media (max-width: 768px) {
-            input, select {
+            input, select, textarea {
                 padding: 12px;
                 font-size: 16px; /* Prevents zoom on iOS */
             }
         }
         
-        input:focus, select:focus {
+        input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+            -webkit-appearance: checkbox; /* Re-enable default checkbox appearance */
         }
         
         .recommendation-panel {
@@ -441,18 +462,27 @@
             }
         }
         
-        .log-recommendation {
+        .log-recommendation, .log-notes {
             margin-top: 10px;
             padding: 10px;
-            background: #e8f4f8;
             border-radius: 5px;
-            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .log-recommendation {
+             background: #e8f4f8;
+             font-weight: bold;
+        }
+
+        .log-notes {
+            background: #fdf8e2;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
         
         @media (max-width: 768px) {
-            .log-recommendation {
+            .log-recommendation, .log-notes {
                 padding: 8px;
-                font-size: 14px;
             }
         }
         
@@ -695,15 +725,15 @@
                 <div class="input-section">
                     <h3>Recovery Metrics</h3>
                     <div class="input-group">
-                        <label>Sleep Quality (1-10)</label>
-                        <input type="number" id="sleepQuality" min="1" max="10" value="" step="0.5" placeholder="1-10" oninput="validateNumericInput(this, 1, 10)" onkeypress="return isNumberKey(event)">
+                        <label for="sleepQuality">Sleep Quality (1-10)</label>
+                        <input type="number" id="sleepQuality" min="1" max="10" step="0.5" placeholder="1-10" oninput="validateNumericInput(this, 1, 10)" onkeypress="return isNumberKey(event)">
                     </div>
                     <div class="input-group">
-                        <label>Sleep Duration (hours)</label>
-                        <input type="number" id="sleepDuration" min="3" max="12" value="" step="0.5" placeholder="3-12" oninput="validateNumericInput(this, 3, 12)" onkeypress="return isNumberKey(event)">
+                        <label for="sleepDuration">Sleep Duration (hours)</label>
+                        <input type="number" id="sleepDuration" min="3" max="12" step="0.5" placeholder="3-12" oninput="validateNumericInput(this, 3, 12)" onkeypress="return isNumberKey(event)">
                     </div>
                     <div class="input-group">
-                        <label>Mood State</label>
+                        <label for="mood">Mood State</label>
                         <select id="mood">
                             <option value="">Select mood...</option>
                             <option value="1">Psyched</option>
@@ -723,11 +753,11 @@
                 <div class="input-section">
                     <h3>Physical State</h3>
                     <div class="input-group">
-                        <label>Stress Level (1-10)</label>
-                        <input type="number" id="stress" min="1" max="10" value="" step="1" placeholder="1-10" oninput="validateNumericInput(this, 1, 10)" onkeypress="return isNumberKey(event)">
+                        <label for="stress">Stress Level (1-10)</label>
+                        <input type="number" id="stress" min="1" max="10" step="1" placeholder="1-10" oninput="validateNumericInput(this, 1, 10)" onkeypress="return isNumberKey(event)">
                     </div>
                     <div class="input-group">
-                        <label>Muscle Soreness (DOMS)</label>
+                        <label for="doms">Muscle Soreness (DOMS)</label>
                         <select id="doms">
                             <option value="">Select condition...</option>
                             <option value="1">Absent</option>
@@ -740,7 +770,7 @@
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>Tendon Condition</label>
+                        <label for="tendons">Tendon Condition</label>
                         <select id="tendons">
                             <option value="">Select condition...</option>
                             <option value="1">Absent</option>
@@ -752,7 +782,7 @@
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>Skin Condition</label>
+                        <label for="skin">Skin Condition</label>
                         <select id="skin">
                             <option value="">Select condition...</option>
                             <option value="1">Perfect</option>
@@ -764,8 +794,8 @@
                             <option value="7">Edge Tears</option>
                         </select>
                     </div>
-                    <div class="input-group">
-                        <label>Pre-Training Meal</label>
+                     <div class="input-group">
+                        <label for="mealBeforeTraining">Pre-Training Meal</label>
                         <select id="mealBeforeTraining">
                             <option value="">Select...</option>
                             <option value="yes">Yes</option>
@@ -777,22 +807,41 @@
                 <div class="input-section">
                     <h3>Training History</h3>
                     <div class="input-group">
-                        <label>Days Since Last Session</label>
-                        <input type="number" id="daysSince" min="0" max="14" value="" placeholder="0-14" step="1" oninput="validateNumericInput(this, 0, 14)" onkeypress="return isWholeNumberKey(event)">
+                        <label for="daysSince">Days Since Last Session</label>
+                        <input type="number" id="daysSince" min="0" max="14" step="1" placeholder="0-14" oninput="validateNumericInput(this, 0, 14)" onkeypress="return isWholeNumberKey(event)">
                     </div>
                     <div class="input-group">
-                        <label>Last Session RPE (1-10)</label>
-                        <input type="number" id="lastRPE" min="1" max="10" value="" step="0.5" placeholder="1-10" oninput="validateNumericInput(this, 1, 10)" onkeypress="return isNumberKey(event)">
+                        <label for="lastRPE">Last Session RPE (1-10)</label>
+                        <input type="number" id="lastRPE" min="1" max="10" step="0.5" placeholder="1-10" oninput="validateNumericInput(this, 1, 10)" onkeypress="return isNumberKey(event)">
                     </div>
                     <div class="input-group">
-                        <label>Climbing Type</label>
-                        <select id="climbingType">
-                            <option value="">Select type...</option>
-                            <option value="Bouldering">Bouldering</option>
-                            <option value="Top Rope">Top Rope</option>
-                            <option value="Lead">Lead</option>
-                            <option value="No Training">No Training</option>
-                        </select>
+                        <label>Climbing Type (select all that apply)</label>
+                        <div class="checkbox-group" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                            <label for="climbingBouldering">
+                                <input type="checkbox" id="climbingBouldering" value="Bouldering">
+                                Bouldering
+                            </label>
+                            <label for="climbingTopRope">
+                                <input type="checkbox" id="climbingTopRope" value="Top Rope">
+                                Top Rope
+                            </label>
+                            <label for="climbingLead">
+                                <input type="checkbox" id="climbingLead" value="Lead">
+                                Lead
+                            </label>
+                            <label for="climbingNone">
+                                <input type="checkbox" id="climbingNone" value="No Training">
+                                No Training
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-section" style="grid-column: 1 / -1;">
+                    <h3>Session Notes</h3>
+                    <div class="input-group">
+                        <label for="sessionNotes">Comments (optional)</label>
+                        <textarea id="sessionNotes" rows="3" placeholder=></textarea>
                     </div>
                 </div>
             </div>
@@ -830,7 +879,6 @@
         </div>
     </div>
 
-    <!-- Custom Modal HTML -->
     <div id="customModal" class="modal-overlay">
         <div class="modal-content">
             <h3 id="modalTitle">Confirmation</h3>
@@ -844,23 +892,53 @@
 
 
     <script>
+        // --- INPUT VALIDATION HELPERS ---
+        function validateNumericInput(input, min, max) {
+            let value = parseFloat(input.value);
+            if (isNaN(value)) return;
+            if (value > max) input.value = max;
+            if (value < min) input.value = min;
+        }
+
+        function isNumberKey(evt) {
+            const charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
+                return false;
+            }
+            if (charCode === 46 && evt.target.value.indexOf('.') !== -1) {
+                return false;
+            }
+            return true;
+        }
+
+        function isWholeNumberKey(evt) {
+            const charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+
         class MultiDayTracker {
             constructor() {
                 this.trainingData = this.loadData();
-                // Get local date properly adjusted for timezone
+                this.weeklyChart = null;
+                this.modalCallback = null;
+                
+                this.setInitialDate();
+                this.setupEventListeners();
+                this.loadDataForDate();
+            }
+            
+            setInitialDate() {
                 const now = new Date();
                 const year = now.getFullYear();
                 const month = String(now.getMonth() + 1).padStart(2, '0');
                 const day = String(now.getDate()).padStart(2, '0');
                 this.currentDate = `${year}-${month}-${day}`;
                 document.getElementById('currentDate').value = this.currentDate;
-                this.weeklyChart = null;
-
-                // Initialize UI
-                this.updateHistory();
-                this.loadDataForDate();
             }
-            
+
             // --- SCORING ALGORITHMS ---
             recoveryDecay(days, halfLife = 2.5) { return 1 - Math.exp(-days * Math.log(2) / halfLife); }
             stressImpact(stress) { return 10 / (1 + Math.exp(-0.8 * (stress - 5))); }
@@ -880,7 +958,7 @@
                 const moodScore = Math.pow((11 - mood) / 10, 1.5);
                 const skinScore = skin <= 3 ? 1 : skin <= 5 ? 0.7 : skin <= 7 ? 0.4 : 0.1;
                 
-                const mealFactor = mealBeforeTraining === 'yes' ? 1.05 : 0.95; // 5% boost/penalty for meal
+                const mealFactor = mealBeforeTraining === 'yes' ? 1.05 : 0.95;
                 
                 const baseReadiness = (
                     sleepScore * 0.25 + recoveryScore * 0.20 + stressScore * 0.15 + 
@@ -904,15 +982,15 @@
                 const riskFactors = this.assessRiskFactors(inputs);
                 const trainingVolume = this.calculateOptimalVolume(readinessScore, riskFactors);
                 
-                if (readinessScore >= 8.5) return { type: "HIGH INTENSITY", description: "Perfect conditions for limit bouldering or project attempts", volume: trainingVolume.high, risk: "LOW", color: "#27ae60" };
-                if (readinessScore >= 7) return { type: "MODERATE INTENSITY",  description: "Good for technical climbing and strength training", volume: trainingVolume.moderate, risk: "LOW-MODERATE", color: "#f39c12" };
-                if (readinessScore >= 5) return { type: "LIGHT TRAINING", description: "Focus on technique, mobility, or easy volume", volume: trainingVolume.light, risk: "MODERATE", color: "#e67e22" };
-                if (readinessScore >= 3) return { type: "RECOVERY FOCUS", description: "Active recovery, stretching, or very light movement", volume: trainingVolume.recovery, risk: "MODERATE-HIGH", color: "#e74c3c" };
-                return { type: "REST DAY", description: "Complete rest recommended - address limiting factors", volume: "0 hours", risk: "HIGH", color: "#c0392b" };
+                if (readinessScore >= 8.5) return { type: "HIGH INTENSITY", description: "Perfect conditions for limit bouldering or project attempts.", volume: trainingVolume.high, risk: "Low", color: "#27ae60" };
+                if (readinessScore >= 7) return { type: "MODERATE INTENSITY", description: "Good for technical climbing and strength training.", volume: trainingVolume.moderate, risk: "Low-Moderate", color: "#f39c12" };
+                if (readinessScore >= 5) return { type: "LIGHT TRAINING", description: "Focus on technique, mobility, or easy volume.", volume: trainingVolume.light, risk: "Moderate", color: "#e67e22" };
+                if (readinessScore >= 3) return { type: "RECOVERY FOCUS", description: "Active recovery, stretching, or very light movement.", volume: trainingVolume.recovery, risk: "Moderate-High", color: "#e74c3c" };
+                return { type: "REST DAY", description: "Complete rest recommended - address limiting factors.", volume: "0 hours", risk: "High", color: "#c0392b" };
             }
             
             assessRiskFactors(inputs) {
-                 const risks = [];
+                const risks = [];
                 if (inputs.tendons > 4) risks.push("Tendon strain risk");
                 if (inputs.doms > 5) risks.push("Muscle overload risk");
                 if (inputs.stress > 7) risks.push("Psychological stress");
@@ -923,330 +1001,325 @@
             }
             
             calculateOptimalVolume(readiness, risks) {
-                 const baseVolumes = { high: "2-3 hours", moderate: "1.5-2 hours", light: "1-1.5 hours",  recovery: "30-60 minutes" };
+                const baseVolumes = { high: "2-3 hours", moderate: "1.5-2 hours", light: "1-1.5 hours", recovery: "30-60 minutes" };
                 if (risks.length > 2) return { high: "1.5-2 hours", moderate: "1-1.5 hours", light: "45-90 minutes", recovery: "20-45 minutes" };
                 return baseVolumes;
             }
 
             // --- DATA & UI ---
-            saveData() { localStorage.setItem('climbingData', JSON.stringify(this.trainingData)); }
-            loadData() { return JSON.parse(localStorage.getItem('climbingData') || '{}'); }
-            
-            saveEntry() {
-                const date = document.getElementById('currentDate').value;
-                const inputs = this.getCurrentInputs();
-                const readiness = this.calculateAdvancedReadiness(inputs);
-                if (readiness === null) {
-                    this.showModal("Incomplete Data", "Please fill out all fields before saving.");
-                    return;
-                }
-                const recommendation = this.generateRecommendation(readiness, inputs);
-                
-                this.trainingData[date] = { ...inputs, readiness, recommendation: recommendation.type, timestamp: new Date().toISOString() };
-                this.saveData();
-                this.updateHistory();
-                this.showModal('Success!', 'Entry saved successfully!');
-            }
+            setupEventListeners() {
+                document.getElementById('modalConfirmBtn').addEventListener('click', () => this.confirmModal());
+                document.getElementById('modalCancelBtn').addEventListener('click', () => this.hideModal());
 
-            deleteEntry(date) {
-                this.showModal('Delete Entry?', `Are you sure you want to delete the entry for ${new Date(date + 'T12:00:00').toLocaleDateString()}?`, () => {
-                    delete this.trainingData[date];
-                    this.saveData();
-                    this.updateHistory();
-                    this.showModal('Deleted!', 'The entry has been removed.');
+                const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead'];
+                const noneCheckbox = document.getElementById('climbingNone');
+
+                climbingCheckboxes.forEach(id => {
+                    document.getElementById(id).addEventListener('change', (e) => {
+                        if (e.target.checked) {
+                            noneCheckbox.checked = false;
+                        }
+                    });
+                });
+
+                noneCheckbox.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        climbingCheckboxes.forEach(id => {
+                            document.getElementById(id).checked = false;
+                        });
+                    }
                 });
             }
 
-            confirmClearAllData() {
-                this.showModal('Delete All Data?', 'This will permanently delete all entries. This action cannot be undone.', () => {
-                    this.trainingData = {};
-                    this.saveData();
-                    this.updateHistory();
-                    this.showModal('Success!', 'All data has been cleared.');
+            getInputs() {
+                const ids = ['sleepQuality', 'sleepDuration', 'mood', 'stress', 'doms', 'tendons', 'skin', 'daysSince', 'lastRPE', 'mealBeforeTraining', 'sessionNotes'];
+                const inputs = {};
+                ids.forEach(id => {
+                    const el = document.getElementById(id);
+                    inputs[id] = el.type === 'number' ? parseFloat(el.value) : el.value;
                 });
-            }
 
-            exportToCSV() {
-                const headers = ['date', 'readiness', 'recommendation', 'sleepQuality', 'sleepDuration', 'mood', 'stress', 'doms', 'tendons', 'daysSince', 'lastRPE', 'skin', 'climbingType', 'mealBeforeTraining'];
-                const sortedData = Object.keys(this.trainingData).sort().map(date => ({ date, ...this.trainingData[date] }));
+                const climbingTypes = [];
+                const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingNone'];
+                climbingCheckboxes.forEach(id => {
+                    const checkbox = document.getElementById(id);
+                    if (checkbox.checked) {
+                        climbingTypes.push(checkbox.value);
+                    }
+                });
+                inputs.climbingType = climbingTypes.join(', ');
 
-                let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n";
-                csvContent += sortedData.map(entry => headers.map(header => `"${entry[header] || ''}"`).join(",")).join("\n");
-
-                const link = document.createElement("a");
-                link.setAttribute("href", encodeURI(csvContent));
-                link.setAttribute("download", "climbing_data.csv");
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }
-            
-            getCurrentInputs() {
-                return {
-                    sleepQuality: parseFloat(document.getElementById('sleepQuality').value),
-                    sleepDuration: parseFloat(document.getElementById('sleepDuration').value),
-                    mood: parseInt(document.getElementById('mood').value),
-                    stress: parseInt(document.getElementById('stress').value),
-                    doms: parseInt(document.getElementById('doms').value),
-                    tendons: parseInt(document.getElementById('tendons').value),
-                    daysSince: parseInt(document.getElementById('daysSince').value),
-                    lastRPE: parseFloat(document.getElementById('lastRPE').value),
-                    skin: parseFloat(document.getElementById('skin').value),
-                    climbingType: document.getElementById('climbingType').value,
-                    mealBeforeTraining: document.getElementById('mealBeforeTraining').value
-                };
-            }
-            
-            loadDataForDate() {
-                const date = document.getElementById('currentDate').value;
-                const data = this.trainingData[date];
-                const fields = ['sleepQuality', 'sleepDuration', 'mood', 'stress', 'doms', 'tendons', 'daysSince', 'lastRPE', 'skin', 'climbingType', 'mealBeforeTraining'];
-                if (data) {
-                    fields.forEach(field => document.getElementById(field).value = data[field] || '');
-                } else {
-                    fields.forEach(field => document.getElementById(field).value = '');
-                }
-                this.calculateRecommendation();
-            }
-            
-            clearCurrentEntry() {
-                const fields = ['sleepQuality', 'sleepDuration', 'mood', 'stress', 'doms', 'tendons', 'daysSince', 'lastRPE', 'skin', 'climbingType', 'mealBeforeTraining'];
-                fields.forEach(field => document.getElementById(field).value = '');
-                this.calculateRecommendation();
-                this.showModal('Cleared!', 'Current entry data has been cleared.');
-            }
-            
-            updateHistory() {
-                const historyList = document.getElementById('historyList');
-                const sortedDates = Object.keys(this.trainingData).sort((a, b) => new Date(b) - new Date(a));
-                
-                if (sortedDates.length === 0) {
-                    historyList.innerHTML = '<p style="text-align: center; color: #7f8c8d; margin-top: 50px;">No training entries yet!</p>';
-                    return;
-                }
-                
-                historyList.innerHTML = sortedDates.map(date => {
-                    const entry = this.trainingData[date];
-                    const displayDate = new Date(date + 'T12:00:00').toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
-                    return `<div class="log-entry">
-                                <div class="log-date">
-                                    <span>${displayDate}</span>
-                                    <button class="delete-btn" onclick="app.deleteEntry('${date}')">✕ Delete</button>
-                                </div>
-                                <div class="log-metrics">
-                                    <div class="log-metric">Sleep: ${entry.sleepQuality}/10 (${entry.sleepDuration}h)</div>
-                                    <div class="log-metric">Mood: ${this.getMoodText(entry.mood)}</div>
-                                    <div class="log-metric">Stress: ${entry.stress}/10</div>
-                                    <div class="log-metric">DOMS: ${entry.doms}/10</div>
-                                    <div class="log-metric">Tendons: ${entry.tendons}/10</div>
-                                    <div class="log-metric">Skin: ${this.getSkinText(entry.skin)}</div>
-                                    <div class="log-metric">Meal: ${entry.mealBeforeTraining === 'yes' ? 'Yes' : entry.mealBeforeTraining === 'no' ? 'No' : 'N/A'}</div>
-                                    <div class="log-metric">Readiness: ${entry.readiness.toFixed(1)}/10</div>
-                                    <div class="log-metric">Type: ${entry.climbingType || 'N/A'}</div>
-                                </div>
-                                <div class="log-recommendation">${entry.recommendation}</div>
-                            </div>`;
-                }).join('');
+                return inputs;
             }
 
             calculateRecommendation() {
-                const inputs = this.getCurrentInputs();
-                const readiness = this.calculateAdvancedReadiness(inputs);
+                const inputs = this.getInputs();
+                const readinessScore = this.calculateAdvancedReadiness(inputs);
+                const panel = document.getElementById('recommendationPanel');
                 const titleEl = document.getElementById('recommendationTitle');
                 const textEl = document.getElementById('recommendationText');
-                const gridEl = document.getElementById('metricsGrid');
+                const metricsGrid = document.getElementById('metricsGrid');
 
-                if (readiness === null) {
-                    titleEl.textContent = "Awaiting Input";
-                    textEl.textContent = "Please fill out all metrics to generate a recommendation.";
-                    gridEl.innerHTML = '';
+                if (readinessScore === null) {
+                    titleEl.innerText = "Incomplete Data";
+                    textEl.innerText = "Please fill in all metric fields to generate a recommendation.";
+                    metricsGrid.innerHTML = '';
+                    panel.style.background = `linear-gradient(135deg, #bdc3c7 0%, #2c3e50 100%)`;
                     return;
                 }
 
-                const rec = this.generateRecommendation(readiness, inputs);
-                const riskFactors = this.assessRiskFactors(inputs);
-
-                titleEl.textContent = `Recommendation: ${rec.type}`;
-                textEl.textContent = rec.description;
-                
-                gridEl.innerHTML = `
-                    <div class="metric-card" style="border-left: 4px solid ${rec.color};"><div class="metric-value">${readiness.toFixed(1)}</div><span>Readiness Score</span></div>
-                    <div class="metric-card"><div class="metric-value">${rec.volume}</div><span>Suggested Volume</span></div>
-                    <div class="metric-card"><div class="metric-value">${rec.risk}</div><span>Injury Risk</span></div>
-                    ${riskFactors.length > 0 ? `<div class="metric-card" style="grid-column: 1 / -1;"><div class="metric-value" style="font-size: 1.2em; line-height: 1.4;">${riskFactors.join('<br>')}</div><span>Key Risk Factors</span></div>` : ''}
+                const recommendation = this.generateRecommendation(readinessScore, inputs);
+                panel.style.background = recommendation.color;
+                titleEl.innerText = `Recommendation: ${recommendation.type}`;
+                textEl.innerText = recommendation.description;
+                metricsGrid.innerHTML = `
+                    <div class="metric-card">
+                        <div class="metric-value">${readinessScore.toFixed(1)}</div>
+                        <div>Readiness Score</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${recommendation.volume}</div>
+                        <div>Optimal Volume</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${recommendation.risk}</div>
+                        <div>Injury Risk</div>
+                    </div>
                 `;
             }
 
-            // --- TABS & MODAL ---
+            saveData() { localStorage.setItem('climbingTrackerData', JSON.stringify(this.trainingData)); }
+            loadData() { return JSON.parse(localStorage.getItem('climbingTrackerData') || '{}'); }
+            
+            saveEntry() {
+                const date = document.getElementById('currentDate').value;
+                if (!date) {
+                    alert('Please select a date.');
+                    return;
+                }
+                const inputs = this.getInputs();
+                const readinessScore = this.calculateAdvancedReadiness(inputs);
+
+                if (readinessScore === null) {
+                    alert('Please fill all required fields before saving.');
+                    return;
+                }
+                 if (!inputs.climbingType) {
+                    alert('Please select at least one Climbing Type.');
+                    return;
+                }
+
+                const recommendation = this.generateRecommendation(readinessScore, inputs);
+                this.trainingData[date] = { inputs, readinessScore, recommendation };
+                this.saveData();
+                alert(`Entry for ${date} saved successfully!`);
+                this.updateHistory();
+                this.updateAnalytics();
+            }
+
+            loadDataForDate() {
+                this.currentDate = document.getElementById('currentDate').value;
+                const data = this.trainingData[this.currentDate];
+                if (data) {
+                    Object.keys(data.inputs).forEach(id => {
+                        if (id === 'climbingType') return;
+                        const el = document.getElementById(id);
+                        if(el) el.value = data.inputs[id];
+                    });
+                    
+                    const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingNone'];
+                    climbingCheckboxes.forEach(id => document.getElementById(id).checked = false);
+
+                    if(data.inputs.climbingType){
+                        const savedTypes = data.inputs.climbingType.split(', ');
+                        savedTypes.forEach(type => {
+                           const checkbox = document.querySelector(`input[value="${type}"]`);
+                           if(checkbox) checkbox.checked = true;
+                        });
+                    }
+
+                } else {
+                    this.clearCurrentEntry(false);
+                }
+                this.calculateRecommendation();
+            }
+
+            clearCurrentEntry(clearDate = true) {
+                const ids = ['sleepQuality', 'sleepDuration', 'mood', 'stress', 'doms', 'tendons', 'skin', 'daysSince', 'lastRPE', 'mealBeforeTraining', 'sessionNotes'];
+                ids.forEach(id => { document.getElementById(id).value = ''; });
+                
+                const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingNone'];
+                climbingCheckboxes.forEach(id => document.getElementById(id).checked = false);
+
+                if (clearDate) {
+                    this.setInitialDate();
+                }
+                this.calculateRecommendation();
+            }
+
             switchTab(tabName) {
                 document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                 document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
                 document.getElementById(tabName).classList.add('active');
-                document.querySelector(`.tab-button[onclick*="'${tabName}'"]`).classList.add('active');
-
-                if (tabName === 'analytics') this.createWeeklyTrendChart();
+                document.querySelector(`.tab-button[onclick="app.switchTab('${tabName}')"]`).classList.add('active');
                 if (tabName === 'history') this.updateHistory();
+                if (tabName === 'analytics') this.updateAnalytics();
             }
 
-            showModal(title, message, onConfirm) {
-                const modal = document.getElementById('customModal');
-                document.getElementById('modalTitle').textContent = title;
-                document.getElementById('modalMessage').textContent = message;
-                modal.classList.add('active');
-
-                const confirmBtn = document.getElementById('modalConfirmBtn');
-                const cancelBtn = document.getElementById('modalCancelBtn');
-
-                if (onConfirm) {
-                    confirmBtn.style.display = 'inline-block';
-                    cancelBtn.textContent = 'Cancel';
-                } else { // It's just an info alert
-                    confirmBtn.style.display = 'none';
-                    cancelBtn.textContent = 'OK';
+            updateHistory() {
+                const historyList = document.getElementById('historyList');
+                historyList.innerHTML = '';
+                const sortedDates = Object.keys(this.trainingData).sort((a,b) => new Date(b) - new Date(a));
+                if (sortedDates.length === 0) {
+                    historyList.innerHTML = '<p style="text-align:center; color:#7f8c8d;">No training history found.</p>';
+                    return;
                 }
-
-                // Clone and replace buttons to remove old event listeners
-                const newConfirmBtn = confirmBtn.cloneNode(true);
-                confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
-
-                const newCancelBtn = cancelBtn.cloneNode(true);
-                cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
-
-                const close = () => modal.classList.remove('active');
-                
-                newConfirmBtn.addEventListener('click', () => {
-                    close();
-                    if (onConfirm) onConfirm();
+                sortedDates.forEach(date => {
+                    const entry = this.trainingData[date];
+                    const notesHTML = entry.inputs.sessionNotes ? `<div class="log-notes"><strong>Notes:</strong> ${entry.inputs.sessionNotes}</div>` : '';
+                    const logHTML = `
+                        <div class="log-entry" style="border-left-color: ${entry.recommendation.color};">
+                            <div class="log-date">
+                                <span>${new Date(date + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                                <button class="delete-btn" onclick="app.deleteEntry('${date}')">Delete</button>
+                            </div>
+                            <div class="log-metrics">
+                                <div class="log-metric"><strong>Readiness:</strong> ${entry.readinessScore.toFixed(1)}</div>
+                                <div class="log-metric"><strong>Sleep:</strong> ${entry.inputs.sleepQuality}/10</div>
+                                <div class="log-metric"><strong>Stress:</strong> ${entry.inputs.stress}/10</div>
+                                <div class="log-metric"><strong>DOMS:</strong> ${entry.inputs.doms}/7</div>
+                                <div class="log-metric"><strong>Tendons:</strong> ${entry.inputs.tendons}/6</div>
+                                <div class="log-metric"><strong>Climbing:</strong> ${entry.inputs.climbingType || 'N/A'}</div>
+                            </div>
+                            <div class="log-recommendation" style="color: ${entry.recommendation.color};">
+                                <strong>Recommendation:</strong> ${entry.recommendation.type} - ${entry.recommendation.description}
+                            </div>
+                            ${notesHTML}
+                        </div>
+                    `;
+                    historyList.innerHTML += logHTML;
                 });
+            }
 
-                newCancelBtn.addEventListener('click', close);
-            }
-            
-            getMoodText(moodValue) {
-                const moods = { 1: "Psyched", 2: "Optimistic", 3: "Focused", 4: "Ready", 5: "Composed", 6: "Neutral", 7: "Apathetic", 8: "Frustrated", 9: "Lethargic", 10: "Exhausted" };
-                return moods[moodValue] || "Unknown";
-            }
-            
-            getSkinText(skinValue) {
-                const skinConditions = { 1: "Perfect", 1.5: "Robust", 3: "Slightly Worn", 4: "Tender Spots", 5: "Sensitive", 6: "Raw/Burning", 7: "Edge Tears" };
-                return skinConditions[skinValue] || "Unknown";
-            }
-            
-            createWeeklyTrendChart() {
-                const ctx = document.getElementById('weeklyTrendChart').getContext('2d');
-                const canvas = document.getElementById('weeklyTrendChart');
+            updateAnalytics() {
+                const sortedData = Object.entries(this.trainingData).sort(([dateA], [dateB]) => new Date(dateA) - new Date(dateB));
                 const noDataMsg = document.getElementById('noDataMessage');
+                const chartCanvas = document.getElementById('weeklyTrendChart');
+
+                if (sortedData.length < 1) {
+                    noDataMsg.style.display = 'flex';
+                    chartCanvas.style.display = 'none';
+                    return;
+                }
                 
+                noDataMsg.style.display = 'none';
+                chartCanvas.style.display = 'block';
+
+                const labels = sortedData.map(([date]) => new Date(date + 'T00:00:00').toLocaleDateString(undefined, {month: 'short', day: 'numeric'}));
+                const readinessScores = sortedData.map(([, data]) => data.readinessScore);
+                const sleepScores = sortedData.map(([, data]) => data.inputs.sleepQuality);
+                const stressScores = sortedData.map(([, data]) => data.inputs.stress);
+
                 if (this.weeklyChart) {
                     this.weeklyChart.destroy();
                 }
 
-                const sortedDates = Object.keys(this.trainingData).sort((a, b) => new Date(a) - new Date(b)).slice(-7);
-                
-                if (sortedDates.length === 0) {
-                    // Hide canvas and show message
-                    canvas.style.display = 'none';
-                    noDataMsg.style.display = 'flex';
-                    return;
-                }
-                
-                // Show canvas and hide message
-                canvas.style.display = 'block';
-                noDataMsg.style.display = 'none';
-
-                const labels = sortedDates.map(date => new Date(date + 'T12:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' }));
-                const readinessData = sortedDates.map(date => this.trainingData[date].readiness);
-                const stressData = sortedDates.map(date => this.trainingData[date].stress);
-                const sleepData = sortedDates.map(date => this.trainingData[date].sleepQuality);
-
+                const ctx = chartCanvas.getContext('2d');
                 this.weeklyChart = new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: labels,
-                        datasets: [{
-                            label: 'Readiness Score',
-                            data: readinessData,
-                            borderColor: '#667eea',
-                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                            borderWidth: 3,
-                            tension: 0.4,
-                            fill: true
-                        }, {
-                            label: 'Stress Level',
-                            data: stressData,
-                            borderColor: '#e74c3c',
-                            backgroundColor: 'rgba(231, 76, 60, 0.1)',
-                            borderWidth: 2,
-                            tension: 0.4,
-                            fill: true
-                        }, {
-                            label: 'Sleep Quality',
-                            data: sleepData,
-                            borderColor: '#2ecc71',
-                            backgroundColor: 'rgba(46, 204, 113, 0.1)',
-                            borderWidth: 2,
-                            tension: 0.4,
-                            fill: true
-                        }]
+                        datasets: [
+                            { label: 'Readiness Score', data: readinessScores, borderColor: '#764ba2', tension: 0.1, yAxisID: 'y', borderWidth: 2, pointBackgroundColor: '#764ba2' },
+                            { label: 'Sleep Quality', data: sleepScores, borderColor: '#3498db', tension: 0.1, yAxisID: 'y', hidden: true },
+                            { label: 'Stress Level', data: stressScores, borderColor: '#e74c3c', tension: 0.1, yAxisID: 'y', hidden: true }
+                        ]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: 'Last 7 Days Trend',
-                                font: { size: 18, family: "'Segoe UI'" },
-                                color: '#2c3e50',
-                                padding: { bottom: 20 }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 10,
-                                grid: { color: '#ecf0f1' }
-                            },
-                            x: {
-                                grid: { display: false }
-                            }
-                        }
+                        scales: { y: { beginAtZero: true, max: 10 } },
+                        plugins: { title: { display: true, text: 'Training Readiness Trends', font: { size: 16 } } }
                     }
                 });
             }
+
+            deleteEntry(date) {
+                this.showModal(`Are you sure you want to delete the entry for ${date}?`, () => {
+                    delete this.trainingData[date];
+                    this.saveData();
+                    this.updateHistory();
+                    this.updateAnalytics();
+                    this.hideModal();
+                });
+            }
+
+            confirmClearAllData() {
+                this.showModal('This will permanently delete all data. Are you sure?', () => {
+                    this.trainingData = {};
+                    this.saveData();
+                    this.updateHistory();
+                    this.updateAnalytics();
+                    this.hideModal();
+                });
+            }
+
+            exportToCSV() {
+                const data = this.trainingData;
+                if (Object.keys(data).length === 0) {
+                    alert("No data to export.");
+                    return;
+                }
+                const headers = ['Date', 'ReadinessScore', 'SleepQuality', 'SleepDuration', 'Mood', 'Stress', 'DOMS', 'Tendons', 'Skin', 'DaysSinceLast', 'LastRPE', 'MealBefore', 'ClimbingType', 'SessionNotes', 'RecType', 'RecDesc'];
+                let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n";
+                const sortedDates = Object.keys(data).sort((a,b) => new Date(a) - new Date(b));
+                
+                sortedDates.forEach(date => {
+                    const entry = data[date];
+                    const notes = entry.inputs.sessionNotes ? `"${entry.inputs.sessionNotes.replace(/"/g, '""')}"` : '';
+                    const row = [
+                        date,
+                        entry.readinessScore.toFixed(2),
+                        entry.inputs.sleepQuality, entry.inputs.sleepDuration, entry.inputs.mood, entry.inputs.stress,
+                        entry.inputs.doms, entry.inputs.tendons, entry.inputs.skin, entry.inputs.daysSince, entry.inputs.lastRPE,
+                        entry.inputs.mealBeforeTraining, `"${entry.inputs.climbingType}"`, notes,
+                        entry.recommendation.type, `"${entry.recommendation.description}"`
+                    ].join(",");
+                    csvContent += row + "\n";
+                });
+
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "climbing_training_log.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+
+            // --- MODAL ---
+            showModal(message, callback) {
+                document.getElementById('modalMessage').innerText = message;
+                this.modalCallback = callback;
+                document.getElementById('customModal').classList.add('active');
+            }
+
+            hideModal() {
+                document.getElementById('customModal').classList.remove('active');
+                this.modalCallback = null;
+            }
+
+            confirmModal() {
+                if (this.modalCallback) {
+                    this.modalCallback();
+                }
+            }
         }
 
-        // --- GLOBAL HELPERS & INITIALIZATION ---
-        let app;
+        // --- INITIALIZE APP ---
         document.addEventListener('DOMContentLoaded', () => {
-            app = new MultiDayTracker();
-            // Assign methods to global scope for inline event handlers
-            window.app = app; 
+            window.app = new MultiDayTracker(); 
         });
-
-        // Input validation helper functions
-        function validateNumericInput(el, min, max) {
-            if (parseFloat(el.value) > max) el.value = max;
-            // Do not set to min if below, allows user to clear the field.
-        };
-
-        function isNumberKey(evt) {
-            const charCode = (evt.which) ? evt.which : evt.keyCode;
-            // Allow backspace, decimal point, and numbers
-            if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
-                return false;
-            }
-            return true;
-        };
-
-        function isWholeNumberKey(evt) {
-            const charCode = (evt.which) ? evt.which : evt.keyCode;
-            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-                return false;
-            }
-            return true;
-        };
-
     </script>
 </body>
 </html>
