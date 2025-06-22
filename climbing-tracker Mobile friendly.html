@@ -1224,7 +1224,7 @@
             window.app = app; 
         });
 
-         // These functions can now be removed from the global scope as they are handled by the app instance.
+        // Input validation helper functions
         function validateNumericInput(el, min, max) {
             if (parseFloat(el.value) > max) el.value = max;
             // Do not set to min if below, allows user to clear the field.
