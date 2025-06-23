@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ClimbSmart - Training Readiness Tracker</title>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
+        :root {
+            --slider-track-bg: #ecf0f1;
+            --slider-thumb-bg: #764ba2;
+            --slider-fill-color: #667eea;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -206,6 +212,10 @@
             font-family: inherit;
             -webkit-appearance: none;
         }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
         
         textarea {
             resize: vertical;
@@ -224,6 +234,71 @@
             outline: none;
             border-color: #3498db;
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slider-container input[type="number"] {
+            width: 70px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: var(--slider-track-bg);
+            border-radius: 5px;
+            outline: none;
+            cursor: pointer;
+            position: relative; /* Context for z-index */
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--slider-thumb-bg);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            margin-top: -6px; /* center thumb on track */
+            transition: transform 0.2s ease;
+            position: relative;
+            z-index: 2; /* Ensure thumb is above the track background */
+        }
+
+        input[type="range"]:active::-webkit-slider-thumb {
+            transform: scale(1.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--slider-thumb-bg);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+        }
+
+        .calculated-value {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            color: #2c3e50;
+            border: 2px solid #ecf0f1;
         }
         
         /* Field validation styles */
@@ -1164,13 +1239,24 @@
         <div class="dashboard">
             <div class="input-section">
                 <h3>Recovery Metrics</h3>
-                <div class="input-group">
+                <div class="input-group slider-group">
                     <label for="sleepQuality">Sleep Quality (1-10)</label>
-                    <input type="number" id="sleepQuality" min="1" max="10" step="0.5" placeholder="1-10" oninput="app.validateNumericInput(this, 1, 10)" onkeypress="return app.isNumberKey(event)">
+                    <div class="slider-container">
+                        <input type="number" id="sleepQuality" min="1" max="10" step="0.5" placeholder="1-10" onkeypress="return app.isNumberKey(event)">
+                        <input type="range" id="sleepQualitySlider" min="1" max="10" step="0.5">
+                    </div>
                 </div>
                 <div class="input-group">
-                    <label for="sleepDuration">Sleep Duration (hours)</label>
-                    <input type="number" id="sleepDuration" min="3" max="12" step="0.5" placeholder="3-12" oninput="app.validateNumericInput(this, 3, 12)" onkeypress="return app.isNumberKey(event)">
+                    <label for="snoozeTime">Snooze Time</label>
+                    <input type="time" id="snoozeTime">
+                </div>
+                <div class="input-group">
+                    <label for="wakeTime">Wake Time</label>
+                    <input type="time" id="wakeTime">
+                </div>
+                <div class="input-group">
+                    <label>Calculated Sleep Duration</label>
+                    <div id="sleepDurationDisplay" class="calculated-value">--:-- hours</div>
                 </div>
                 <div class="input-group">
                     <label for="mood">Mood State</label>
@@ -1192,9 +1278,12 @@
             
             <div class="input-section">
                 <h3>Physical State</h3>
-                <div class="input-group">
+                <div class="input-group slider-group">
                     <label for="stress">Stress Level (1-10)</label>
-                    <input type="number" id="stress" min="1" max="10" step="1" placeholder="1-10" oninput="app.validateNumericInput(this, 1, 10)" onkeypress="return app.isNumberKey(event)">
+                    <div class="slider-container">
+                        <input type="number" id="stress" min="1" max="10" step="1" placeholder="1-10" onkeypress="return app.isWholeNumberKey(event)">
+                        <input type="range" id="stressSlider" min="1" max="10" step="1">
+                    </div>
                 </div>
                 <div class="input-group">
                     <label for="doms">Muscle Soreness (DOMS)</label>
@@ -1246,13 +1335,19 @@
             
             <div class="input-section">
                 <h3>Training History</h3>
-                <div class="input-group">
+                <div class="input-group slider-group">
                     <label for="daysSince">Days Since Last Session</label>
-                    <input type="number" id="daysSince" min="0" max="14" step="1" placeholder="0-14" oninput="app.validateNumericInput(this, 0, 14)" onkeypress="return app.isWholeNumberKey(event)">
+                     <div class="slider-container">
+                        <input type="number" id="daysSince" min="0" max="14" step="1" placeholder="0-14" onkeypress="return app.isWholeNumberKey(event)">
+                        <input type="range" id="daysSinceSlider" min="0" max="14" step="1">
+                    </div>
                 </div>
-                <div class="input-group">
+                <div class="input-group slider-group">
                     <label for="lastRPE">Last Session RPE (1-10)</label>
-                    <input type="number" id="lastRPE" min="1" max="10" step="0.5" placeholder="1-10" oninput="app.validateNumericInput(this, 1, 10)" onkeypress="return app.isNumberKey(event)">
+                     <div class="slider-container">
+                        <input type="number" id="lastRPE" min="1" max="10" step="0.5" placeholder="1-10" onkeypress="return app.isNumberKey(event)">
+                         <input type="range" id="lastRPESlider" min="1" max="10" step="0.5">
+                    </div>
                 </div>
                 <div class="input-group">
                     <label>Climbing Type (select all that apply)</label>
@@ -1402,7 +1497,7 @@ Please add at least one entry.
 
     class MultiDayTracker {
         constructor() {
-            this.dataVersion = 2;
+            this.dataVersion = 3; // Incremented version for new data structure
             this.initData();
             this.weeklyChart = null;
             this.modalCallback = null;
@@ -1412,7 +1507,8 @@ Please add at least one entry.
             // Field definitions for validation
             this.fieldDefinitions = {
                 sleepQuality: { name: 'Sleep Quality', section: 'Recovery Metrics', type: 'number' },
-                sleepDuration: { name: 'Sleep Duration', section: 'Recovery Metrics', type: 'number' },
+                snoozeTime: { name: 'Snooze Time', section: 'Recovery Metrics', type: 'time' },
+                wakeTime: { name: 'Wake Time', section: 'Recovery Metrics', type: 'time' },
                 mood: { name: 'Mood State', section: 'Recovery Metrics', type: 'select' },
                 stress: { name: 'Stress Level', section: 'Physical State', type: 'number' },
                 doms: { name: 'Muscle Soreness (DOMS)', section: 'Physical State', type: 'select' },
@@ -1473,9 +1569,15 @@ Please add at least one entry.
                 
                 // Restore inputs
                 Object.keys(data.inputs).forEach(id => {
-                    if (id === 'climbingType') return;
+                    if (id === 'climbingType' || id === 'sleepDuration') return;
                     const el = document.getElementById(id);
-                    if(el) el.value = data.inputs[id];
+                    if(el) {
+                       el.value = data.inputs[id];
+                       // Trigger input event for sliders to update
+                       if (el.type === 'number') {
+                           el.dispatchEvent(new Event('input'));
+                       }
+                    }
                 });
                 
                 const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingNone'];
@@ -1489,7 +1591,7 @@ Please add at least one entry.
                     });
                 }
                 
-                // Show notification
+                this.calculateAndDisplaySleepDuration();
                 showToast('Restored your unsaved data from previous session.');
             }
         }
@@ -1508,10 +1610,8 @@ Please add at least one entry.
                 
                 if (Math.abs(diff) > 100) {
                     if (diff > 0) {
-                        // Swipe right - previous tab
                         this.swipeTab(-1);
                     } else {
-                        // Swipe left - next tab
                         this.swipeTab(1);
                     }
                 }
@@ -1567,7 +1667,6 @@ Please add at least one entry.
                 return null;
             }
             
-            // Calculate personalization factors
             const sleepFactor = this.calculateSleepFactor();
             const injuryRiskFactor = this.calculateInjuryRiskFactor(inputs);
             
@@ -1592,7 +1691,6 @@ Please add at least one entry.
         }
         
         calculateSleepFactor() {
-            // Calculate average sleep duration from past data
             const entries = Object.values(this.trainingData);
             if (entries.length === 0) return 1.0;
             
@@ -1610,7 +1708,6 @@ Please add at least one entry.
             
             const avgSleep = totalSleep / count;
             
-            // Personalization factor based on average sleep
             if (avgSleep > 8) return 1.1;
             if (avgSleep > 7) return 1.0;
             if (avgSleep > 6) return 0.9;
@@ -1618,7 +1715,6 @@ Please add at least one entry.
         }
         
         calculateInjuryRiskFactor(inputs) {
-            // Assess injury risk based on historical tendon and muscle issues
             const entries = Object.values(this.trainingData);
             if (entries.length === 0) return 1.0;
             
@@ -1639,7 +1735,6 @@ Please add at least one entry.
             const tendonRisk = tendonIssues / count;
             const muscleRisk = muscleIssues / count;
             
-            // Update UI
             let riskLevel = "Low";
             let riskFactor = 1.0;
             
@@ -1673,59 +1768,34 @@ Please add at least one entry.
             let hasErrors = false;
             let firstErrorElement = null;
             
-            // Clear previous error states
             document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
             
-            // Check each required field
             Object.keys(this.fieldDefinitions).forEach(fieldId => {
-                if (fieldId === 'sessionNotes') return; // Skip optional field
+                if (fieldId === 'sessionNotes') return;
                 
                 const field = this.fieldDefinitions[fieldId];
                 const value = inputs[fieldId];
+                const element = document.getElementById(fieldId);
                 
+                const addError = (el) => {
+                    hasErrors = true;
+                    el.classList.add('error');
+                    if (!firstErrorElement) firstErrorElement = el;
+                    if (!missingFields[field.section]) missingFields[field.section] = [];
+                    missingFields[field.section].push(field.name);
+                };
+
                 if (fieldId === 'climbingType') {
                     if (!value || value === '') {
-                        hasErrors = true;
-                        const group = document.getElementById('climbingTypeGroup');
-                        group.classList.add('error');
-                        
-                        if (!firstErrorElement) firstErrorElement = group;
-                        
-                        if (!missingFields[field.section]) {
-                            missingFields[field.section] = [];
-                        }
-                        missingFields[field.section].push(field.name);
+                        addError(document.getElementById('climbingTypeGroup'));
                     }
-                } else if (field.type === 'number') {
-                    if (value === '' || isNaN(value)) {
-                        hasErrors = true;
-                        const element = document.getElementById(fieldId);
-                        element.classList.add('error');
-                        
-                        if (!firstErrorElement) firstErrorElement = element;
-                        
-                        if (!missingFields[field.section]) {
-                            missingFields[field.section] = [];
-                        }
-                        missingFields[field.section].push(field.name);
-                    }
-                } else if (field.type === 'select') {
-                    if (!value || value === '') {
-                        hasErrors = true;
-                        const element = document.getElementById(fieldId);
-                        element.classList.add('error');
-                        
-                        if (!firstErrorElement) firstErrorElement = element;
-                        
-                        if (!missingFields[field.section]) {
-                            missingFields[field.section] = [];
-                        }
-                        missingFields[field.section].push(field.name);
-                    }
+                } else if (value === '' || (field.type === 'number' && isNaN(value))) {
+                    addError(element);
+                } else if (field.type === 'time' && value === '') {
+                     addError(element);
                 }
             });
             
-            // Scroll to first error
             if (firstErrorElement) {
                 firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
@@ -1799,6 +1869,16 @@ Please add at least one entry.
             document.getElementById('modalConfirmBtn').addEventListener('click', () => this.confirmModal());
             document.getElementById('modalCancelBtn').addEventListener('click', () => this.hideModal('customModal'));
 
+            // Link sliders to number inputs
+            this.setupSlider('sleepQuality', 'sleepQualitySlider');
+            this.setupSlider('stress', 'stressSlider');
+            this.setupSlider('daysSince', 'daysSinceSlider');
+            this.setupSlider('lastRPE', 'lastRPESlider');
+
+            // Time input listeners
+            document.getElementById('snoozeTime').addEventListener('input', () => this.calculateAndDisplaySleepDuration());
+            document.getElementById('wakeTime').addEventListener('input', () => this.calculateAndDisplaySleepDuration());
+
             const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead'];
             const noneCheckbox = document.getElementById('climbingNone');
 
@@ -1820,28 +1900,101 @@ Please add at least one entry.
                 }
             });
             
-            // Add listeners to clear error state when field is filled
             Object.keys(this.fieldDefinitions).forEach(fieldId => {
                 if (fieldId === 'climbingType' || fieldId === 'sessionNotes') return;
                 
                 const element = document.getElementById(fieldId);
                 if (element) {
-                    element.addEventListener('change', () => {
-                        if (element.value !== '') {
-                            element.classList.remove('error');
-                        }
-                    });
-                    element.addEventListener('input', () => {
-                        if (element.value !== '') {
-                            element.classList.remove('error');
-                        }
+                    const eventType = element.tagName === 'SELECT' ? 'change' : 'input';
+                    element.addEventListener(eventType, () => {
+                        if (element.value !== '') element.classList.remove('error');
                     });
                 }
             });
         }
 
+        updateSliderFill(slider) {
+            if (!slider) return;
+            const min = parseFloat(slider.min);
+            const max = parseFloat(slider.max);
+            const val = parseFloat(slider.value);
+
+            if (isNaN(val)) return;
+
+            const percentage = ((val - min) / (max - min)) * 100;
+            const fillGradient = 'linear-gradient(to right, #667eea, #764ba2)';
+            const trackColor = '#ecf0f1';
+
+            slider.style.background = `linear-gradient(to right, ${fillGradient} ${percentage}%, ${trackColor} ${percentage}%)`;
+        }
+
+        setupSlider(inputId, sliderId) {
+            const numberInput = document.getElementById(inputId);
+            const sliderInput = document.getElementById(sliderId);
+
+            if (!numberInput || !sliderInput) return;
+
+            const min = parseFloat(sliderInput.min);
+            const max = parseFloat(sliderInput.max);
+
+            numberInput.addEventListener('input', () => {
+                let value = parseFloat(numberInput.value);
+                if (isNaN(value)) {
+                    sliderInput.value = min;
+                    this.updateSliderFill(sliderInput);
+                    return;
+                }
+                if (value > max) value = max;
+                if (value < min) value = min;
+                
+                // Update slider only if the value is different to avoid cursor jumping
+                if (parseFloat(sliderInput.value) !== value) {
+                    sliderInput.value = value;
+                }
+                this.updateSliderFill(sliderInput);
+            });
+
+            sliderInput.addEventListener('input', () => {
+                numberInput.value = sliderInput.value;
+                this.updateSliderFill(sliderInput);
+            });
+
+            // Set initial fill on load
+            this.updateSliderFill(sliderInput);
+        }
+
+
+        calculateAndDisplaySleepDuration() {
+            const snoozeTime = document.getElementById('snoozeTime').value;
+            const wakeTime = document.getElementById('wakeTime').value;
+            const display = document.getElementById('sleepDurationDisplay');
+
+            if (!snoozeTime || !wakeTime) {
+                display.textContent = '--:-- hours';
+                return NaN;
+            }
+
+            let start = new Date(`1970-01-01T${snoozeTime}`);
+            let end = new Date(`1970-01-01T${wakeTime}`);
+
+            if (end < start) {
+                end.setDate(end.getDate() + 1);
+            }
+            
+            const diffMs = end - start;
+            const durationHours = diffMs / (1000 * 60 * 60);
+            
+            if (isNaN(durationHours) || durationHours < 0) {
+                 display.textContent = '--:-- hours';
+                return NaN;
+            }
+
+            display.textContent = `${durationHours.toFixed(2)} hours`;
+            return durationHours;
+        }
+
         getInputs() {
-            const ids = ['sleepQuality', 'sleepDuration', 'mood', 'stress', 'doms', 'tendons', 'skin', 'daysSince', 'lastRPE', 'mealBeforeTraining', 'sessionNotes'];
+            const ids = ['sleepQuality', 'mood', 'stress', 'doms', 'tendons', 'skin', 'daysSince', 'lastRPE', 'mealBeforeTraining', 'sessionNotes', 'snoozeTime', 'wakeTime'];
             const inputs = {};
             ids.forEach(id => {
                 const el = document.getElementById(id);
@@ -1849,6 +2002,8 @@ Please add at least one entry.
                     inputs[id] = el.type === 'number' ? parseFloat(el.value) : el.value;
                 }
             });
+
+            inputs.sleepDuration = this.calculateAndDisplaySleepDuration();
 
             const climbingTypes = [];
             const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingNone'];
@@ -1860,7 +2015,6 @@ Please add at least one entry.
             });
             inputs.climbingType = climbingTypes.join(', ');
 
-            // Sanitize notes
             if (inputs.sessionNotes) {
                 inputs.sessionNotes = this.sanitizeNotes(inputs.sessionNotes);
             }
@@ -1869,7 +2023,6 @@ Please add at least one entry.
         }
         
         sanitizeNotes(text) {
-            // Remove HTML tags to prevent XSS
             return text.replace(/<[^>]*>/g, '');
         }
 
@@ -1921,17 +2074,14 @@ Please add at least one entry.
                 return;
             }
             
-            // Validate fields
             const validation = this.validateFields();
             if (validation.hasErrors) {
                 this.showValidationModal(validation.missingFields);
                 return;
             }
             
-            // Show loader
             document.getElementById('loader').style.display = 'flex';
             
-            // Simulate processing delay
             setTimeout(() => {
                 const inputs = this.getInputs();
                 const readinessScore = this.calculateAdvancedReadiness(inputs);
@@ -1940,7 +2090,6 @@ Please add at least one entry.
                 this.trainingData[date] = { inputs, readinessScore, recommendation };
                 this.saveData();
                 
-                // Hide loader
                 document.getElementById('loader').style.display = 'none';
                 
                 showToast(`Entry for ${date} saved successfully!`);
@@ -1954,9 +2103,14 @@ Please add at least one entry.
             const data = this.trainingData[this.currentDate];
             if (data) {
                 Object.keys(data.inputs).forEach(id => {
-                    if (id === 'climbingType') return;
+                    if (id === 'climbingType' || id === 'sleepDuration') return;
                     const el = document.getElementById(id);
-                    if(el) el.value = data.inputs[id];
+                    if(el) {
+                        el.value = data.inputs[id];
+                        if (el.type === 'number') {
+                            el.dispatchEvent(new Event('input'));
+                        }
+                    }
                 });
                 
                 const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingNone'];
@@ -1973,19 +2127,25 @@ Please add at least one entry.
             } else {
                 this.clearCurrentEntry(false);
             }
+            this.calculateAndDisplaySleepDuration();
             this.calculateRecommendation();
         }
 
         clearCurrentEntry(clearDate = true) {
-            const ids = ['sleepQuality', 'sleepDuration', 'mood', 'stress', 'doms', 'tendons', 'skin', 'daysSince', 'lastRPE', 'mealBeforeTraining', 'sessionNotes'];
+            const ids = ['sleepQuality', 'mood', 'stress', 'doms', 'tendons', 'skin', 'daysSince', 'lastRPE', 'mealBeforeTraining', 'sessionNotes', 'snoozeTime', 'wakeTime'];
             ids.forEach(id => { 
                 const el = document.getElementById(id);
                 if (el) {
                     el.value = '';
                     el.classList.remove('error');
+                    if(el.type === 'number') {
+                        el.dispatchEvent(new Event('input'));
+                    }
                 }
             });
             
+            document.getElementById('sleepDurationDisplay').textContent = '--:-- hours';
+
             const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingNone'];
             climbingCheckboxes.forEach(id => document.getElementById(id).checked = false);
             document.getElementById('climbingTypeGroup').classList.remove('error');
@@ -1997,14 +2157,12 @@ Please add at least one entry.
         }
 
         switchTab(tabName) {
-            // Fade out current active tab
             const currentTab = document.querySelector('.tab-content.active');
             if (currentTab) {
                 currentTab.style.opacity = 0;
                 setTimeout(() => {
                     currentTab.classList.remove('active');
                     
-                    // Fade in new tab
                     const newTab = document.getElementById(tabName);
                     newTab.classList.add('active');
                     setTimeout(() => {
@@ -2013,11 +2171,9 @@ Please add at least one entry.
                 }, 300);
             }
             
-            // Update tab buttons
             document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
             document.querySelector(`.tab-button[onclick="app.switchTab('${tabName}')"]`).classList.add('active');
             
-            // Update content based on tab
             if (tabName === 'history') {
                 this.updateHistory();
                 this.updateWeekDisplay();
@@ -2063,7 +2219,6 @@ Please add at least one entry.
                 return;
             }
             
-            // Filter by week if needed
             let displayDates = sortedDates;
             if (this.currentWeekIndex > 0) {
                 const now = new Date();
@@ -2088,6 +2243,7 @@ Please add at least one entry.
             displayDates.forEach(date => {
                 const entry = this.trainingData[date];
                 const notesHTML = entry.inputs.sessionNotes ? `<div class="log-notes"><strong>Notes:</strong> ${entry.inputs.sessionNotes}</div>` : '';
+                const sleepDuration = entry.inputs.sleepDuration ? `${parseFloat(entry.inputs.sleepDuration).toFixed(1)}h` : 'N/A';
                 const logHTML = `
                     <div class="log-entry" style="border-left-color: ${entry.recommendation.color};">
                         <div class="log-date">
@@ -2096,7 +2252,7 @@ Please add at least one entry.
                         </div>
                         <div class="log-metrics">
                             <div class="log-metric"><strong>Readiness:</strong> ${entry.readinessScore.toFixed(1)}</div>
-                            <div class="log-metric"><strong>Sleep:</strong> ${entry.inputs.sleepQuality}/10</div>
+                            <div class="log-metric"><strong>Sleep:</strong> ${sleepDuration} (${entry.inputs.sleepQuality}/10)</div>
                             <div class="log-metric"><strong>Stress:</strong> ${entry.inputs.stress}/10</div>
                             <div class="log-metric"><strong>DOMS:</strong> ${entry.inputs.doms}/7</div>
                             <div class="log-metric"><strong>Tendons:</strong> ${entry.inputs.tendons}/6</div>
@@ -2115,7 +2271,6 @@ Please add at least one entry.
         updateAnalytics() {
             clearTimeout(this.chartDebounce);
             
-            // Use debounce to avoid excessive chart rendering
             this.chartDebounce = setTimeout(() => {
                 const sortedData = Object.entries(this.trainingData).sort(([dateA], [dateB]) => new Date(dateA) - new Date(dateB));
                 const noDataMsg = document.getElementById('noDataMessage');
@@ -2132,7 +2287,6 @@ Please add at least one entry.
 
                 const labels = sortedData.map(([date]) => new Date(date + 'T00:00:00').toLocaleDateString(undefined, {month: 'short', day: 'numeric'}));
                 
-                // Extract all metrics for charting
                 const readinessScores = sortedData.map(([, data]) => data.readinessScore);
                 const sleepQuality = sortedData.map(([, data]) => data.inputs.sleepQuality);
                 const sleepDuration = sortedData.map(([, data]) => data.inputs.sleepDuration);
@@ -2357,7 +2511,6 @@ Please add at least one entry.
                     }
                 });
                 
-                // Add chart controls
                 this.addChartControls();
             }, 300);
         }
@@ -2427,7 +2580,7 @@ Please add at least one entry.
                 showToast("No data to export.");
                 return;
             }
-            const headers = ['Date', 'ReadinessScore', 'SleepQuality', 'SleepDuration', 'Mood', 'Stress', 'DOMS', 'Tendons', 'Skin', 'DaysSinceLast', 'LastRPE', 'MealBefore', 'ClimbingType', 'SessionNotes', 'RecType', 'RecDesc'];
+            const headers = ['Date', 'ReadinessScore', 'SleepQuality', 'SnoozeTime', 'WakeTime', 'SleepDuration', 'Mood', 'Stress', 'DOMS', 'Tendons', 'Skin', 'DaysSinceLast', 'LastRPE', 'MealBefore', 'ClimbingType', 'SessionNotes', 'RecType', 'RecDesc'];
             let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n";
             const sortedDates = Object.keys(data).sort((a,b) => new Date(a) - new Date(b));
             
@@ -2437,7 +2590,8 @@ Please add at least one entry.
                 const row = [
                     date,
                     entry.readinessScore.toFixed(2),
-                    entry.inputs.sleepQuality, entry.inputs.sleepDuration, entry.inputs.mood, entry.inputs.stress,
+                    entry.inputs.sleepQuality, entry.inputs.snoozeTime, entry.inputs.wakeTime, entry.inputs.sleepDuration.toFixed(2),
+                    entry.inputs.mood, entry.inputs.stress,
                     entry.inputs.doms, entry.inputs.tendons, entry.inputs.skin, entry.inputs.daysSince, entry.inputs.lastRPE,
                     entry.inputs.mealBeforeTraining, `"${entry.inputs.climbingType}"`, notes,
                     entry.recommendation.type, `"${entry.recommendation.description}"`
@@ -2504,13 +2658,6 @@ Please add at least one entry.
         }
         
         // --- INPUT VALIDATION HELPERS ---
-        validateNumericInput(input, min, max) {
-            let value = parseFloat(input.value);
-            if (isNaN(value)) return;
-            if (value > max) input.value = max;
-            if (value < min) input.value = min;
-        }
-
         isNumberKey(evt) {
             const charCode = (evt.which) ? evt.which : evt.keyCode;
             if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
