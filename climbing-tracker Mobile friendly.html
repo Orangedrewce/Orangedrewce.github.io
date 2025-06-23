@@ -1336,7 +1336,7 @@
             <div class="input-section">
                 <h3>Training History</h3>
                 <div class="input-group slider-group">
-                    <label for="daysSince">Days Since Last Session</label>
+                    <label for="daysSince">Days Since Last Session (0-14)</label>
                      <div class="slider-container">
                         <input type="number" id="daysSince" min="0" max="14" step="1" placeholder="0-14" onkeypress="return app.isWholeNumberKey(event)">
                         <input type="range" id="daysSinceSlider" min="0" max="14" step="1">
@@ -1497,7 +1497,7 @@ Please add at least one entry.
 
     class MultiDayTracker {
         constructor() {
-            this.dataVersion = 3; // Incremented version for new data structure
+            this.dataVersion = 3;
             this.initData();
             this.weeklyChart = null;
             this.modalCallback = null;
@@ -1540,7 +1540,6 @@ Please add at least one entry.
             if (savedData && savedVersion === String(this.dataVersion)) {
                 this.trainingData = JSON.parse(savedData);
             } else {
-                // Clear old data if version mismatch
                 if (savedData) localStorage.removeItem('climbingTrackerData');
                 this.trainingData = {};
                 this.saveData();
@@ -1940,17 +1939,16 @@ Please add at least one entry.
             numberInput.addEventListener('input', () => {
                 let value = parseFloat(numberInput.value);
                 if (isNaN(value)) {
+                    numberInput.value = min;
                     sliderInput.value = min;
                     this.updateSliderFill(sliderInput);
                     return;
                 }
-                if (value > max) value = max;
-                if (value < min) value = min;
                 
-                // Update slider only if the value is different to avoid cursor jumping
-                if (parseFloat(sliderInput.value) !== value) {
-                    sliderInput.value = value;
-                }
+                // Clamp value to min and max
+                value = Math.min(max, Math.max(min, value));
+                numberInput.value = value;
+                sliderInput.value = value;
                 this.updateSliderFill(sliderInput);
             });
 
@@ -2018,6 +2016,17 @@ Please add at least one entry.
             if (inputs.sessionNotes) {
                 inputs.sessionNotes = this.sanitizeNotes(inputs.sessionNotes);
             }
+            
+            // Clamp values to expected ranges (only if they are numbers)
+            const clamp = (value, min, max) => {
+                if (typeof value !== 'number' || isNaN(value)) return value;
+                return Math.min(max, Math.max(min, value));
+            };
+
+            inputs.sleepQuality = clamp(inputs.sleepQuality, 1, 10);
+            inputs.stress = clamp(inputs.stress, 1, 10);
+            inputs.daysSince = clamp(inputs.daysSince, 0, 14);
+            inputs.lastRPE = clamp(inputs.lastRPE, 1, 10);
 
             return inputs;
         }
@@ -2074,6 +2083,18 @@ Please add at least one entry.
                 return;
             }
             
+            // Prevent future dates
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const todayStr = `${year}-${month}-${day}`;
+            
+            if (date > todayStr) {
+                showToast('Cannot save entries for future dates.');
+                return;
+            }
+            
             const validation = this.validateFields();
             if (validation.hasErrors) {
                 this.showValidationModal(validation.missingFields);
@@ -2089,6 +2110,9 @@ Please add at least one entry.
                 
                 this.trainingData[date] = { inputs, readinessScore, recommendation };
                 this.saveData();
+                
+                // Clear autosave after successful save
+                localStorage.removeItem('climbSmartAutoSave');
                 
                 document.getElementById('loader').style.display = 'none';
                 
@@ -2107,6 +2131,7 @@ Please add at least one entry.
                     const el = document.getElementById(id);
                     if(el) {
                         el.value = data.inputs[id];
+                        // Trigger input event for sliders to update
                         if (el.type === 'number') {
                             el.dispatchEvent(new Event('input'));
                         }
@@ -2623,17 +2648,40 @@ Please add at least one entry.
             }
             
             try {
-                const data = JSON.parse(atob(backupCode));
-                if (data && typeof data === 'object') {
-                    this.trainingData = data;
-                    this.saveData();
-                    this.updateHistory();
-                    this.updateAnalytics();
-                    showToast('Data restored successfully!');
-                } else {
-                    throw new Error('Invalid backup data');
+                const decoded = atob(backupCode);
+                // Basic validation for JSON structure
+                if (!decoded.startsWith('{') && !decoded.startsWith('[')) {
+                    throw new Error('Invalid data format');
                 }
+                
+                const data = JSON.parse(decoded);
+                
+                // Additional validation for data structure
+                if (typeof data !== 'object' || data === null) {
+                    throw new Error('Invalid data structure');
+                }
+                
+                let isValid = true;
+                for (const key in data) {
+                    if (!data[key].hasOwnProperty('inputs') || 
+                        !data[key].hasOwnProperty('readinessScore') || 
+                        !data[key].hasOwnProperty('recommendation')) {
+                        isValid = false;
+                        break;
+                    }
+                }
+                
+                if (!isValid) {
+                    throw new Error('Invalid data structure');
+                }
+                
+                this.trainingData = data;
+                this.saveData();
+                this.updateHistory();
+                this.updateAnalytics();
+                showToast('Data restored successfully!');
             } catch (e) {
+                console.error('Backup import error:', e);
                 showToast('Invalid backup code. Please check and try again.');
             }
         }
