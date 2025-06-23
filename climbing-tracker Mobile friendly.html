@@ -1199,8 +1199,8 @@
     <div class="modal-content">
         <h2>Welcome to ClimbSmart!</h2>
         <div class="intro-text">
-            <p>Hi there! I'm a passionate climber who developed this tool to optimize my training and reduce injuries.</p>
-            <p>This tracker uses a custom Nonlinear Dynamic algorithm to analyze your inputs and provide a readiness score.</p>
+            <p>Hi there! I'm a climber who developed this tool to optimize my training and reduce injuries.</p>
+            <p>This tracker uses custom Nonlinear Dynamic algorithms to analyze your inputs and provide a readiness score.</p>
         </div>
         
         <div class="support-section">
@@ -1350,7 +1350,7 @@
                     </div>
                 </div>
                 <div class="input-group">
-                    <label>Climbing Type (select all that apply)</label>
+                    <label>Completed today (select all that apply)</label>
                     <div class="checkbox-group" id="climbingTypeGroup" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
                         <label for="climbingBouldering">
                             <input type="checkbox" id="climbingBouldering" value="Bouldering">
@@ -1376,7 +1376,7 @@
                 <h3>Session Notes</h3>
                 <div class="input-group">
                     <label for="sessionNotes">Comments (optional)</label>
-                    <textarea id="sessionNotes" rows="3" placeholder="Add any notes about your session or how you're feeling..."></textarea>
+                    <textarea id="sessionNotes" rows="3" placeholder="Add any notes about your session"></textarea>
                 </div>
             </div>
         </div>
@@ -1657,7 +1657,7 @@ Please add at least one entry.
         }
 
         // --- SCORING ALGORITHMS ---
-        recoveryDecay(days, halfLife = 2.5) { return 1 - Math.exp(-days * Math.log(2) / halfLife); }
+        recoveryDecay(days, halfLife = 1.5) { return 1 - Math.exp(-days * Math.log(2) / halfLife); }
         stressImpact(stress) { return 10 / (1 + Math.exp(-0.8 * (stress - 5))); }
         cumulativeFatigue(rpe, days) { return Math.log(1 + rpe) * Math.exp(-days / 3); }
         
