@@ -37,11 +37,14 @@ Key Features
     <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.4.7/peerjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
     <style>
-        :root {
-            --slider-track-bg: #ecf0f1;
+:root {
+            --slider-track-bg: #d5d8dc;
             --slider-thumb-bg: #764ba2;
-            --slider-fill-color: #667eea;
+            --slider-fill-color: #3498db;
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --slider-fill-start: #3498db;
+            --slider-fill-end: #9b59b6;
+            --slider-thumb-border: #ffffff;
             --success-color: #27ae60;
             --warning-color: #f39c12;
             --danger-color: #e74c3c;
@@ -69,17 +72,25 @@ Key Features
             }
         }
         
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            position: relative;
-            z-index: 1;
-        }
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background-color: rgba(238, 231, 215, 0.95);
+    /* This gradient creates subtle, repeating diagonal lines */
+    background-image: repeating-linear-gradient(
+        45deg,
+        hsla(0, 0%, 0%, 0.05),
+        hsla(0, 0%, 0%, 0.05) 1px,
+        transparent 1px,
+        transparent 5px
+    );
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 1;
+}
         
         @media (max-width: 768px) {
             .container {
@@ -119,7 +130,6 @@ Key Features
             display: flex;
             gap: 10px;
             margin-bottom: 30px;
-            border-bottom: 2px solid #ecf0f1;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
@@ -131,18 +141,54 @@ Key Features
             }
         }
         
-        .tab-button {
-            padding: 12px 24px;
-            background: #ecf0f1;
-            border: none;
-            border-radius: 8px 8px 0 0;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            color: #7f8c8d;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
+.tab-button {
+    padding: 12px 24px;
+    background: #ecf0f1;
+    border: none;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    color: #7f8c8d;
+    white-space: nowrap;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Tab hover effect */
+.tab-button:hover:not(.active) {
+    background: linear-gradient(135deg, #d5d8dc 0%, #bdc3c7 100%);
+    color: #2c3e50;
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Active tab styling */
+.tab-button.active {
+    background: var(--primary-gradient);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Active tab hover (subtle enhancement) */
+.tab-button.active:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+    filter: brightness(1.1);
+}
+
+/* ============================================
+   ALTERNATIVE TAB STYLES (CHOOSE ONE)
+   ============================================ */
+
+/* Option 1: Subtle gradient hover */
+.tab-button-gradient:hover:not(.active) {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: #495057;
+    transform: translateY(-1px);
+}
         
         @media (max-width: 768px) {
             .tab-button {
@@ -240,17 +286,245 @@ Key Features
             }
         }
         
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #ecf0f1;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            background-color: white;
-            font-family: inherit;
-            -webkit-appearance: none;
-        }
+/* General input/select/textarea styling */
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ecf0f1;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: white;
+    font-family: inherit;
+    -webkit-appearance: none;
+}
+
+/* ============================================
+   ENHANCED INPUT HOVER EFFECTS
+   ============================================ */
+
+/* General input, select, textarea with enhanced transitions */
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ecf0f1;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;  /* Enhanced transition */
+    background-color: white;
+    font-family: inherit;
+    -webkit-appearance: none;
+    position: relative;
+}
+
+/* General hover effect for all inputs */
+input:hover:not(:focus):not(:disabled), 
+select:hover:not(:focus):not(:disabled), 
+textarea:hover:not(:focus):not(:disabled) {
+    background-color: #f8f9fa;  /* Subtle background change */
+    border-color: #bdc3c7;     /* Slightly darker border */
+    transform: translateY(-1px); /* Subtle lift */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Gentle shadow */
+}
+
+/* ============================================
+   SPECIFIC INPUT FIELD TARGETING
+   ============================================ */
+
+/* Time inputs - Snooze Time & Wake Time */
+#snoozeTime:hover:not(:focus), 
+#wakeTime:hover:not(:focus) {
+    background-color: #e8f4f8;  /* Light blue tint */
+    border-color: #3498db;
+    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.15);
+    transform: translateY(-1px) scale(1.005);
+}
+
+/* Mood State select */
+#mood:hover:not(:focus) {
+    background-color: #fff3e0;  /* Light orange tint */
+    border-color: #f39c12;
+    box-shadow: 0 3px 10px rgba(243, 156, 18, 0.15);
+    transform: translateY(-1px) scale(1.005);
+}
+
+/* Muscle Soreness (DOMS) select */
+#doms:hover:not(:focus) {
+    background-color: #fef5e7;  /* Light amber tint */
+    border-color: #e67e22;
+    box-shadow: 0 3px 10px rgba(230, 126, 34, 0.15);
+    transform: translateY(-1px) scale(1.005);
+}
+
+/* Tendon Condition select */
+#tendons:hover:not(:focus) {
+    background-color: #f4f1f8;  /* Light purple tint */
+    border-color: #9b59b6;
+    box-shadow: 0 3px 10px rgba(155, 89, 182, 0.15);
+    transform: translateY(-1px) scale(1.005);
+}
+
+/* Skin Condition select */
+#skin:hover:not(:focus) {
+    background-color: #fef9e7;  /* Light yellow tint */
+    border-color: #f1c40f;
+    box-shadow: 0 3px 10px rgba(241, 196, 15, 0.15);
+    transform: translateY(-1px) scale(1.005);
+}
+
+/* Pre-Training Meal select */
+#mealBeforeTraining:hover:not(:focus) {
+    background-color: #e8f6f0;  /* Light green tint */
+    border-color: #27ae60;
+    box-shadow: 0 3px 10px rgba(39, 174, 96, 0.15);
+    transform: translateY(-1px) scale(1.005);
+}
+
+/* Number inputs - Days Since & RPE */
+#daysSince:hover:not(:focus), 
+#lastRPE:hover:not(:focus) {
+    background-color: #f0ebf4;  /* Light purple-gray tint */
+    border-color: #8e44ad;
+    box-shadow: 0 3px 10px rgba(142, 68, 173, 0.15);
+    transform: translateY(-1px) scale(1.005);
+}
+
+/* ============================================
+   ENHANCED FOCUS STATES
+   ============================================ */
+
+/* Time inputs focus */
+#snoozeTime:focus, #wakeTime:focus {
+    border-color: #2980b9;
+    box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.2);
+    background-color: #eaf4ff;
+}
+
+/* Mood focus */
+#mood:focus {
+    border-color: #d68910;
+    box-shadow: 0 0 0 3px rgba(214, 137, 16, 0.2);
+    background-color: #fff8e1;
+}
+
+/* DOMS focus */
+#doms:focus {
+    border-color: #d35400;
+    box-shadow: 0 0 0 3px rgba(211, 84, 0, 0.2);
+    background-color: #fff3e0;
+}
+
+/* Tendons focus */
+#tendons:focus {
+    border-color: #7d3c98;
+    box-shadow: 0 0 0 3px rgba(125, 60, 152, 0.2);
+    background-color: #f8f4ff;
+}
+
+/* Skin focus */
+#skin:focus {
+    border-color: #d4ac0d;
+    box-shadow: 0 0 0 3px rgba(212, 172, 13, 0.2);
+    background-color: #fffef0;
+}
+
+/* Meal focus */
+#mealBeforeTraining:focus {
+    border-color: #1e8449;
+    box-shadow: 0 0 0 3px rgba(30, 132, 73, 0.2);
+    background-color: #f0fff4;
+}
+
+/* Number inputs focus */
+#daysSince:focus, #lastRPE:focus {
+    border-color: #6c3483;
+    box-shadow: 0 0 0 3px rgba(108, 52, 131, 0.2);
+    background-color: #f8f4ff;
+}
+
+/* ============================================
+   SLIDER CONTAINER HOVER ENHANCEMENT
+   ============================================ */
+
+/* Make slider containers more interactive */
+.slider-container:hover input[type="number"] {
+    background-color: #f0ebf4;
+    border-color: #8e44ad;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(142, 68, 173, 0.1);
+}
+
+/* ============================================
+   DISABLED STATE STYLING
+   ============================================ */
+
+input:disabled, select:disabled {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+input:disabled:hover, select:disabled:hover {
+    transform: none;
+    box-shadow: none;
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Reduce hover effects on mobile for better touch experience */
+    input:hover:not(:focus), 
+    select:hover:not(:focus), 
+    textarea:hover:not(:focus) {
+        transform: none;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    }
+    
+    /* Keep subtle background changes on mobile */
+    #snoozeTime:hover:not(:focus), #wakeTime:hover:not(:focus) {
+        background-color: #f0f8ff;
+        transform: none;
+    }
+    
+    #mood:hover:not(:focus) {
+        background-color: #fffaf0;
+        transform: none;
+    }
+    
+    /* Continue pattern for other fields... */
+}
+
+@media (hover: none) {
+    /* Disable hover effects on devices without hover capability */
+    input:hover, select:hover, textarea:hover {
+        transform: none;
+        box-shadow: none;
+        background-color: white;
+        border-color: #ecf0f1;
+    }
+}
+
+/* ============================================
+   ANIMATION FOR SMOOTH TRANSITIONS
+   ============================================ */
+
+@keyframes subtle-glow {
+    0% { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); }
+    50% { box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12); }
+    100% { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); }
+}
+
+/* Apply subtle glow animation on hover for extra "alive" feeling */
+input:hover:not(:focus):not(:disabled), 
+select:hover:not(:focus):not(:disabled) {
+    animation: subtle-glow 2s ease-in-out infinite;
+}
 
         input[type="number"] {
             -moz-appearance: textfield;
@@ -275,60 +549,94 @@ Key Features
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
         }
 
-        .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+.slider-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 10px 0;
+}
 
-        .slider-container input[type="number"] {
-            width: 70px;
-            text-align: center;
-            flex-shrink: 0;
-        }
+.slider-container input[type="number"] {
+    width: 70px;
+    text-align: center;
+    flex-shrink: 0;
+    border: 2px solid var(--slider-track-bg);
+    border-radius: 6px;
+    padding: 8px;
+}
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 10px;
+    background: var(--slider-track-bg);
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    border: 1px solid #bdc3c7;
+}
 
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 100%;
-            height: 8px;
-            background: var(--slider-track-bg);
-            border-radius: 5px;
-            outline: none;
-            cursor: pointer;
-            position: relative;
-        }
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 35px;
+    height: 35px;
+    background: var(--slider-thumb-bg);
+    border-radius: 50%;
+    border: 3px solid var(--slider-thumb-border);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    margin-top: -2px;
+    transition: all 0.2s ease;
+    position: relative;
+    z-index: 2;
+    cursor: grab;
+}
 
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            background: var(--slider-thumb-bg);
-            border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            margin-top: -6px;
-            transition: transform 0.2s ease;
-            position: relative;
-            z-index: 2;
-        }
+input[type="range"]:active::-webkit-slider-thumb {
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    cursor: grabbing;
+}
 
-        input[type="range"]:active::-webkit-slider-thumb {
-            transform: scale(1.2);
-        }
+input[type="range"]:hover::-webkit-slider-thumb {
+    background: #34495e;
+}
 
-        input[type="range"]::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            background: var(--slider-thumb-bg);
-            border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            cursor: pointer;
-            position: relative;
-            z-index: 2;
-        }
+input[type="range"]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    background: var(--slider-thumb-bg);
+    border-radius: 50%;
+    border: 3px solid var(--slider-thumb-border);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    cursor: grab;
+    position: relative;
+    z-index: 2;
+    margin-top: 0;
+}
+
+input[type="range"]:active::-moz-range-thumb {
+    transform: scale(1.15);
+}
+
+input[type="range"]::-moz-range-track {
+    height: 10px;
+    background: var(--slider-track-bg);
+    border-radius: 6px;
+    border: 1px solid #bdc3c7;
+}
+
+input[type="range"].disabled-input {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+input[type="range"].disabled-input::-webkit-slider-thumb {
+    cursor: not-allowed;
+    background: #95a5a6;
+}
+
 
         .calculated-value {
             background-color: #f8f9fa;
@@ -508,13 +816,15 @@ Key Features
             }
         }
         
-        .button-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
+.button-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 30px;  /* Increased from 20px to 30px */
+    margin-top: 20px;  /* Added top margin */
+    padding-bottom: 10px;  /* Added padding for extra space */
+}
         
         @media (max-width: 768px) {
             .button-group {
@@ -523,19 +833,95 @@ Key Features
             }
         }
         
-        .update-btn {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            flex: 1;
-            min-width: 140px;
-            max-width: 200px;
-        }
+.update-btn {
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;  /* Changed from just transform */
+    flex: 1;
+    min-width: 140px;
+    max-width: 200px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Enhanced hover effect similar to title */
+.update-btn:hover {
+    transform: translateY(-2px) scale(1.02);  /* Combined movement like title */
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);  /* Added glow */
+    filter: brightness(1.1);  /* Slight brightness increase */
+}
+
+/* Specific button targeting by ID for different effects */
+#loadDateBtn {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+}
+
+#loadDateBtn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+    color: #ecf0f1;
+}
+
+#updateRecBtn {
+    background: var(--primary-gradient);
+}
+
+#updateRecBtn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+#saveEntryBtn {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+}
+
+#saveEntryBtn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
+}
+
+#clearEntryBtn {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+}
+
+#clearEntryBtn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+}
+
+/* ============================================
+   ACTIVE/CLICK EFFECTS
+   ============================================ */
+
+.update-btn:active {
+    transform: translateY(0) scale(0.98);  /* Slight press down effect */
+    transition: all 0.1s ease;
+}
+
+/* ============================================
+   MOBILE ADJUSTMENTS (DISABLE ON TOUCH DEVICES)
+   ============================================ */
+
+@media (max-width: 768px) {
+    .update-btn:hover {
+        transform: none;  /* Disable hover effects on mobile */
+        box-shadow: none;
+        filter: none;
+    }
+}
+
+@media (hover: none) {
+    .update-btn:hover {
+        transform: none;
+        box-shadow: none;
+        filter: none;
+    }
+}
         
         @media (max-width: 768px) {
             .update-btn {
@@ -921,7 +1307,7 @@ Key Features
         
         .welcome-modal .intro-text {
             color: #34495e;
-            line-height: 1.8;
+            line-height: 1.6;
             margin-bottom: 30px;
             font-size: 1.1em;
         }
@@ -1150,14 +1536,16 @@ Key Features
             color: white;
         }
 
-        .personalization-section {
-            background: #fdf8e2;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            border-left: 4px solid #f39c12;
-        }
-        
+.personalization-section {
+    background: #fdf8e2;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 40px;  /* Increased from 20px to 40px */
+    margin-bottom: 20px;  /* Added bottom margin for good measure */
+    border-left: 4px solid #f39c12;
+    /* Add subtle shadow to separate it visually */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
         .personalization-section h3 {
             color: #2c3e50;
             margin-bottom: 15px;
@@ -2985,20 +3373,29 @@ validateFields() {
             }
         }
 
-        updateSliderFill(slider) {
-            if (!slider) return;
-            const min = parseFloat(slider.min);
-            const max = parseFloat(slider.max);
-            const val = parseFloat(slider.value);
+updateSliderFill(slider) {
+    if (!slider || slider.disabled) return;
+    
+    const min = parseFloat(slider.min) || 0;
+    const max = parseFloat(slider.max) || 100;
+    const val = parseFloat(slider.value) || 0;
 
-            if (isNaN(val)) return;
+    if (isNaN(val)) return;
 
-            const percentage = ((val - min) / (max - min)) * 100;
-            const fillGradient = 'linear-gradient(to right, #667eea, #764ba2)';
-            const trackColor = '#ecf0f1';
+    const clampedVal = Math.min(max, Math.max(min, val));
+    const percentage = ((clampedVal - min) / (max - min)) * 100;
+    
+    const fillGradient = 'linear-gradient(to right, #3498db, #9b59b6)';
+    const trackColor = '#d5d8dc';
 
-            slider.style.background = `linear-gradient(to right, ${fillGradient} ${percentage}%, ${trackColor} ${percentage}%)`;
-        }
+    slider.style.background = `linear-gradient(to right, ${fillGradient} ${percentage}%, ${trackColor} ${percentage}%)`;
+    
+    if (percentage > 0) {
+        slider.style.boxShadow = 'inset 0 0 5px rgba(52, 152, 219, 0.3)';
+    } else {
+        slider.style.boxShadow = 'none';
+    }
+}
 
         setupSlider(inputId, sliderId) {
             const numberInput = document.getElementById(inputId);
