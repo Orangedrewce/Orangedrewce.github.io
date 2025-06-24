@@ -7,6 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.4.7/peerjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
     <style>
         :root {
             --slider-track-bg: #ecf0f1;
@@ -1468,6 +1469,96 @@
                 text-align: left;
             }
         }
+        
+        /* Camera scan UI */
+        .camera-container {
+            display: none;
+            margin-top: 15px;
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        #qrScanner {
+            width: 100%;
+            display: block;
+        }
+        
+        .scan-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
+        
+        .scan-box {
+            width: 70%;
+            height: 70%;
+            max-width: 300px;
+            max-height: 300px;
+            border: 3px solid #3498db;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #3498db;
+            animation: scan 2s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { top: 0; }
+            50% { top: 97%; }
+            100% { top: 0; }
+        }
+        
+        .camera-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 10;
+        }
+        
+        .camera-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.8);
+            color: #2c3e50;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .camera-btn:hover {
+            background: white;
+        }
+        
+        .camera-btn.danger {
+            background: rgba(231, 76, 60, 0.8);
+            color: white;
+        }
+        
+        .camera-btn.danger:hover {
+            background: #e74c3c;
+        }
     </style>
 </head>
 <body>
@@ -1788,7 +1879,7 @@ Please add at least one entry.
                 <div class="sync-steps">
                     <div class="sync-step active">
                         <div class="sync-step-icon">1</div>
-                        <div class="sync-step-text">Enter Code</div>
+                        <div class="sync-step-text">Scan QR Code</div>
                     </div>
                     <div class="sync-step">
                         <div class="sync-step-icon">2</div>
@@ -1801,14 +1892,35 @@ Please add at least one entry.
                 </div>
                 
                 <div class="sync-input-group">
-                    <input type="text" class="sync-input" id="receiverCode" placeholder="Enter 6-digit code" maxlength="6">
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="text" class="sync-input" id="receiverCode" placeholder="Enter 6-digit code" maxlength="6" style="flex: 1;">
+                        <button id="scanQRBtn" class="sync-btn" style="padding: 12px; min-width: auto;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 20h7a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7M4 6.001H2v14a2 2 0 0 0 2 2h14v-2H4z"></path>
+                                <path d="m15 9-6 6"></path>
+                                <path d="m9 9 6 6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="camera-container" id="cameraContainer">
+                    <video id="qrScanner" width="100%"></video>
+                    <div class="scan-overlay">
+                        <div class="scan-box">
+                            <div class="scan-line"></div>
+                        </div>
+                    </div>
+                    <div class="camera-controls">
+                        <button id="cancelScanBtn" class="camera-btn danger">Cancel Scan</button>
+                    </div>
                 </div>
                 
                 <div class="sync-progress">
                     <div class="sync-progress-bar" id="receiveProgress"></div>
                 </div>
                 
-                <div class="sync-status" id="receiveStatus">Enter code to connect</div>
+                <div class="sync-status" id="receiveStatus">Enter code or scan QR to connect</div>
                 
                 <div class="sync-actions">
                     <button class="sync-btn secondary" id="cancelSyncBtn">Cancel</button>
@@ -1872,6 +1984,7 @@ Please add at least one entry.
             this.peerId = null;
             this.qrCode = null;
             this.receivedData = null;
+            this.videoStream = null;
             
             // UI elements
             this.sendContent = document.getElementById('sendContent');
@@ -1883,6 +1996,10 @@ Please add at least one entry.
             this.receiveProgress = document.getElementById('receiveProgress');
             this.receiverCode = document.getElementById('receiverCode');
             this.sendQrContainer = document.getElementById('sendQrContainer');
+            this.cameraContainer = document.getElementById('cameraContainer');
+            this.videoElement = document.getElementById('qrScanner');
+            this.scanBtn = document.getElementById('scanQRBtn');
+            this.cancelScanBtn = document.getElementById('cancelScanBtn');
             
             // Initialize event listeners
             this.initEvents();
@@ -1908,6 +2025,10 @@ Please add at least one entry.
             document.getElementById('generateCodeBtn').addEventListener('click', () => this.startPeer());
             document.getElementById('cancelSyncBtn').addEventListener('click', () => this.resetSyncState());
             document.getElementById('connectToPeerBtn').addEventListener('click', () => this.connectToPeer());
+            
+            // Camera scanning
+            this.scanBtn.addEventListener('click', () => this.startCameraScan());
+            this.cancelScanBtn.addEventListener('click', () => this.stopCameraScan());
         }
         
         resetSyncState() {
@@ -1916,7 +2037,7 @@ Please add at least one entry.
             this.sendStatus.className = 'sync-status';
             this.sendProgress.style.width = '0%';
             
-            this.receiveStatus.textContent = 'Enter code to connect';
+            this.receiveStatus.textContent = 'Enter code or scan QR to connect';
             this.receiveStatus.className = 'sync-status';
             this.receiveProgress.style.width = '0%';
             this.receiverCode.value = '';
@@ -1938,6 +2059,7 @@ Please add at least one entry.
             
             // Reset peer connection
             this.resetPeerConnection();
+            this.stopCameraScan();
         }
         
         resetPeerConnection() {
@@ -2057,6 +2179,78 @@ Please add at least one entry.
                     showToast('Failed to generate QR code');
                 }
             }, 100);
+        }
+        
+        startCameraScan() {
+            // Hide input, show video
+            this.receiverCode.style.display = 'none';
+            this.scanBtn.style.display = 'none';
+            this.cameraContainer.style.display = 'block';
+            
+            // Camera constraints
+            const constraints = {
+                video: { facingMode: "environment" },
+                audio: false
+            };
+
+            // Start video stream
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(stream => {
+                    this.videoStream = stream;
+                    this.videoElement.srcObject = stream;
+                    this.videoElement.play();
+                    this.scanQRCode();
+                })
+                .catch(err => {
+                    this.receiveStatus.textContent = `Camera error: ${err.message}`;
+                    this.receiveStatus.className = 'sync-status error';
+                    this.stopCameraScan();
+                });
+        }
+        
+        scanQRCode() {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            
+            const scanFrame = () => {
+                if (!this.videoElement || !this.videoElement.videoWidth) {
+                    return requestAnimationFrame(scanFrame);
+                }
+                
+                canvas.width = this.videoElement.videoWidth;
+                canvas.height = this.videoElement.videoHeight;
+                context.drawImage(this.videoElement, 0, 0, canvas.width, canvas.height);
+                
+                try {
+                    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                    const code = jsQR(imageData.data, imageData.width, imageData.height);
+                    
+                    if (code) {
+                        this.receiverCode.value = code.data;
+                        this.stopCameraScan();
+                        this.connectToPeer();
+                    } else {
+                        requestAnimationFrame(scanFrame);
+                    }
+                } catch (e) {
+                    console.error('QR scanning error:', e);
+                    requestAnimationFrame(scanFrame);
+                }
+            };
+            
+            requestAnimationFrame(scanFrame);
+        }
+        
+        stopCameraScan() {
+            if (this.videoStream) {
+                this.videoStream.getTracks().forEach(track => track.stop());
+                this.videoStream = null;
+            }
+            
+            this.cameraContainer.style.display = 'none';
+            this.receiverCode.style.display = 'block';
+            this.scanBtn.style.display = 'block';
+            this.videoElement.srcObject = null;
         }
         
         connectToPeer() {
