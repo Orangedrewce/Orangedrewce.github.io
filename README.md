@@ -1,4 +1,4 @@
-This is a link----> https://orangedrewce.github.io/climbing-tracker%20Mobile%20friendly.html
+This is a [[link](https://orangedrewce.github.io/climbing-tracker%20Mobile%20friendly.html)]
 
 
 
