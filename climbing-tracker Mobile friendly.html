@@ -2629,34 +2629,41 @@ Please add at least one entry.
             return Math.log(1 + rpe) * Math.exp(-days / 3); 
         }
         
-        calculateAdvancedReadiness(inputs) {
-            const {sleepQuality, sleepDuration, mood, stress, doms, tendons, daysSince, lastRPE, skin, mealBeforeTraining} = inputs;
-            if ([sleepQuality, sleepDuration, mood, stress, doms, tendons, daysSince, lastRPE, skin].some(val => val === '' || isNaN(val)) || !mealBeforeTraining) {
-                return null;
-            }
-            
-            const sleepFactor = this.calculateSleepFactor();
-            const injuryRiskFactor = this.calculateInjuryRiskFactor(inputs);
-            
-            const sleepOptimal = sleepDuration >= 7 && sleepDuration <= 9 ? 1 : Math.exp(-Math.pow((sleepDuration - 8) / 2, 2));
-            const sleepScore = (sleepQuality / 10) * sleepOptimal * sleepFactor;
-            const recoveryScore = this.recoveryDecay(daysSince);
-            const stressScore = 1 - (this.stressImpact(stress) / 10);
-            const physicalScore = Math.exp(-((doms - 1) + (tendons - 1)) / 5);
-            const fatigueScore = 1 - this.cumulativeFatigue(lastRPE, daysSince);
-            const moodScore = Math.pow((11 - mood) / 10, 1.5);
-            const skinScore = skin <= 3 ? 1 : skin <= 5 ? 0.7 : skin <= 7 ? 0.4 : 0.1;
-            
-            const mealFactor = mealBeforeTraining === 'yes' ? 1.05 : 0.95;
-            
-            const baseReadiness = (
-                sleepScore * 0.25 + recoveryScore * 0.20 + stressScore * 0.15 + 
-                physicalScore * 0.20 + fatigueScore * 0.10 + moodScore * 0.10
-            ) * skinScore * mealFactor * injuryRiskFactor;
-            
-            const interactionMultiplier = this.calculateInteractions(inputs);
-            return Math.max(0, Math.min(10, baseReadiness * 10 * interactionMultiplier));
-        }
+calculateAdvancedReadiness(inputs) {
+    const {sleepQuality, sleepDuration, mood, stress, doms, tendons, daysSince, lastRPE, skin, mealBeforeTraining} = inputs;
+    const isRestDay = inputs.climbingType.includes('No Training');
+    
+    // Allow missing RPE on rest days
+    const requiredFields = [sleepQuality, sleepDuration, mood, stress, doms, tendons, daysSince, skin];
+    if (requiredFields.some(val => val === '' || isNaN(val)) || !mealBeforeTraining) {
+        return null;
+    }
+    
+    // Use 0 for RPE on rest days or when missing
+    const effectiveRPE = isRestDay ? 0 : (lastRPE || 0);
+    
+    const sleepFactor = this.calculateSleepFactor();
+    const injuryRiskFactor = this.calculateInjuryRiskFactor(inputs);
+    
+    const sleepOptimal = sleepDuration >= 7 && sleepDuration <= 9 ? 1 : Math.exp(-Math.pow((sleepDuration - 8) / 2, 2));
+    const sleepScore = (sleepQuality / 10) * sleepOptimal * sleepFactor;
+    const recoveryScore = this.recoveryDecay(daysSince);
+    const stressScore = 1 - (this.stressImpact(stress) / 10);
+    const physicalScore = Math.exp(-((doms - 1) + (tendons - 1)) / 5);
+    const fatigueScore = 1 - this.cumulativeFatigue(effectiveRPE, daysSince);
+    const moodScore = Math.pow((11 - mood) / 10, 1.5);
+    const skinScore = skin <= 3 ? 1 : skin <= 5 ? 0.7 : skin <= 7 ? 0.4 : 0.1;
+    
+    const mealFactor = mealBeforeTraining === 'yes' ? 1.05 : 0.95;
+    
+    const baseReadiness = (
+        sleepScore * 0.25 + recoveryScore * 0.20 + stressScore * 0.15 + 
+        physicalScore * 0.20 + fatigueScore * 0.10 + moodScore * 0.10
+    ) * skinScore * mealFactor * injuryRiskFactor;
+    
+    const interactionMultiplier = this.calculateInteractions(inputs);
+    return Math.max(0, Math.min(10, baseReadiness * 10 * interactionMultiplier));
+}
         
         calculateSleepFactor() {
             const entries = Object.values(this.trainingData);
@@ -2730,51 +2737,55 @@ Please add at least one entry.
         }
         
         // --- VALIDATION ---
-        validateFields() {
-            const inputs = this.getInputs();
-            const missingFields = {};
-            let hasErrors = false;
-            let firstErrorElement = null;
-            
-            document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
-            
-            Object.keys(this.fieldDefinitions).forEach(fieldId => {
-                if (fieldId === 'sessionNotes') return;
-                
-                const field = this.fieldDefinitions[fieldId];
-                const value = inputs[fieldId];
-                const element = document.getElementById(fieldId);
-                
-                const addError = (el) => {
-                    hasErrors = true;
-                    el.classList.add('error');
-                    if (!firstErrorElement) firstErrorElement = el;
-                    if (!missingFields[field.section]) missingFields[field.section] = [];
-                    missingFields[field.section].push(field.name);
-                };
+validateFields() {
+    const inputs = this.getInputs();
+    const missingFields = {};
+    let hasErrors = false;
+    let firstErrorElement = null;
+    
+    document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+    
+    Object.keys(this.fieldDefinitions).forEach(fieldId => {
+        if (fieldId === 'sessionNotes') return;
+        
+        const field = this.fieldDefinitions[fieldId];
+        const value = inputs[fieldId];
+        const element = document.getElementById(fieldId);
+        const isRestDay = inputs.climbingType.includes('No Training');
+        
+        const addError = (el) => {
+            hasErrors = true;
+            el.classList.add('error');
+            if (!firstErrorElement) firstErrorElement = el;
+            if (!missingFields[field.section]) missingFields[field.section] = [];
+            missingFields[field.section].push(field.name);
+        };
 
-                if (fieldId === 'climbingType') {
-                    if (!value || value === '') {
-                        addError(document.getElementById('climbingTypeGroup'));
-                    }
-                } else if (fieldId === 'lastRPE') {
-                    // Only require RPE if last session was training (not rest)
-                    if (value === '' && inputs.daysSince > 0) {
-                        addError(element);
-                    }
-                } else if (value === '' || (field.type === 'number' && isNaN(value))) {
-                    addError(element);
-                } else if (field.type === 'time' && value === '') {
-                     addError(element);
-                }
-            });
-            
-            if (firstErrorElement) {
-                firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (fieldId === 'climbingType') {
+            // Always require at least one selection
+            if (!value || value === '') {
+                addError(document.getElementById('climbingTypeGroup'));
             }
-            
-            return { hasErrors, missingFields };
+        } else if (fieldId === 'lastRPE') {
+            // Only require RPE if:
+            // - There was a previous session (daysSince > 0)
+            // - And today is NOT a rest day
+            if ((value === '' || isNaN(value)) && inputs.daysSince > 0 && !isRestDay) {
+                addError(element);
+            }
+        } else if (value === '' || (field.type === 'number' && isNaN(value))) {
+            addError(element);
+        } else if (field.type === 'time' && value === '') {
+             addError(element);
         }
+    });
+    
+    if (firstErrorElement) {
+        firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    
+    return { hasErrors, missingFields };
+}
         
         showValidationModal(missingFields) {
             const errorsDiv = document.getElementById('validationErrors');
@@ -2998,33 +3009,34 @@ Please add at least one entry.
 
 
         calculateAndDisplaySleepDuration() {
-            const snoozeTime = document.getElementById('snoozeTime').value;
-            const wakeTime = document.getElementById('wakeTime').value;
-            const display = document.getElementById('sleepDurationDisplay');
+    const snoozeTime = document.getElementById('snoozeTime').value;
+    const wakeTime = document.getElementById('wakeTime').value;
+    const display = document.getElementById('sleepDurationDisplay');
 
-            if (!snoozeTime || !wakeTime) {
-                display.textContent = '--:-- hours';
-                return NaN;
-            }
+    if (!snoozeTime || !wakeTime) {
+        display.textContent = '--:-- hours';
+        return NaN;
+    }
 
-            let start = new Date(`1970-01-01T${snoozeTime}`);
-            let end = new Date(`1970-01-01T${wakeTime}`);
+    let start = new Date(`1970-01-01T${snoozeTime}`);
+    let end = new Date(`1970-01-01T${wakeTime}`);
 
-            if (end < start) {
-                end.setDate(end.getDate() + 1);
-            }
-            
-            const diffMs = end - start;
-            const durationHours = diffMs / (1000 * 60 * 60);
-            
-            if (isNaN(durationHours) || durationHours < 0) {
-                 display.textContent = '--:-- hours';
-                return NaN;
-            }
+    // Handle overnight sleep (snooze time is PM, wake time is AM)
+    if (end < start) {
+        end.setDate(end.getDate() + 1);
+    }
+    
+    const diffMs = end - start;
+    const durationHours = diffMs / (1000 * 60 * 60);
+    
+    if (isNaN(durationHours) || durationHours < 0) {
+         display.textContent = '--:-- hours';
+        return NaN;
+    }
 
-            display.textContent = `${durationHours.toFixed(2)} hours`;
-            return durationHours;
-        }
+    display.textContent = `${durationHours.toFixed(2)} hours`;
+    return durationHours;
+}
 
         getInputs() {
             const ids = ['sleepQuality', 'mood', 'stress', 'doms', 'tendons', 'skin', 'daysSince', 'lastRPE', 'mealBeforeTraining', 'sessionNotes', 'snoozeTime', 'wakeTime'];
