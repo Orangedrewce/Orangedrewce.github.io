@@ -1,3 +1,9 @@
+This is a link----> https://orangedrewce.github.io/climbing-tracker%20Mobile%20friendly.html
+
+
+
+
+
 Generic corprate bullshit bla bla bla 
 Im so smart youre so dumb. no, most of this isnt stolen blah blah blah.
 
