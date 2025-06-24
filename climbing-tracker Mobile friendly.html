@@ -5,11 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ClimbSmart - Training Readiness Tracker</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.4.7/peerjs.min.js"></script>
     <style>
         :root {
             --slider-track-bg: #ecf0f1;
             --slider-thumb-bg: #764ba2;
             --slider-fill-color: #667eea;
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #3498db;
         }
 
         * {
@@ -24,6 +31,7 @@
             min-height: 100vh;
             padding: 20px;
             color: #2c3e50;
+            overflow-x: hidden;
         }
         
         @media (max-width: 768px) {
@@ -40,6 +48,8 @@
             padding: 20px;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1;
         }
         
         @media (max-width: 768px) {
@@ -114,7 +124,7 @@
         }
         
         .tab-button.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary-gradient);
             color: white;
             transform: translateY(-2px);
         }
@@ -257,7 +267,7 @@
             border-radius: 5px;
             outline: none;
             cursor: pointer;
-            position: relative; /* Context for z-index */
+            position: relative;
         }
 
         input[type="range"]::-webkit-slider-thumb {
@@ -269,10 +279,10 @@
             border-radius: 50%;
             border: 3px solid white;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            margin-top: -6px; /* center thumb on track */
+            margin-top: -6px;
             transition: transform 0.2s ease;
             position: relative;
-            z-index: 2; /* Ensure thumb is above the track background */
+            z-index: 2;
         }
 
         input[type="range"]:active::-webkit-slider-thumb {
@@ -301,15 +311,9 @@
             border: 2px solid #ecf0f1;
         }
         
-        /* Field validation styles */
         input.error, select.error {
             border-color: #e74c3c;
             background-color: #fee;
-        }
-        
-        input.error:focus, select.error:focus {
-            border-color: #e74c3c;
-            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
         }
         
         .checkbox-group label {
@@ -335,7 +339,7 @@
         
         .recommendation-panel {
             grid-column: 1 / -1;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary-gradient);
             color: white;
             padding: 20px;
             border-radius: 12px;
@@ -491,7 +495,7 @@
         }
         
         .update-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary-gradient);
             color: white;
             border: none;
             padding: 15px 30px;
@@ -704,7 +708,6 @@
             }
         }
         
-        /* Custom Modal Styles */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -820,7 +823,6 @@
             background: #bdc3c7;
         }
         
-        /* Validation Error Modal Styles */
         .validation-modal .modal-content {
             text-align: left;
             max-width: 500px;
@@ -877,7 +879,6 @@
             background: #2980b9;
         }
         
-        /* Welcome Modal Styles */
         .welcome-modal .modal-content {
             max-width: 550px;
             padding: 40px;
@@ -964,7 +965,7 @@
         }
         
         .welcome-modal .close-welcome-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary-gradient);
             color: white;
             border: none;
             padding: 14px 40px;
@@ -999,7 +1000,6 @@
             }
         }
         
-        /* Loader */
         .loader {
             display: none;
             position: fixed;
@@ -1041,7 +1041,6 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Swipe indicator */
         .swipe-indicator {
             text-align: center;
             margin-top: 10px;
@@ -1056,7 +1055,6 @@
             }
         }
         
-        /* Data backup section */
         .backup-section {
             background: #f8f9fa;
             padding: 20px;
@@ -1080,7 +1078,6 @@
             min-width: 200px;
         }
         
-        /* History navigation */
         .history-nav {
             display: flex;
             justify-content: space-between;
@@ -1103,7 +1100,6 @@
             font-weight: bold;
         }
         
-        /* Chart controls */
         .chart-controls {
             display: flex;
             flex-wrap: wrap;
@@ -1125,7 +1121,6 @@
             color: white;
         }
 
-        /* Personalization section */
         .personalization-section {
             background: #fdf8e2;
             padding: 20px;
@@ -1158,7 +1153,6 @@
             margin: 10px 0;
         }
 
-        /* Toast notification */
         #toast {
             position: fixed;
             bottom: 20px;
@@ -1187,10 +1181,296 @@
             opacity: 0.6;
             pointer-events: none;
         }
+        
+        /* Sync Tab Styles */
+        .sync-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .sync-tabs {
+            display: flex;
+            background: var(--primary-gradient);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+        
+        .sync-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .sync-tab.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .sync-content {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sync-content.active {
+            display: block;
+        }
+        
+        .sync-title {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.6em;
+        }
+        
+        .sync-description {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            text-align: center;
+            line-height: 1.6;
+        }
+        
+        .qr-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .qr-container {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .qr-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            color: #7f8c8d;
+            font-style: italic;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .qr-error {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            color: #e74c3c;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .peer-id-display {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: 3px;
+            color: #2c3e50;
+        }
+        
+        .sync-input-group {
+            margin-bottom: 25px;
+        }
+        
+        .sync-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        
+        .sync-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .sync-status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .sync-status.connecting {
+            background: #fdf8e2;
+            color: #f39c12;
+        }
+        
+        .sync-status.connected {
+            background: #e8f4f8;
+            color: #3498db;
+        }
+        
+        .sync-status.success {
+            background: #e8f6ef;
+            color: #27ae60;
+        }
+        
+        .sync-status.error {
+            background: #fceae9;
+            color: #e74c3c;
+        }
+        
+        .sync-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .sync-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 140px;
+        }
+        
+        .sync-btn.primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+        
+        .sync-btn.secondary {
+            background: #ecf0f1;
+            color: #7f8c8d;
+        }
+        
+        .sync-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sync-progress {
+            height: 6px;
+            background: #ecf0f1;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 25px 0;
+        }
+        
+        .sync-progress-bar {
+            height: 100%;
+            background: var(--primary-gradient);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .sync-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .sync-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: #ecf0f1;
+            z-index: 1;
+        }
+        
+        .sync-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 2;
+        }
+        
+        .sync-step-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #ecf0f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .sync-step.active .sync-step-icon {
+            background: #667eea;
+            color: white;
+        }
+        
+        .sync-step.completed .sync-step-icon {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .sync-step-text {
+            color: #2c3e50;
+            font-size: 0.9em;
+            text-align: center;
+            max-width: 100px;
+        }
+        
+        .sync-step.active .sync-step-text {
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .sync-steps {
+                flex-direction: column;
+                gap: 25px;
+                align-items: center;
+            }
+            
+            .sync-steps::before {
+                display: none;
+            }
+            
+            .sync-step {
+                flex-direction: row;
+                gap: 15px;
+            }
+            
+            .sync-step-text {
+                text-align: left;
+            }
+        }
     </style>
 </head>
 <body>
-<!-- Toast container -->
 <div id="toast"></div>
 
 <div id="loader" class="loader">
@@ -1212,7 +1492,7 @@
             <h3>Support the Project</h3>
             <a href="https://www.paypal.me/futurefusionpcs" target="_blank" rel="noopener noreferrer" class="qr-link">
                 <div class="paypal-qr">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAH0AAACiCAMAAABbNjLtAAAAWlBMVEVHcEwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACNqrUmAAAAHXRSTlMABAkPIxYBNixAHGBQSFhy2OWPhWnyfJiuuMyjwrW96TMAABP2SURBVHja7FjZduUgDjSb2cHGNt7//zdHAvsu6ZtM5nHOiR5ud9gKRCGV3DR/9md/9md/9md/9md/9md/9md/9n9sRjsXbtOkNlItmoZI0zSt5PC3Ukyz0swl1aaMEZo2DTRjnyh9RhEczZ7rwYriB2wxdNP5tI3VZj0NANkn2Fy3kIYeq50sNse9c/1QxuRJNw00H4edYtPIaUid72ec97LitEX2HTg/cMBt59ldOzWDxJ15cEC0bUOsVUlBc9JuNNiMO8wwWCU+Wp7KaO2yyA7aprc1z/2b47PlPFer5WXLA53PFcElcw1Vc0H3YYCj+KGMI3GUs7JRJW2H5wkBPd1L6nE7z0Q+oofznF/8kh7ous/l36GXV5+bQmneO4PNqmz+WEJv1zVMY2l+otsXXq3nY5E3a/ez440JMcZx9G1FpwrIRB1nnBjGFOG4PSNEEExQLwS2cEc5o4YYAaM5hx/DoZkZwsWFbmLMYJ4AWc74CZ0e59LSpdJjJYAOrHM9bFz2GSi0Dci6ncAhV9uH/QhdRFLl3PkuxV6/LlamuC5d6P4inW9Ed6aP176dc2P6d3Q1g5/M7F1WAzibDSOwLkeZZMwS6WBm5xJP1s/87eXOLiSVwjv6mSvKd+j8CzofFPA631dFo5MD/+fO8LADXLUalMXRIfLHlDf0AT08//rsfopLV15wZX+/xMl/mp2xOUzhOMqUMOVP6Pm/oHcv6MA6FoT0zHJm4IDALMmNZQypxwQxhInW0GesExZjnTUlBGIfu9DdhR5/Rhc3Oq3ocgvpcN04bODY3MHTsp3fd9rQffUd9OnthcKuAwfoLtT3uWkk6v+CDj/TG/rih12uYcQQFRa4crfKGQIGGZJa3bjLJTyX0Cvctlor+8dFLePt+SvW2Z/RidIezMnrvYuRE8qiklZY1aCTVRaEwHt3ltBWW0pbaYvzSfA8YnyirbdmVDJSSi50ptGkZD+jN19inTvHkjLm3vW1N58O6WVX6CVLD95IU4l1plvHszgCmi1OUf/Gup/QF/5iez073DcNnGsa8A1RYgJriXBCauChhJjYqABnJ4x4aUY4e8ta6VhQyt9nz+a5quq+RT/7F5tOiNZ6wzR1jBihgV5iHdqGppk2JEFOIBnpEFfYYTjgpPKAK9dbuKccGR13Tq/Lnt+jv1sP6MeNzo+CngC9sC7trGmHBdEPjugSgd/R15Lpvy77EZ1gfinJIA/FEigBYY3SInBwI0P/Om2c8Bo8rz1zwEicyKhWPMDbNrZ4nkjNcApz4A+Rh5zjq+lfKy13QuAakUL8inX5tNsxnuPa2TM/QuBeYp1FRiLrMNalPvRz+2skgmm/hSttW4J/4LnMyHWAx3a9Kho0H41zPHLvoA9CPI6mViokHPSVRWCKg7MLK+uyFH9I0/6wlzbDTUKMkPsY4CeX0FFD9eLGd0Ekr75xlou1y1NLtEOiSMaiUsQOl8/27Fadkl58ntn3R58PjKYbJPLY+XX23Z1OZBeH7S2z+a5cHkkrRNr80kf2hV4rgSuKJDhmu7l9dl2Yjx8krXTgNUgngnLLvIYkUk8uIcvAm5amZhLNpHr0eaAXFS1K8ZptGFBQUFHEOQ0KfryCEKElc4yVZkk+K6v+PsMwhW2lV3BagUJDglg35An8HaHvoI8poU9PRX1pvrH8i+FxGCa3QVJ2B8g9dzXzz/zO9M4WA4+hrXtsLUoFn02UElUzqIvRXn0wxeR6P6Wv6AwQJPV2oE/rwcQAygOENjRjt4v049ljuknhd5Wj3m/W8f1S1Hu5TjJEuSsU2vW4IQGwhimjrFPaOABCeHBM7+oCwOb0kXpk327uxt5tu+1v1t2KOlcxXKQzuNH3NbUPmPZjH47FVu/CSrCf1N0utlVx0uW9+d2UL/4kSkDg0gqVcaEJLzoamkFWlzNwUVQzdQI0dmnm+L+iqKvQ4UQx5e7RqMRNWan0tZ9fXN0V7+aMB4EgscLzoUstDVT/poTpeoQ+zlDH5TLly5JFUfOaeJciwunPoa696h+Wgk5qiC1cFP7YoUwUKbztdYxq9iHz5FFohy/oIMILHW4RHiP534ppiKbNo4p0mdWn4Ip0NlEF5G5tLnRv6GghnI4jj6pUkQA8aok1q0IRDpy3kf4a/X6gWCrn8kozVCd7oZCbLDKL7Ojdq44TGCLgQiy+91J08x5KHCDqOBWO2uWlvPvZBGMSU6qpdZxRRFAIXJILh58JJFMg/ZBehjKgIEN6AfsIVyygHFL4wcFz46hgQEYBVR/j6pcpTxx7uSjfB4zzqC62GPFpjZ2sr6oGbd4B68xWWeexz/e3juNbhoyBKwF/fed+7XY257KeXMDPHFUzFmw7+NkvFX2YKxn3gD+xjNaLuqbUI+w2LCrBSiQNz+ZvMSGajjWRj15FE1xLWjdS0l59+CjQJ4RSSCfVyl4ul8LoIKLyuIgeMb9jXuejQMXQOhQJF8CnLIfppMrjfo34EYZhlqnvfZqHKp3h/Otx27okx14F8xamuBah/RDhY+UvPWCll1z2TwlfpHM5BMhjz7wjgmgPP6DqguKO3t8Z3uy4fUpEqzWIcIlTYLTG3TKsPRhrYSVHQG1b8u1no/ge/Xa5ubTrzeZDr/lb9dtd+cg/Ne1mxyoxQISHDUo/rPoWfYR8fPfsig5+RZ/l6geYY/Mq18fOeP9VJF9xVGMJJ0sJsLpYxZhYBlDbKfnDp10C+vLto2dEuYfng6AUFLUOzCqgmZVPevyj/CshWijqNFQ10otRFQ2gHAPOQmUHLUY7WI78FO+eRVksBdsZQTrXr4Xzy8etL/YQNsA6dinqSyXV5LqtFkX486PCJ0VNmls6O80tFqugqB0cBBkp22vb+V/0Wwq0QFRwQMApOJrjI20pcc7YcnbVfj47gUJ9v/MY6GAABB28ujzrpUavceWfKI/oL9/gJBZf/BLaAeOPR0V9g8ZFfEZf/8O4lS2mCgNRs5E9IERW+/+/eWcmgWIr9vrQBxSCOJk5W+MhRBBhg5oPa5qWsJZibFfznvB9nfew7TzWfCag7ZHeUc3vq1/VPGAbmiRll3LAzxb4mMKtXi5O0Pl2aDu/a15FoTVsdZhJgtGnqX0AoobGaGEwiejqRX61GpICRuhQW1M6FAnO+7i8nbXPn6+6Uf2Xx6oDOKQObG73CfvIy+qvq466s25dG5Ge3cwovZcj3JFq8WdtmlvpUvHX6jtHgU8nDz0/eqRzdJEWviocbm5uNMmjjPcZ5Ijeh033LVbCUDEy4GA5eZpx8FV+/eqvIukW28FswU9m8nbSE+BvjSAcFaUt5A9kjiZ233aAKhFQLuledkHfxW4kxQye5s/FXwc3AO1tTfcRGGE3AtBGbJ6Wma4E2Hz6DHCaCFiFWYOQxQmvpOFaAY+TQiYSC+bXzba9KN5Scsl15EZwB4MJ0HbQCnkcoW0GpE9+BDgSgYpbt71W5pWkALmzibrhHsu8bdMATfhV6H5Sr/sG4YCo850e5f/BGhSj+eg1+g9yNH40vS0mBHkT1WhpGXvzJQDTwtFvbA5XGrweTJv/VElGiTiYt8j99gcx6DS+3nb81d1eVzfDy1tiTHp0eJi+jL5q82gwtZXLnOjw9qNMSslf1A48+fR4AQnw5IEWLksg6ne9341FC8TxYEgmKGBaC4U4GLAJ9jpGGiZt8Xe/IxSVtlBw4mjlcIp0KggjRVDKQf1eKie4RQa0QDIKI/H+LcQ3/UpsAp4bW2j17W2/uodtES9sGE9JeDl7T0Rtr3Ya9oiUoEekiG3FnLeSn1CjxsO15N8+QaD148DgSkdHoQZF/pmZbdt/LvyG3A/otNwHaJTpQIAAj7Mt0kQp+XRxfoMcjz5oW5Q7WgfYHHo2SiHNTY3afiZzEqcMYBsOX3P3QpvpbrvpBKse9pPAWNojzKt+eHjY7w9fpZ5YGeH7W1dYbRGeU2NxUmoNOJhKCCBPLOKUWTt4XQJTIUR2DG9aWhGNs4J6HQ1emLPB6XA1Zkz3YnMQQPX9k5RghxQO70soeImLdskROvt+USdGOHkq4g5wSlzzMKtLPH8S8iOSBIBJ9PGMf/wi/1Rb+wlQ83kFtQ0BAQ5cCZgBIurLwuenp4I4GCEiUDZvdJn94g/3PgPrUW2RrnVlPpzBYUDULYJp0bD/VRD2qrOV3g0P/ZeiHb6rbtpZH6GkJTz8Xxo1x1sjKblyAPjujMF3B5LBGWnwzS44s58ohTOFIFx4SUQCCrXOIcDmViORKPT3AlEDb8p50VMuv9ZSfq1hs0tq551JJXTEACPT4ZcntfVw+xPgbziFSsXOZbLR734rZkpzwaRYDytkoIvopqhlSkQJoYChVgKs/iztza923uIa+wnI5Wt4ANoc1vzqB9wm9Uq36tlgK5/h2Q1XiDog4BUARghRo8OBu5RznhzQYXJGrIS9DNQMqocB0DawpyXJOUQCRQTqByCcCegOAIeAPEeuDdI7VHm0FVZVovjru8/3hNKfqYj6XHVjFRUkSn/HlnwMM/UzBOGsIOqEQ7mmPrCpVbVbrEWHAEZ4oR40MTkibNDQi2TKUDmBIgRSZkk+aVgitF3uDhq69S5r7Z23JKnIVjYN9XmVNXz35qazg4lBV7o1IUk4JYv3M24yJAFNOaGobGcNiHqONLAAHm8+IdCOm+kH9lZoahsC4ZOtM05MOU6OhKZh+EOrZNMzYqd1a4kxpHuc53DPNKwJUbdrXDd0Td5CREHS7rzsp5CaNuIv5u8Xp/zgcZI7DTiYS6YBGTNrWYXHmPrgUHpOwGGFvZKkP2mYVqp6HU4JzZVC1Oya4vCVKzk0WgAllc77XjIEHFyVJsDBCicsgDTUPosOfXvtdXxBpXTuLFad/CWuVkhXEHX7AESdHjsvkdcadRzkEBBRIzLOLRSdH91gq2FyDIimyQh1E3w6xiPbQxGkMzYPBZv3pvX7e+nCGckohYdeHZeS9bBBC0SMoa4Od0ZYSfb2oH4JVhgz/EHh3MIpfXyzQImp3C6ePJbXfb/9VPgZ0GFPDgA+4hoq2ihrFL/DIN3UAn7Z0JZ/YtZo3X+sn4bCo71G1GiXH60I3Q9H5QVNTUhulCrOyE0qrkm6dgpdE2B9UULB0WGJ0BmweXSYNcKphIVaitFJqt8LZwRR89CZ080uorpC/Rv2YO8tgvBhBBDeNy8c9hkIm3cD6dcZOWwoj7KZLqouY/Wk6Rt6sHZkNWN2To0dz2qLCWoCQXifm9Nhm3vTBzxc4kl20+NIpYLduH+PbYpPR8GhkYJDu3ZR9WvkeDnQe2VDjSa20E3tuN+ZzNJnIJ63pp4SAVH7UBA1bfb2Cp8031i3LWoL6Tb7FCU6DFNmPBsmNeF2GG9Ydf6RD2w+VSfUPwui/qEAvWDKw58lU0RhSFKl8pxw8BrMHmiHAAdjRkIkCac4aI9MVM0qKW1VcpXCASOE6QsUTgtbTGVePeP/fMUSHGqGJ6EL9ewJHusu9EtAw8R0dHhoCggP2xw6v2eNnsOhh20JnRHb5X51/726Xkp7aDeNgqXY2rCg+7HYsdcLXM/hYVUhlAXANdh6CuUIDtTW02Ezp/weUfM8vL56rEIGYx9tDi8yVV0sgYjWNYhBbRKt/kbicDgEhWOfk3tCp3hMg4aIIDXh7Oe3/0y8yOK/u2Km95T6YEWl9hUOxbNBSmpheIxzqUOHsra8F2xD8yp/DZfo/evRnV4PXL0o7giPKb7Ckm2QRKlM1IDpIBAO3QBui0IbbARwaBPDp0EIkUX40wT8NXRUQTJxtfqmTq8NVyfB+VbzRGRz+BVjPU9A1BEtEFliPSNA3a2PzxrHmC0eVoedwabpUIkX9Tnl1TRIKHrKGq3hrCyrpd9Xn+aI78kaafJr3AbyZWj1SMmkuT3I5Z6ibYYPq/Nx27Z5nkfKFrqbqJvXJKLDAKsd7GnY4A0XALlxBxdF2yFfofeUVToywShrJKMAGqMFxZNq57j9mS188rJ6PEU4+pr68OtJMtKPvrbH3C3YHtdcq24q6kFC9SBB1/zKnznjr2SjA1bqCF5rNBbJNTHZpcBYSSaRRUlgGg6HCIg6JIoncfRYVLZoaFp8L7hW/rn6a6rTYeCDgkP+lDXifYtou9RR6TZb+YHtbEcE4WTd+o1SS7Qmhyb02Yf9nWjFXGXnJyyTc9aIb1OAGiuzX6KZItdSVN+dVndt+7SYWtK104bPHvTvNC8lWh0Z7QB5tKwJfW6h6hjFWmHKKK7wDyb7DQo0Fk1QA8MHyhINPUDUMLQsHdb8Mr5PiUf1I08bMJqLU5Sg84OCBN85JEakbM8eYNWl+UnOiHxRSh9pgUIlm+4K17HlawagvN7v0OimurocTBoBQcRRDZEwLUCF7EtWrSm5i4KoGwaoGQBJht+gCMs7xEglnoTWixzt7WLA9phgb5TDl/jOz2e0Oc6ZE8oa6bY1G6W4I5kpdjJwGEG4nKqZcmA0jWTOTJoiSP591gjdnu13ep/NayHW3XAQtgWg8/z0GHEw+H8TstvGe1pL1sje8w/SklDxxdQH0J/myhnB7PyS4/5aanqfeJySqF8DLcMbAlJmuME/GCrCKKVR+J6jCNK/ds2oBWEYBsJqu3VTyYZlQ8H//zu9JBRd0TF82sN9j4VQQvJwRy5IY9eP7uo5JEhrCfFsiez2p49DC4/qrN5oI/fiYfOs8SsNDtnF6FkSL0vHAA97cbnnJQLb64rael9Lmszj9IHm5yGPfVoxi84W0vmUB431YLPcfFW3iXhLrs3VTllJDx+HLfHn1f9T/yYdD8sN3a4Hv5T8UUwIIYQQQgghZGe8AFZSfelgpuPoAAAAAElFTkSuQmCC" alt="PayPal">
+                    <img src="data:image/png;base64,image" alt="PayPal">
                 </div>
             </a>
             <p style="font-size: 0.9em; color: #7f8c8d; margin-top: 10px;"></p>
@@ -1221,24 +1501,25 @@
             </p>
         </div>
         
-        <button class="close-welcome-btn" onclick="app.closeWelcomeModal()">Start Tracking</button>
+        <button class="close-welcome-btn" id="closeWelcomeBtn">Start Tracking</button>
     </div>
 </div>
 
 <div class="container">
-    <h1 onclick="app.showWelcomeModal()">ClimbSmart Training Tracker</h1>
+    <h1 id="appTitle">ClimbSmart Training Tracker</h1>
     
     <div class="nav-tabs" role="tablist">
-        <button class="tab-button active" onclick="app.switchTab('daily')" role="tab" aria-selected="true">Daily Entry</button>
-        <button class="tab-button" onclick="app.switchTab('history')" role="tab" aria-selected="false">Training History</button>
-        <button class="tab-button" onclick="app.switchTab('analytics')" role="tab" aria-selected="false">Analytics</button>
+        <button class="tab-button active" data-tab="daily" role="tab" aria-selected="true">Daily Entry</button>
+        <button class="tab-button" data-tab="history" role="tab" aria-selected="false">Training History</button>
+        <button class="tab-button" data-tab="analytics" role="tab" aria-selected="false">Analytics</button>
+        <button class="tab-button" data-tab="sync" role="tab" aria-selected="false">Sync</button>
     </div>
     
     <div id="daily" class="tab-content active" role="tabpanel">
         <div class="date-selector">
             <label for="currentDate">Date:</label>
             <input type="date" id="currentDate">
-            <button class="update-btn" onclick="app.loadDataForDate()">Load Date</button>
+            <button class="update-btn" id="loadDateBtn">Load Date</button>
         </div>
         
         <div class="dashboard">
@@ -1247,7 +1528,7 @@
                 <div class="input-group slider-group">
                     <label for="sleepQuality">Sleep Quality (1-10)</label>
                     <div class="slider-container">
-                        <input type="number" id="sleepQuality" min="1" max="10" step="0.5" placeholder="1-10" onkeypress="return app.isNumberKey(event)">
+                        <input type="number" id="sleepQuality" min="1" max="10" step="0.5" placeholder="1-10">
                         <input type="range" id="sleepQualitySlider" min="1" max="10" step="0.5">
                     </div>
                 </div>
@@ -1286,7 +1567,7 @@
                 <div class="input-group slider-group">
                     <label for="stress">Stress Level (1-10)</label>
                     <div class="slider-container">
-                        <input type="number" id="stress" min="1" max="10" step="1" placeholder="1-10" onkeypress="return app.isWholeNumberKey(event)">
+                        <input type="number" id="stress" min="1" max="10" step="1" placeholder="1-10">
                         <input type="range" id="stressSlider" min="1" max="10" step="1">
                     </div>
                 </div>
@@ -1343,14 +1624,14 @@
                 <div class="input-group slider-group">
                     <label for="daysSince">Days Since Last Session (0-14)</label>
                      <div class="slider-container">
-                        <input type="number" id="daysSince" min="0" max="14" step="1" placeholder="0-14" onkeypress="return app.isWholeNumberKey(event)">
+                        <input type="number" id="daysSince" min="0" max="14" step="1" placeholder="0-14">
                         <input type="range" id="daysSinceSlider" min="0" max="14" step="1">
                     </div>
                 </div>
                 <div class="input-group slider-group">
                     <label for="lastRPE">Last Session RPE (1-10, 0=rest)</label>
                      <div class="slider-container">
-                        <input type="number" id="lastRPE" min="0" max="10" step="0.5" placeholder="0-10" onkeypress="return app.isNumberKey(event)">
+                        <input type="number" id="lastRPE" min="0" max="10" step="0.5" placeholder="0-10">
                          <input type="range" id="lastRPESlider" min="0" max="10" step="0.5">
                     </div>
                 </div>
@@ -1370,7 +1651,7 @@
                             Lead
                         </label>
                         <label for="climbingNone">
-                            <input type="checkbox" id="climbingNone" value="No Training" onchange="app.handleTrainingChange()">
+                            <input type="checkbox" id="climbingNone" value="No Training">
                             No Training
                         </label>
                     </div>
@@ -1403,9 +1684,9 @@
         </div>
         
         <div class="button-group">
-            <button class="update-btn" onclick="app.calculateRecommendation()">Update Recommendation</button>
-            <button class="update-btn" onclick="app.saveEntry()">Save Entry</button>
-            <button class="update-btn" onclick="app.clearCurrentEntry()" style="background: #e74c3c;">Clear Data</button>
+            <button class="update-btn" id="updateRecBtn">Update Recommendation</button>
+            <button class="update-btn" id="saveEntryBtn">Save Entry</button>
+            <button class="update-btn" id="clearEntryBtn" style="background: #e74c3c;">Clear Data</button>
         </div>
         
         <div class="recommendation-panel" id="recommendationPanel">
@@ -1417,22 +1698,22 @@
     
     <div id="history" class="tab-content" role="tabpanel">
         <div class="history-nav">
-            <button class="nav-btn" onclick="app.prevWeek()">◀ Previous</button>
+            <button class="nav-btn" id="prevWeekBtn">◀ Previous</button>
             <div class="current-week" id="currentWeek">Current Week</div>
-            <button class="nav-btn" onclick="app.nextWeek()">Next ▶</button>
+            <button class="nav-btn" id="nextWeekBtn">Next ▶</button>
         </div>
         
         <div class="export-section">
-            <button class="export-btn" onclick="app.exportToCSV()">Export to CSV</button>
-            <button class="export-btn" onclick="app.confirmClearAllData()" style="background: #e74c3c;">Clear All Data</button>
+            <button class="export-btn" id="exportCsvBtn">Export to CSV</button>
+            <button class="export-btn" id="clearAllDataBtn" style="background: #e74c3c;">Clear All Data</button>
         </div>
         
         <div class="backup-section">
             <h3>Data Backup & Restore</h3>
             <div class="backup-controls">
                 <input type="text" class="backup-input" id="backupCode" placeholder="Backup code">
-                <button class="export-btn" onclick="app.exportBackup()">Generate Backup</button>
-                <button class="export-btn" onclick="app.importBackup()">Restore Backup</button>
+                <button class="export-btn" id="exportBackupBtn">Generate Backup</button>
+                <button class="export-btn" id="importBackupBtn">Restore Backup</button>
             </div>
         </div>
         
@@ -1454,6 +1735,88 @@ Please add at least one entry.
         
         <div class="swipe-indicator">Swipe left/right to navigate between tabs</div>
     </div>
+
+    <div id="sync" class="tab-content" role="tabpanel">
+        <div class="sync-container">
+            <div class="sync-tabs">
+                <div class="sync-tab active" data-tab="send">Send Data</div>
+                <div class="sync-tab" data-tab="receive">Receive Data</div>
+            </div>
+            
+            <div class="sync-content active" id="sendContent">
+                <h2 class="sync-title">Send Your Training Data</h2>
+                <p class="sync-description">Share your training data securely with another device using QR code or code</p>
+                
+                <div class="sync-steps">
+                    <div class="sync-step active">
+                        <div class="sync-step-icon">1</div>
+                        <div class="sync-step-text">Generate Code</div>
+                    </div>
+                    <div class="sync-step">
+                        <div class="sync-step-icon">2</div>
+                        <div class="sync-step-text">Connect Device</div>
+                    </div>
+                    <div class="sync-step">
+                        <div class="sync-step-icon">3</div>
+                        <div class="sync-step-text">Transfer Data</div>
+                    </div>
+                </div>
+                
+                <div class="qr-section">
+                    <div class="qr-container" id="sendQrContainer">
+                        <div class="qr-placeholder">Click "Generate Code" to start</div>
+                    </div>
+                    <div class="peer-id-display" id="peerIdDisplay">CLICK "GENERATE CODE"</div>
+                </div>
+                
+                <div class="sync-progress">
+                    <div class="sync-progress-bar" id="sendProgress"></div>
+                </div>
+                
+                <div class="sync-status" id="sendStatus">Ready to generate sync code</div>
+                
+                <div class="sync-actions">
+                    <button class="sync-btn secondary" id="copyPeerIdBtn">Copy Code</button>
+                    <button class="sync-btn primary" id="generateCodeBtn">Generate Code</button>
+                </div>
+            </div>
+            
+            <div class="sync-content" id="receiveContent">
+                <h2 class="sync-title">Receive Training Data</h2>
+                <p class="sync-description">Enter the code from the sender to receive training data</p>
+                
+                <div class="sync-steps">
+                    <div class="sync-step active">
+                        <div class="sync-step-icon">1</div>
+                        <div class="sync-step-text">Enter Code</div>
+                    </div>
+                    <div class="sync-step">
+                        <div class="sync-step-icon">2</div>
+                        <div class="sync-step-text">Connect</div>
+                    </div>
+                    <div class="sync-step">
+                        <div class="sync-step-icon">3</div>
+                        <div class="sync-step-text">Receive Data</div>
+                    </div>
+                </div>
+                
+                <div class="sync-input-group">
+                    <input type="text" class="sync-input" id="receiverCode" placeholder="Enter 6-digit code" maxlength="6">
+                </div>
+                
+                <div class="sync-progress">
+                    <div class="sync-progress-bar" id="receiveProgress"></div>
+                </div>
+                
+                <div class="sync-status" id="receiveStatus">Enter code to connect</div>
+                
+                <div class="sync-actions">
+                    <button class="sync-btn secondary" id="cancelSyncBtn">Cancel</button>
+                    <button class="sync-btn primary" id="connectToPeerBtn">Connect</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="customModal" class="modal-overlay">
@@ -1472,7 +1835,7 @@ Please add at least one entry.
         <h3>Missing Required Fields</h3>
         <div class="validation-errors" id="validationErrors"></div>
         <div class="modal-buttons">
-            <button class="modal-btn" onclick="app.hideModal('validationModal')">OK</button>
+            <button class="modal-btn" id="validationOkBtn">OK</button>
         </div>
     </div>
 </div>
@@ -1499,7 +1862,406 @@ Please add at least one entry.
         const modal = document.getElementById(modalId);
         modal.classList.remove('active');
     }
-
+    
+    // --- PEER-TO-PEER SYNC MODULE ---
+    class PeerSync {
+        constructor(app) {
+            this.app = app;
+            this.peer = null;
+            this.connection = null;
+            this.peerId = null;
+            this.qrCode = null;
+            this.receivedData = null;
+            
+            // UI elements
+            this.sendContent = document.getElementById('sendContent');
+            this.receiveContent = document.getElementById('receiveContent');
+            this.sendStatus = document.getElementById('sendStatus');
+            this.receiveStatus = document.getElementById('receiveStatus');
+            this.peerIdDisplay = document.getElementById('peerIdDisplay');
+            this.sendProgress = document.getElementById('sendProgress');
+            this.receiveProgress = document.getElementById('receiveProgress');
+            this.receiverCode = document.getElementById('receiverCode');
+            this.sendQrContainer = document.getElementById('sendQrContainer');
+            
+            // Initialize event listeners
+            this.initEvents();
+        }
+        
+        initEvents() {
+            // Tab switching for Send/Receive within the Sync tab
+            document.querySelectorAll('.sync-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.sync-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.sync-content').forEach(c => c.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    const tabId = tab.getAttribute('data-tab');
+                    document.getElementById(`${tabId}Content`).classList.add('active');
+                    
+                    this.resetSyncState();
+                });
+            });
+            
+            // Sync buttons
+            document.getElementById('copyPeerIdBtn').addEventListener('click', () => this.copyPeerId());
+            document.getElementById('generateCodeBtn').addEventListener('click', () => this.startPeer());
+            document.getElementById('cancelSyncBtn').addEventListener('click', () => this.resetSyncState());
+            document.getElementById('connectToPeerBtn').addEventListener('click', () => this.connectToPeer());
+        }
+        
+        resetSyncState() {
+            // Reset UI elements
+            this.sendStatus.textContent = 'Ready to generate sync code';
+            this.sendStatus.className = 'sync-status';
+            this.sendProgress.style.width = '0%';
+            
+            this.receiveStatus.textContent = 'Enter code to connect';
+            this.receiveStatus.className = 'sync-status';
+            this.receiveProgress.style.width = '0%';
+            this.receiverCode.value = '';
+            
+            // Clear QR code if exists
+            if (this.qrCode) {
+                this.qrCode.clear();
+                this.sendQrContainer.innerHTML = '<div class="qr-placeholder">Click "Generate Code" to start</div>';
+                this.qrCode = null;
+            }
+            
+            this.peerIdDisplay.textContent = 'CLICK "GENERATE CODE"';
+            
+            // Reset steps
+            document.querySelectorAll('#sync .sync-step').forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index === 0) step.classList.add('active');
+            });
+            
+            // Reset peer connection
+            this.resetPeerConnection();
+        }
+        
+        resetPeerConnection() {
+            if (this.connection) {
+                this.connection.close();
+                this.connection = null;
+            }
+            
+            if (this.peer) {
+                this.peer.destroy();
+                this.peer = null;
+            }
+            
+            this.peerId = null;
+            this.receivedData = null;
+        }
+        
+        generatePeerId() {
+            // Generate a random 6-digit alphanumeric code
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let id = '';
+            for (let i = 0; i < 6; i++) {
+                id += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return id;
+        }
+        
+        copyPeerId() {
+            if (!this.peerId) {
+                showToast('Generate a code first');
+                return;
+            }
+            
+            navigator.clipboard.writeText(this.peerId).then(() => {
+                showToast('Code copied to clipboard!');
+            }).catch(err => {
+                this.sendStatus.textContent = 'Failed to copy code: ' + err;
+                this.sendStatus.className = 'sync-status error';
+            });
+        }
+        
+        startPeer() {
+            if (this.peer) return;
+            
+            // Immediate UI feedback
+            this.sendStatus.textContent = 'Generating sync code...';
+            this.sendStatus.className = 'sync-status connecting';
+            
+            this.peerId = this.generatePeerId();
+            this.peerIdDisplay.textContent = this.peerId;
+            
+            // Show QR code placeholder
+            this.sendQrContainer.innerHTML = '<div class="qr-placeholder">Generating QR code...</div>';
+            
+            // Generate QR code after a small delay to ensure container is ready
+            setTimeout(() => {
+                try {
+                    // Clear any existing QR code
+                    if (this.qrCode) {
+                        this.qrCode.clear();
+                    }
+                    
+                    // Generate new QR code
+                    this.sendQrContainer.innerHTML = '';
+                    this.qrCode = new QRCode(this.sendQrContainer, {
+                        text: this.peerId,
+                        width: 160,
+                        height: 160,
+                        colorDark: "#2c3e50",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                    
+                    // Update step 1 to completed
+                    document.querySelector('#sendContent .sync-step:nth-child(1)').classList.add('completed');
+                    document.querySelector('#sendContent .sync-step:nth-child(2)').classList.add('active');
+                    
+                    this.sendStatus.textContent = 'Waiting for receiver to connect...';
+                    
+                    // Initialize PeerJS
+                    this.peer = new Peer(this.peerId, {
+                        host: '0.peerjs.com',
+                        port: 443,
+                        secure: true,
+                        debug: 1
+                    });
+                    
+                    // Debug event handler
+                    this.peer.on('error', (err) => {
+                        console.error('PeerJS error:', err);
+                        this.sendStatus.textContent = `Error: ${err.type}`;
+                        this.sendStatus.className = 'sync-status error';
+                        showToast(`PeerJS error: ${err.type}`);
+                    });
+                    
+                    this.peer.on('open', (id) => {
+                        this.sendStatus.textContent = `Ready to connect with ID: ${id}`;
+                    });
+                    
+                    this.peer.on('connection', (conn) => {
+                        this.connection = conn;
+                        this.sendStatus.textContent = 'Receiver connected!';
+                        this.sendStatus.className = 'sync-status connected';
+                        
+                        // Update step 2 to completed
+                        document.querySelector('#sendContent .sync-step:nth-child(2)').classList.add('completed');
+                        document.querySelector('#sendContent .sync-step:nth-child(3)').classList.add('active');
+                        
+                        this.setupDataConnection();
+                    });
+                    
+                } catch (e) {
+                    console.error('QR code generation error:', e);
+                    this.sendQrContainer.innerHTML = '<div class="qr-error">Failed to generate QR code</div>';
+                    this.sendStatus.textContent = 'QR generation failed - try again';
+                    this.sendStatus.className = 'sync-status error';
+                    showToast('Failed to generate QR code');
+                }
+            }, 100);
+        }
+        
+        connectToPeer() {
+            const peerId = this.receiverCode.value.trim().toUpperCase();
+            if (!peerId || peerId.length !== 6) {
+                this.receiveStatus.textContent = 'Please enter a valid 6-digit code';
+                this.receiveStatus.className = 'sync-status error';
+                return;
+            }
+            
+            this.receiveStatus.textContent = 'Connecting to sender...';
+            this.receiveStatus.className = 'sync-status connecting';
+            this.receiveProgress.style.width = '30%';
+            
+            // Initialize PeerJS with a random ID
+            this.peer = new Peer({
+                host: '0.peerjs.com',
+                port: 443,
+                secure: true,
+                debug: 1
+            });
+            
+            this.peer.on('open', (id) => {
+                this.receiveStatus.textContent = `Connecting to ${peerId}...`;
+                this.receiveProgress.style.width = '60%';
+                
+                // Connect to the sender
+                this.connection = this.peer.connect(peerId, {
+                    reliable: true
+                });
+                
+                this.setupDataConnection();
+                
+                // Update step 1 to completed
+                document.querySelector('#receiveContent .sync-step:nth-child(1)').classList.add('completed');
+                document.querySelector('#receiveContent .sync-step:nth-child(2)').classList.add('active');
+            });
+            
+            this.peer.on('error', (err) => {
+                console.error('PeerJS error:', err);
+                this.receiveStatus.textContent = `Error: ${err.type}`;
+                this.receiveStatus.className = 'sync-status error';
+                this.receiveProgress.style.width = '0%';
+            });
+        }
+        
+        setupDataConnection() {
+            if (!this.connection) return;
+            
+            this.connection.on('open', () => {
+                if (this.sendContent.classList.contains('active')) {
+                    // We are the sender - send data
+                    this.sendStatus.textContent = 'Sending training data...';
+                    this.sendProgress.style.width = '50%';
+                    
+                    setTimeout(() => {
+                        this.sendTrainingData();
+                    }, 500);
+                } else {
+                    // We are the receiver - wait for data
+                    this.receiveStatus.textContent = 'Connected. Waiting for data...';
+                    this.receiveStatus.className = 'sync-status connected';
+                    this.receiveProgress.style.width = '80%';
+                    
+                    // Update step 2 to completed
+                    document.querySelector('#receiveContent .sync-step:nth-child(2)').classList.add('completed');
+                    document.querySelector('#receiveContent .sync-step:nth-child(3)').classList.add('active');
+                }
+            });
+            
+            this.connection.on('data', (data) => {
+                if (this.receiveContent.classList.contains('active')) {
+                    // We are the receiver - process incoming data
+                    this.receiveTrainingData(data);
+                }
+            });
+            
+            this.connection.on('close', () => {
+                if (this.sendContent.classList.contains('active')) {
+                    this.sendStatus.textContent = 'Connection closed';
+                } else {
+                    this.receiveStatus.textContent = 'Connection closed';
+                }
+            });
+            
+            this.connection.on('error', (err) => {
+                console.error('Connection error:', err);
+                if (this.sendContent.classList.contains('active')) {
+                    this.sendStatus.textContent = `Connection error: ${err.message}`;
+                    this.sendStatus.className = 'sync-status error';
+                } else {
+                    this.receiveStatus.textContent = `Connection error: ${err.message}`;
+                    this.receiveStatus.className = 'sync-status error';
+                }
+            });
+        }
+        
+        sendTrainingData() {
+            if (!this.connection || !this.connection.open) {
+                this.sendStatus.textContent = 'Connection not ready for sending';
+                this.sendStatus.className = 'sync-status error';
+                return;
+            }
+            
+            try {
+                const trainingData = this.app.trainingData;
+                const dataStr = JSON.stringify(trainingData);
+                
+                // Send data in chunks to simulate progress
+                const chunkSize = 1024;
+                const totalChunks = Math.ceil(dataStr.length / chunkSize);
+                let chunksSent = 0;
+                
+                const sendNextChunk = () => {
+                    const start = chunksSent * chunkSize;
+                    const end = Math.min(start + chunkSize, dataStr.length);
+                    const chunk = dataStr.substring(start, end);
+                    
+                    this.connection.send({
+                        type: 'data',
+                        chunk: chunk,
+                        totalChunks: totalChunks,
+                        currentChunk: chunksSent + 1
+                    });
+                    
+                    chunksSent++;
+                    const progress = Math.round((chunksSent / totalChunks) * 100);
+                    this.sendProgress.style.width = `${50 + (progress / 2)}%`;
+                    
+                    if (chunksSent < totalChunks) {
+                        setTimeout(sendNextChunk, 50);
+                    } else {
+                        // Final message
+                        this.connection.send({
+                            type: 'complete',
+                            entries: Object.keys(trainingData).length
+                        });
+                        
+                        this.sendProgress.style.width = '100%';
+                        this.sendStatus.textContent = `Data sent successfully! Transferred ${Object.keys(trainingData).length} entries.`;
+                        this.sendStatus.className = 'sync-status success';
+                        
+                        // Update step 3 to completed
+                        document.querySelector('#sendContent .sync-step:nth-child(3)').classList.add('completed');
+                        
+                        // Close connection after a delay
+                        setTimeout(() => {
+                            if (this.connection) this.connection.close();
+                        }, 3000);
+                    }
+                };
+                
+                // Start sending chunks
+                sendNextChunk();
+                
+            } catch (err) {
+                console.error('Error sending data:', err);
+                this.sendStatus.textContent = 'Error sending data: ' + err.message;
+                this.sendStatus.className = 'sync-status error';
+            }
+        }
+        
+        receiveTrainingData(data) {
+            if (data.type === 'complete') {
+                // Final processing
+                this.receiveProgress.style.width = '100%';
+                this.receiveStatus.textContent = `Received ${data.entries} training entries!`;
+                this.receiveStatus.className = 'sync-status success';
+                
+                // Update step 3 to completed
+                document.querySelector('#receiveContent .sync-step:nth-child(3)').classList.add('completed');
+                
+                // Save the data to the app
+                try {
+                    this.app.trainingData = JSON.parse(this.receivedData);
+                    this.app.saveData();
+                    this.app.updateHistory();
+                    this.app.updateAnalytics();
+                    showToast('Data received and saved successfully!');
+                } catch (e) {
+                    this.receiveStatus.textContent = 'Error parsing received data';
+                    this.receiveStatus.className = 'sync-status error';
+                }
+                
+                // Close connection after a delay
+                setTimeout(() => {
+                    if (this.connection) this.connection.close();
+                }, 3000);
+                
+                return;
+            }
+            
+            if (data.type === 'data') {
+                if (!this.receivedData) this.receivedData = '';
+                this.receivedData += data.chunk;
+                
+                const progress = Math.round((data.currentChunk / data.totalChunks) * 100);
+                this.receiveProgress.style.width = `${80 + (progress / 5)}%`;
+                this.receiveStatus.textContent = `Receiving data... ${data.currentChunk}/${data.totalChunks} chunks`;
+                
+                return;
+            }
+        }
+    }
+    
     class MultiDayTracker {
         constructor() {
             this.dataVersion = 3;
@@ -1536,6 +2298,9 @@ Please add at least one entry.
             
             // Start auto-save timer
             this.startAutoSave();
+            
+            // Initialize sync module
+            this.sync = new PeerSync(this);
         }
         
         initData() {
@@ -1624,7 +2389,7 @@ Please add at least one entry.
         }
         
         swipeTab(direction) {
-            const tabs = ['daily', 'history', 'analytics'];
+            const tabs = ['daily', 'history', 'analytics', 'sync'];
             const currentTab = tabs.findIndex(tab => document.getElementById(tab).classList.contains('active'));
             let newIndex = currentTab + direction;
             
@@ -1879,8 +2644,22 @@ Please add at least one entry.
 
         // --- DATA & UI ---
         setupEventListeners() {
+            // Tab switching
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabName = button.getAttribute('data-tab');
+                    this.switchTab(tabName);
+                });
+            });
+            
+            // Title click
+            document.getElementById('appTitle').addEventListener('click', () => this.showWelcomeModal());
+            
+            // Modal buttons
             document.getElementById('modalConfirmBtn').addEventListener('click', () => this.confirmModal());
             document.getElementById('modalCancelBtn').addEventListener('click', () => this.hideModal('customModal'));
+            document.getElementById('validationOkBtn').addEventListener('click', () => this.hideModal('validationModal'));
+            document.getElementById('closeWelcomeBtn').addEventListener('click', () => this.closeWelcomeModal());
 
             // Link sliders to number inputs
             this.setupSlider('sleepQuality', 'sleepQualitySlider');
@@ -1892,6 +2671,7 @@ Please add at least one entry.
             document.getElementById('snoozeTime').addEventListener('input', () => this.calculateAndDisplaySleepDuration());
             document.getElementById('wakeTime').addEventListener('input', () => this.calculateAndDisplaySleepDuration());
 
+            // Climbing type checkboxes
             const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead'];
             const noneCheckbox = document.getElementById('climbingNone');
 
@@ -1911,8 +2691,10 @@ Please add at least one entry.
                     });
                     document.getElementById('climbingTypeGroup').classList.remove('error');
                 }
+                this.handleTrainingChange();
             });
             
+            // Form validation listeners
             Object.keys(this.fieldDefinitions).forEach(fieldId => {
                 if (fieldId === 'climbingType' || fieldId === 'sessionNotes') return;
                 
@@ -1924,6 +2706,22 @@ Please add at least one entry.
                     });
                 }
             });
+            
+            // Main buttons
+            document.getElementById('updateRecBtn').addEventListener('click', () => this.calculateRecommendation());
+            document.getElementById('saveEntryBtn').addEventListener('click', () => this.saveEntry());
+            document.getElementById('clearEntryBtn').addEventListener('click', () => this.clearCurrentEntry());
+            document.getElementById('loadDateBtn').addEventListener('click', () => this.loadDataForDate());
+            
+            // History navigation
+            document.getElementById('prevWeekBtn').addEventListener('click', () => this.prevWeek());
+            document.getElementById('nextWeekBtn').addEventListener('click', () => this.nextWeek());
+            
+            // Export/import
+            document.getElementById('exportCsvBtn').addEventListener('click', () => this.exportToCSV());
+            document.getElementById('clearAllDataBtn').addEventListener('click', () => this.confirmClearAllData());
+            document.getElementById('exportBackupBtn').addEventListener('click', () => this.exportBackup());
+            document.getElementById('importBackupBtn').addEventListener('click', () => this.importBackup());
         }
         
         handleTrainingChange() {
@@ -2227,6 +3025,8 @@ Please add at least one entry.
 
         switchTab(tabName) {
             const currentTab = document.querySelector('.tab-content.active');
+            if (currentTab && currentTab.id === tabName) return;
+
             if (currentTab) {
                 currentTab.style.opacity = 0;
                 setTimeout(() => {
@@ -2238,10 +3038,16 @@ Please add at least one entry.
                         newTab.style.opacity = 1;
                     }, 10);
                 }, 300);
+            } else {
+                 const newTab = document.getElementById(tabName);
+                 newTab.classList.add('active');
+                 setTimeout(() => {
+                     newTab.style.opacity = 1;
+                 }, 10);
             }
             
             document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-            document.querySelector(`.tab-button[onclick="app.switchTab('${tabName}')"]`).classList.add('active');
+            document.querySelector(`.tab-button[data-tab="${tabName}"]`).classList.add('active');
             
             if (tabName === 'history') {
                 this.updateHistory();
@@ -2249,6 +3055,9 @@ Please add at least one entry.
             }
             if (tabName === 'analytics') {
                 this.updateAnalytics();
+            }
+            if (tabName === 'sync' && this.sync) {
+                this.sync.resetSyncState();
             }
         }
         
@@ -2307,6 +3116,8 @@ Please add at least one entry.
                     historyList.innerHTML = '<p style="text-align:center; color:#7f8c8d;">No entries for this week.</p>';
                     return;
                 }
+            } else {
+                 displayDates = sortedDates.slice(this.currentWeekIndex * 7, (this.currentWeekIndex * 7) + 7);
             }
             
             displayDates.forEach(date => {
@@ -2540,15 +3351,7 @@ Please add at least one entry.
                                 font: { size: 16 } 
                             },
                             legend: {
-                                display: true,
-                                position: 'top',
-                                labels: {
-                                    usePointStyle: true,
-                                    padding: 15,
-                                    font: {
-                                        size: 12
-                                    }
-                                }
+                                display: false // We use custom controls now
                             },
                             tooltip: {
                                 mode: 'index',
@@ -2588,39 +3391,39 @@ Please add at least one entry.
             const controlsDiv = document.getElementById('chartControls');
             controlsDiv.innerHTML = '';
             
-            const datasets = [
-                { id: 'readiness', label: 'Readiness', color: '#764ba2' },
-                { id: 'sleepQuality', label: 'Sleep Quality', color: '#3498db' },
-                { id: 'sleepDuration', label: 'Sleep Hours', color: '#1abc9c' },
-                { id: 'mood', label: 'Mood', color: '#f39c12' },
-                { id: 'stress', label: 'Stress', color: '#e74c3c' },
-                { id: 'doms', label: 'DOMS', color: '#e67e22' },
-                { id: 'tendons', label: 'Tendons', color: '#9b59b6' },
-                { id: 'skin', label: 'Skin', color: '#34495e' },
-                { id: 'lastRPE', label: 'Last RPE', color: '#16a085' }
-            ];
+            const datasets = this.weeklyChart.data.datasets;
             
             datasets.forEach((dataset, index) => {
                 const button = document.createElement('button');
-                button.className = 'chart-toggle active';
+                button.className = 'chart-toggle';
                 button.textContent = dataset.label;
-                button.style.backgroundColor = dataset.color;
-                button.style.color = '#fff';
-                button.dataset.index = index;
+                
+                // Set initial active state based on visibility
+                if (!this.weeklyChart.getDatasetMeta(index).hidden) {
+                    button.classList.add('active');
+                }
                 
                 button.addEventListener('click', () => {
-                    const isActive = button.classList.contains('active');
-                    button.classList.toggle('active', !isActive);
-                    
-                    if (this.weeklyChart) {
-                        const meta = this.weeklyChart.getDatasetMeta(index);
-                        meta.hidden = !meta.hidden;
-                        this.weeklyChart.update();
-                    }
+                    button.classList.toggle('active');
+                    const meta = this.weeklyChart.getDatasetMeta(index);
+                    meta.hidden = !meta.hidden;
+                    this.weeklyChart.update();
                 });
                 
                 controlsDiv.appendChild(button);
             });
+            
+            // Initially hide all but the first dataset (Readiness)
+            datasets.forEach((_, index) => {
+                 if(index > 0) {
+                     this.weeklyChart.getDatasetMeta(index).hidden = true;
+                     controlsDiv.children[index].classList.remove('active');
+                 } else {
+                      this.weeklyChart.getDatasetMeta(index).hidden = false;
+                      controlsDiv.children[index].classList.add('active');
+                 }
+            });
+            this.weeklyChart.update();
         }
 
         deleteEntry(date) {
@@ -2630,16 +3433,18 @@ Please add at least one entry.
                 this.updateHistory();
                 this.updateAnalytics();
                 hideModal('customModal');
+                showToast('Entry deleted.');
             });
         }
 
         confirmClearAllData() {
-            this.showModal('This will permanently delete all data. Are you sure?', () => {
+            this.showModal('This will permanently delete all data. This action cannot be undone. Are you sure?', () => {
                 this.trainingData = {};
                 this.saveData();
                 this.updateHistory();
                 this.updateAnalytics();
                 hideModal('customModal');
+                showToast('All data has been cleared.');
             });
         }
 
@@ -2747,26 +3552,6 @@ Please add at least one entry.
                 this.modalCallback();
             }
             hideModal('customModal');
-        }
-        
-        // --- INPUT VALIDATION HELPERS ---
-        isNumberKey(evt) {
-            const charCode = (evt.which) ? evt.which : evt.keyCode;
-            if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
-                return false;
-            }
-            if (charCode === 46 && evt.target.value.indexOf('.') !== -1) {
-                return false;
-            }
-            return true;
-        }
-
-        isWholeNumberKey(evt) {
-            const charCode = (evt.which) ? evt.which : evt.keyCode;
-            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-                return false;
-            }
-            return true;
         }
     }
 
