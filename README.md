@@ -1,4 +1,10 @@
-generic corprate bullshit bla bla bla 
+Generic corprate bullshit bla bla bla 
+Im so smart youre so dumb. no, most of this isnt stolen blah blah blah.
+
+
+
+
+
  Scientific Foundation
 
 ClimbSmart addresses the core issue of load management and adequate recovery, which are critical for preventing overuse injuries in climbers. The algorithm combines multiple sub-scores (sleep, recovery, stress, physical state, fatigue, mood, skin condition) with personalization factors based on your training history.
@@ -11,7 +17,7 @@ ClimbSmart addresses the core issue of load management and adequate recovery, wh
 References:
 - [Load Management in Climbing](https://pmc.ncbi.nlm.nih.gov/articles/PMC10756908/)
 - [Supercompensation Theory](https://en.wikipedia.org/wiki/Supercompensation)
-
++some other shit
  Key Features
 - Comprehensive Metrics: Tracks all key factors affecting climbing performance
 - Personalized Recommendations: Goes beyond simple scoring to provide actionable advice
