@@ -38,18 +38,24 @@ Key Features
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
     <style>
 :root {
-            --slider-track-bg: #d5d8dc;
-            --slider-thumb-bg: #764ba2;
-            --slider-fill-color: #3498db;
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --slider-fill-start: #3498db;
-            --slider-fill-end: #9b59b6;
-            --slider-thumb-border: #ffffff;
-            --success-color: #27ae60;
-            --warning-color: #f39c12;
-            --danger-color: #e74c3c;
-            --info-color: #3498db;
-        }
+    --slider-track-bg: #d5d8dc;
+    --slider-thumb-bg: #764ba2;
+    --slider-fill-color: #3498db;
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --slider-fill-start: #3498db;
+    --slider-fill-end: #9b59b6;
+    --slider-thumb-border: #ffffff;
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    --info-color: #3498db;
+    
+    /* Post-it Note Colors */
+    --daily-color: linear-gradient(135deg, #FFE135 0%, #FDD835 100%);      /* Canary Yellow */
+    --history-color: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);    /* Orange */
+    --analytics-color: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);  /* Lime Green */
+    --sync-color: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);       /* Blue */
+}
 
         * {
             margin: 0;
@@ -57,14 +63,34 @@ Key Features
             box-sizing: border-box;
         }
         
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #2c3e50;
-            overflow-x: hidden;
-        }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    padding: 20px;
+    color: #2c3e50;
+    overflow-x: hidden;
+    
+    /* Subtle paper-themed background with fade */
+    background: 
+        radial-gradient(
+            circle at 20% 20%, 
+            rgba(255, 250, 205, 0.3) 0%, 
+            transparent 50%
+        ),
+        radial-gradient(
+            circle at 80% 80%, 
+            rgba(245, 222, 179, 0.2) 0%, 
+            transparent 50%
+        ),
+        linear-gradient(
+            135deg, 
+            #f7f3e9 0%, 
+            #f0ead6 25%, 
+            #e8dcc6 50%, 
+            #f2e7d5 75%, 
+            #f7f3e9 100%
+        );
+}
         
         @media (max-width: 768px) {
             body {
@@ -75,21 +101,192 @@ Key Features
 .container {
     max-width: 1400px;
     margin: 0 auto;
-    background-color: rgba(238, 231, 215, 0.95);
-    /* This gradient creates subtle, repeating diagonal lines */
-    background-image: repeating-linear-gradient(
-        45deg,
-        hsla(0, 0%, 0%, 0.05),
-        hsla(0, 0%, 0%, 0.05) 1px,
-        transparent 1px,
-        transparent 5px
-    );
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    background-color: #fffacd;  /* Legal pad yellow */
+    border-radius: 0 0 15px 15px;  /* Only round bottom corners */
+    padding: 60px 20px 20px 80px;  /* Extra top padding for torn edge */
+    box-shadow: 
+        0 15px 30px rgba(0, 0, 0, 0.1),
+        inset 0 2px 4px rgba(0, 0, 0, 0.05);  /* Subtle inset shadow */
     backdrop-filter: blur(10px);
     position: relative;
     z-index: 1;
+    overflow: visible;  /* Allow torn edge to show */
+    
+    /* Yellow legal pad lines */
+    background-image: 
+        /* Red margin line */
+        linear-gradient(
+            to right, 
+            transparent 65px, 
+            #ff6b6b 65px, 
+            #ff6b6b 67px, 
+            transparent 67px
+        ),
+        /* Blue horizontal lines */
+        repeating-linear-gradient(
+            transparent,
+            transparent 31px,
+            rgba(70, 130, 180, 0.4) 31px,
+            rgba(70, 130, 180, 0.4) 32px
+        ),
+        /* Paper texture */
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 1px,
+            rgba(0, 0, 0, 0.01) 1px,
+            rgba(0, 0, 0, 0.01) 2px
+        );
+}
+
+/* Torn top edge with holes */
+.container::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: #fffacd;
+    z-index: -1;
+    
+    /* Create torn edge effect */
+    clip-path: polygon(
+        0% 50%,
+        2% 45%,
+        4% 55%,
+        6% 40%,
+        8% 60%,
+        10% 45%,
+        12% 50%,
+        14% 35%,
+        16% 65%,
+        18% 40%,
+        20% 55%,
+        22% 45%,
+        24% 60%,
+        26% 35%,
+        28% 50%,
+        30% 45%,
+        32% 65%,
+        34% 40%,
+        36% 55%,
+        38% 50%,
+        40% 35%,
+        42% 60%,
+        44% 45%,
+        46% 50%,
+        48% 40%,
+        50% 65%,
+        52% 45%,
+        54% 55%,
+        56% 35%,
+        58% 50%,
+        60% 45%,
+        62% 60%,
+        64% 40%,
+        66% 55%,
+        68% 50%,
+        70% 35%,
+        72% 65%,
+        74% 45%,
+        76% 50%,
+        78% 40%,
+        80% 60%,
+        82% 45%,
+        84% 55%,
+        86% 35%,
+        88% 50%,
+        90% 45%,
+        92% 65%,
+        94% 40%,
+        96% 55%,
+        98% 50%,
+        100% 45%,
+        100% 100%,
+        0% 100%
+    );
+    
+    /* Add spiral holes */
+    background-image: 
+        repeating-linear-gradient(
+            90deg,
+            transparent 0px,
+            transparent 40px,
+            radial-gradient(circle, #333 25%, transparent 35%) 50px,
+            transparent 60px
+        );
+    background-size: 80px 20px;
+    background-position: 20px 10px;
+}
+
+/* Paper crumples and wrinkles */
+.container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1;
+    
+    /* Crumple effects */
+    background-image: 
+        /* Corner crumple */
+        radial-gradient(
+            ellipse at 95% 5%, 
+            rgba(0, 0, 0, 0.08) 0%, 
+            rgba(0, 0, 0, 0.04) 30%,
+            transparent 60%
+        ),
+        /* Side wrinkle */
+        radial-gradient(
+            ellipse at 2% 60%, 
+            rgba(0, 0, 0, 0.05) 0%, 
+            rgba(0, 0, 0, 0.02) 40%,
+            transparent 70%
+        ),
+        /* Fold line */
+        linear-gradient(
+            135deg,
+            transparent 20%,
+            rgba(0, 0, 0, 0.03) 45%,
+            rgba(0, 0, 0, 0.06) 50%,
+            rgba(0, 0, 0, 0.03) 55%,
+            transparent 80%
+        ),
+        /* Random small crumples */
+        radial-gradient(
+            circle at 70% 80%, 
+            rgba(0, 0, 0, 0.03) 0%, 
+            transparent 20%
+        ),
+        radial-gradient(
+            circle at 30% 30%, 
+            rgba(0, 0, 0, 0.02) 0%, 
+            transparent 25%
+        );
+}
+
+/* Add slight yellowing/aging around edges */
+.container {
+    box-shadow: 
+        0 15px 30px rgba(0, 0, 0, 0.1),
+        inset 0 0 50px rgba(218, 165, 32, 0.1),  /* Golden aging */
+        inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 50px 15px 15px 60px;
+    }
+    
+    .container::before {
+        background-size: 60px 20px;
+        background-position: 15px 10px;
+    }
 }
         
         @media (max-width: 768px) {
@@ -143,25 +340,54 @@ Key Features
         
 .tab-button {
     padding: 12px 24px;
-    background: #ecf0f1;
     border: none;
     border-radius: 8px 8px 0 0;
     cursor: pointer;
     font-size: 16px;
     transition: all 0.3s ease;
-    color: #7f8c8d;
     white-space: nowrap;
     flex-shrink: 0;
     position: relative;
     overflow: hidden;
 }
 
-/* Tab hover effect */
+/* Individual tab standby colors - subtle Post-it tints */
+.tab-button[data-tab="daily"] {
+    background: linear-gradient(135deg, #FFFDE7 0%, #FFF8E1 100%);
+    color: #F57F17;
+    border: 1px solid #FFE082;
+}
+
+.tab-button[data-tab="history"] {
+    background: linear-gradient(135deg, #FFF3E0 0%, #FFEDDE 100%);
+    color: #E65100;
+    border: 1px solid #FFCC80;
+}
+
+.tab-button[data-tab="analytics"] {
+    background: linear-gradient(135deg, #F1F8E9 0%, #E8F5E8 100%);
+    color: #33691E;
+    border: 1px solid #C8E6C9;
+}
+
+.tab-button[data-tab="sync"] {
+    background: linear-gradient(135deg, #E3F2FD 0%, #E1F5FE 100%);
+    color: #0D47A1;
+    border: 1px solid #BBDEFB;
+}
+
+/* Fallback for unspecified tabs */
+.tab-button:not([data-tab]) {
+    background: #ecf0f1;
+    color: #7f8c8d;
+}
+
+/* Tab hover effect with hop */
 .tab-button:hover:not(.active) {
     background: linear-gradient(135deg, #d5d8dc 0%, #bdc3c7 100%);
     color: #2c3e50;
-    transform: translateY(-1px) scale(1.02);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px) scale(1.05);  /* Enhanced hop effect */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Active tab styling */
@@ -172,16 +398,12 @@ Key Features
     box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
 }
 
-/* Active tab hover (subtle enhancement) */
+/* Active tab hover (subtle enhancement with hop) */
 .tab-button.active:hover {
-    transform: translateY(-2px) scale(1.01);
-    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+    transform: translateY(-3px) scale(1.02);  /* Added hop to active state */
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
     filter: brightness(1.1);
 }
-
-/* ============================================
-   ALTERNATIVE TAB STYLES (CHOOSE ONE)
-   ============================================ */
 
 /* Option 1: Subtle gradient hover */
 .tab-button-gradient:hover:not(.active) {
@@ -198,11 +420,37 @@ Key Features
             }
         }
         
-        .tab-button.active {
-            background: var(--primary-gradient);
-            color: white;
-            transform: translateY(-2px);
-        }
+/* Active tab hover effects */
+.tab-button[data-tab="daily"].active:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(255, 225, 53, 0.5);
+    filter: brightness(1.1);
+}
+
+.tab-button[data-tab="history"].active:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(255, 152, 0, 0.5);
+    filter: brightness(1.1);
+}
+
+.tab-button[data-tab="analytics"].active:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(139, 195, 74, 0.5);
+    filter: brightness(1.1);
+}
+
+.tab-button[data-tab="sync"].active:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(33, 150, 243, 0.5);
+    filter: brightness(1.1);
+}
+/* Fallback hover for unspecified tabs */
+.tab-button:hover:not(.active):not([data-tab]) {
+    background: linear-gradient(135deg, #d5d8dc 0%, #bdc3c7 100%);
+    color: #2c3e50;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
         
         .tab-content {
             display: none;
@@ -233,7 +481,395 @@ Key Features
                 margin-bottom: 20px;
             }
         }
-        
+/* ============================================
+   📐 DA VINCI SKETCH EFFECT - RECOVERY METRICS (REFINED)
+   ============================================ */
+
+/* Recovery Metrics - Default sketchy graphite state */
+.input-section:first-child {
+    background: #faf9f7; /* Aged paper color */
+    border: none;
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+    transition: all 0.6s ease;
+    overflow: hidden;
+    
+    /* Remove color - make it grayscale sketch */
+    filter: grayscale(100%) contrast(1.1) brightness(0.95);
+    
+    /* Visible crosshatch texture overlay */
+    background-image: 
+        /* Primary diagonal crosshatch lines */
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.08) 2px,
+            rgba(0, 0, 0, 0.08) 3px,
+            transparent 3px,
+            transparent 8px
+        ),
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.06) 2px,
+            rgba(0, 0, 0, 0.06) 3px,
+            transparent 3px,
+            transparent 8px
+        ),
+        /* Secondary finer crosshatch */
+        repeating-linear-gradient(
+            30deg,
+            transparent,
+            transparent 1px,
+            rgba(0, 0, 0, 0.03) 1px,
+            rgba(0, 0, 0, 0.03) 2px,
+            transparent 2px,
+            transparent 12px
+        ),
+        /* Paper texture */
+        radial-gradient(
+            circle at 20% 80%, 
+            rgba(139, 69, 19, 0.03) 0%, 
+            transparent 50%
+        );
+    
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        inset 0 0 50px rgba(0, 0, 0, 0.03);
+}
+
+/* Clean sketch border - no jagged lines */
+.input-section:first-child::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    border: 2px solid #34495e;
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+    
+    /* Clean hand-drawn style without jagged clips */
+    background: transparent;
+    border-style: dashed;
+    border-width: 1px;
+    
+    /* Subtle shadow for depth */
+    box-shadow: 
+        0 0 0 1px rgba(52, 73, 94, 0.1),
+        inset 0 0 10px rgba(52, 73, 94, 0.05);
+}
+
+/* Construction lines overlay - always visible */
+.input-section:first-child::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.12;
+    
+    /* Clean construction lines like technical drawings */
+    background-image:
+        /* Horizontal guide lines */
+        repeating-linear-gradient(
+            to bottom,
+            transparent,
+            transparent 28px,
+            rgba(44, 62, 80, 0.15) 28px,
+            rgba(44, 62, 80, 0.15) 29px,
+            transparent 29px,
+            transparent 32px
+        ),
+        /* Vertical guide lines */
+        repeating-linear-gradient(
+            to right,
+            transparent,
+            transparent 40px,
+            rgba(44, 62, 80, 0.08) 40px,
+            rgba(44, 62, 80, 0.08) 41px,
+            transparent 41px,
+            transparent 45px
+        );
+}
+
+/* Sketch-style inputs */
+.input-section:first-child input,
+.input-section:first-child select,
+.input-section:first-child textarea {
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px dashed #7f8c8d;
+    border-radius: 4px;
+    color: #2c3e50;
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 2;
+    
+    /* Remove modern styling */
+    box-shadow: none;
+    backdrop-filter: blur(1px);
+}
+
+/* Sketch-style labels */
+.input-section:first-child label {
+    color: #34495e;
+    font-weight: 500;
+    position: relative;
+    z-index: 2;
+    
+    /* Slightly hand-written feel */
+    transform: rotate(-0.2deg);
+    font-style: italic;
+    opacity: 0.95;
+    
+    /* Add subtle text shadow for pencil effect */
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Sketch h3 title */
+.input-section:first-child h3 {
+    color: #2c3e50;
+    position: relative;
+    z-index: 2;
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    opacity: 0.95;
+    
+    /* Add underline sketch */
+    border-bottom: 1px dashed #7f8c8d;
+    padding-bottom: 8px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Calculated value - sketch box */
+.input-section:first-child .calculated-value {
+    background: rgba(248, 249, 250, 0.4);
+    border: 1px dashed #95a5a6;
+    border-radius: 4px;
+    color: #2c3e50;
+    position: relative;
+    z-index: 2;
+    font-style: italic;
+    opacity: 0.95;
+    backdrop-filter: blur(1px);
+}
+
+/* Sketch sliders */
+.input-section:first-child input[type="range"] {
+    background: rgba(189, 195, 199, 0.6);
+    border: 1px dashed #7f8c8d;
+    opacity: 0.9;
+    border-radius: 3px;
+}
+
+.input-section:first-child input[type="range"]::-webkit-slider-thumb {
+    background: #34495e;
+    border: 2px solid #2c3e50;
+    border-radius: 50%;
+    opacity: 0.95;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.input-section:first-child input[type="range"]::-moz-range-thumb {
+    background: #34495e;
+    border: 2px solid #2c3e50;
+    border-radius: 50%;
+    opacity: 0.95;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================
+   🎨 TRANSFORMATION TO FULL COLOR ON HOVER
+   ============================================ */
+
+/* When hovering - bring the sketch to life! */
+.input-section:first-child:hover,
+.input-section:first-child:focus-within {
+    /* Remove grayscale filter - reveal full color */
+    filter: none;
+    
+    /* Enhance colors and shadows */
+    background: white;
+    background-image: none; /* Remove crosshatch */
+    
+    box-shadow: 
+        0 12px 25px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(52, 152, 219, 0.1);
+    
+    /* Add subtle glow and lift */
+    transform: translateY(-3px);
+}
+
+/* Hide sketch overlays on hover */
+.input-section:first-child:hover::before,
+.input-section:first-child:focus-within::before {
+    opacity: 0;
+    transform: scale(0.98);
+}
+
+.input-section:first-child:hover::after,
+.input-section:first-child:focus-within::after {
+    opacity: 0;
+}
+
+/* Transform inputs to modern style */
+.input-section:first-child:hover input,
+.input-section:first-child:hover select,
+.input-section:first-child:hover textarea,
+.input-section:first-child:focus-within input,
+.input-section:first-child:focus-within select,
+.input-section:first-child:focus-within textarea {
+    background: white;
+    border: 2px solid #ecf0f1;
+    border-style: solid;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    color: #2c3e50;
+    backdrop-filter: none;
+}
+
+/* Transform labels */
+.input-section:first-child:hover label,
+.input-section:first-child:focus-within label {
+    color: #34495e;
+    transform: rotate(0deg);
+    font-style: normal;
+    opacity: 1;
+    font-weight: 500;
+    text-shadow: none;
+}
+
+/* Transform title */
+.input-section:first-child:hover h3,
+.input-section:first-child:focus-within h3 {
+    color: #2c3e50;
+    transform: rotate(0deg);
+    font-style: normal;
+    opacity: 1;
+    border-bottom: none;
+    padding-bottom: 15px;
+    text-shadow: none;
+    
+    /* Add modern accent */
+    border-left: 4px solid #FFD54F;
+    padding-left: 12px;
+    margin-left: -16px;
+}
+
+/* Transform calculated value */
+.input-section:first-child:hover .calculated-value,
+.input-section:first-child:focus-within .calculated-value {
+    background: #f8f9fa;
+    border: 2px solid #ecf0f1;
+    border-style: solid;
+    border-radius: 8px;
+    font-style: normal;
+    opacity: 1;
+    color: #2c3e50;
+    font-weight: bold;
+    backdrop-filter: none;
+}
+
+/* Transform sliders */
+.input-section:first-child:hover input[type="range"],
+.input-section:first-child:focus-within input[type="range"] {
+    background: var(--slider-track-bg, #d5d8dc);
+    border: 1px solid #bdc3c7;
+    border-style: solid;
+    border-radius: 6px;
+    opacity: 1;
+}
+
+.input-section:first-child:hover input[type="range"]::-webkit-slider-thumb,
+.input-section:first-child:focus-within input[type="range"]::-webkit-slider-thumb {
+    background: var(--slider-thumb-bg, #764ba2);
+    border: 3px solid var(--slider-thumb-border, #ffffff);
+    border-style: solid;
+    opacity: 1;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.input-section:first-child:hover input[type="range"]::-moz-range-thumb,
+.input-section:first-child:focus-within input[type="range"]::-moz-range-thumb {
+    background: var(--slider-thumb-bg, #764ba2);
+    border: 3px solid var(--slider-thumb-border, #ffffff);
+    border-style: solid;
+    opacity: 1;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   ✏️ GENTLE SKETCH ANIMATION
+   ============================================ */
+
+/* Very subtle "pencil drawing" animation */
+.input-section:first-child::before {
+    animation: gentle-sketch 15s ease-in-out infinite;
+}
+
+@keyframes gentle-sketch {
+    0%, 100% { 
+        opacity: 0.5;
+    }
+    50% { 
+        opacity: 0.4;
+    }
+}
+
+/* Pause animation on hover */
+.input-section:first-child:hover::before {
+    animation-play-state: paused;
+}
+
+/* ============================================
+   📱 MOBILE OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 768px) {
+    .input-section:first-child {
+        /* Lighter crosshatch on mobile for performance */
+        background-image: 
+            repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 0, 0, 0.05) 3px,
+                rgba(0, 0, 0, 0.05) 4px,
+                transparent 4px,
+                transparent 10px
+            ),
+            repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 0, 0, 0.04) 3px,
+                rgba(0, 0, 0, 0.04) 4px,
+                transparent 4px,
+                transparent 10px
+            );
+    }
+    
+    .input-section:first-child::after {
+        /* Simpler construction lines on mobile */
+        background-image:
+            repeating-linear-gradient(
+                to bottom,
+                transparent,
+                transparent 35px,
+                rgba(44, 62, 80, 0.08) 35px,
+                rgba(44, 62, 80, 0.08) 36px
+            );
+    }
+}
         .input-section {
             background: white;
             padding: 20px;
@@ -285,7 +921,1119 @@ Key Features
                 font-size: 13px;
             }
         }
-        
+/* ============================================
+   🎨 DA VINCI SKETCH EFFECT - PHYSICAL STATE
+   ============================================ */
+
+/* Physical State - Default sketchy graphite state */
+.input-section:nth-child(2) {
+    background: #faf9f7; /* Aged paper color */
+    border: none;
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+    transition: all 0.6s ease;
+    overflow: hidden;
+    
+    /* Remove color - make it grayscale sketch */
+    filter: grayscale(100%) contrast(1.1) brightness(0.95);
+    
+    /* Visible crosshatch texture overlay */
+    background-image: 
+        /* Primary diagonal crosshatch lines */
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.08) 2px,
+            rgba(0, 0, 0, 0.08) 3px,
+            transparent 3px,
+            transparent 8px
+        ),
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.06) 2px,
+            rgba(0, 0, 0, 0.06) 3px,
+            transparent 3px,
+            transparent 8px
+        ),
+        /* Secondary finer crosshatch */
+        repeating-linear-gradient(
+            30deg,
+            transparent,
+            transparent 1px,
+            rgba(0, 0, 0, 0.03) 1px,
+            rgba(0, 0, 0, 0.03) 2px,
+            transparent 2px,
+            transparent 12px
+        ),
+        /* Paper texture */
+        radial-gradient(
+            circle at 80% 20%, 
+            rgba(139, 69, 19, 0.03) 0%, 
+            transparent 50%
+        );
+    
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        inset 0 0 50px rgba(0, 0, 0, 0.03);
+}
+
+/* Clean sketch border */
+.input-section:nth-child(2)::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    border: 2px solid #34495e;
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+    
+    /* Clean hand-drawn style */
+    background: transparent;
+    border-style: dashed;
+    border-width: 1px;
+    
+    /* Subtle shadow for depth */
+    box-shadow: 
+        0 0 0 1px rgba(52, 73, 94, 0.1),
+        inset 0 0 10px rgba(52, 73, 94, 0.05);
+}
+
+/* Construction lines overlay */
+.input-section:nth-child(2)::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.12;
+    
+    /* Clean construction lines */
+    background-image:
+        /* Horizontal guide lines */
+        repeating-linear-gradient(
+            to bottom,
+            transparent,
+            transparent 28px,
+            rgba(44, 62, 80, 0.15) 28px,
+            rgba(44, 62, 80, 0.15) 29px,
+            transparent 29px,
+            transparent 32px
+        ),
+        /* Vertical guide lines */
+        repeating-linear-gradient(
+            to right,
+            transparent,
+            transparent 40px,
+            rgba(44, 62, 80, 0.08) 40px,
+            rgba(44, 62, 80, 0.08) 41px,
+            transparent 41px,
+            transparent 45px
+        );
+}
+
+/* Sketch-style inputs */
+.input-section:nth-child(2) input,
+.input-section:nth-child(2) select,
+.input-section:nth-child(2) textarea {
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px dashed #7f8c8d;
+    border-radius: 4px;
+    color: #2c3e50;
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 2;
+    box-shadow: none;
+    backdrop-filter: blur(1px);
+}
+
+/* Sketch-style labels */
+.input-section:nth-child(2) label {
+    color: #34495e;
+    font-weight: 500;
+    position: relative;
+    z-index: 2;
+    transform: rotate(-0.2deg);
+    font-style: italic;
+    opacity: 0.95;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Sketch h3 title */
+.input-section:nth-child(2) h3 {
+    color: #2c3e50;
+    position: relative;
+    z-index: 2;
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    opacity: 0.95;
+    border-bottom: 1px dashed #7f8c8d;
+    padding-bottom: 8px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Sketch sliders */
+.input-section:nth-child(2) input[type="range"] {
+    background: rgba(189, 195, 199, 0.6);
+    border: 1px dashed #7f8c8d;
+    opacity: 0.9;
+    border-radius: 3px;
+}
+
+.input-section:nth-child(2) input[type="range"]::-webkit-slider-thumb {
+    background: #34495e;
+    border: 2px solid #2c3e50;
+    border-radius: 50%;
+    opacity: 0.95;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.input-section:nth-child(2) input[type="range"]::-moz-range-thumb {
+    background: #34495e;
+    border: 2px solid #2c3e50;
+    border-radius: 50%;
+    opacity: 0.95;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================
+   🎨 TRANSFORMATION TO FULL COLOR ON HOVER
+   ============================================ */
+
+/* When hovering - bring the sketch to life! */
+.input-section:nth-child(2):hover,
+.input-section:nth-child(2):focus-within {
+    /* Remove grayscale filter - reveal full color */
+    filter: none;
+    
+    /* Enhance colors and shadows */
+    background: white;
+    background-image: none;
+    
+    box-shadow: 
+        0 12px 25px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(52, 152, 219, 0.1);
+    
+    /* Add subtle glow and lift */
+    transform: translateY(-3px);
+}
+
+/* Hide sketch overlays on hover */
+.input-section:nth-child(2):hover::before,
+.input-section:nth-child(2):focus-within::before {
+    opacity: 0;
+    transform: scale(0.98);
+}
+
+.input-section:nth-child(2):hover::after,
+.input-section:nth-child(2):focus-within::after {
+    opacity: 0;
+}
+
+/* Transform inputs to modern style */
+.input-section:nth-child(2):hover input,
+.input-section:nth-child(2):hover select,
+.input-section:nth-child(2):hover textarea,
+.input-section:nth-child(2):focus-within input,
+.input-section:nth-child(2):focus-within select,
+.input-section:nth-child(2):focus-within textarea {
+    background: white;
+    border: 2px solid #ecf0f1;
+    border-style: solid;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    color: #2c3e50;
+    backdrop-filter: none;
+}
+
+/* Transform labels */
+.input-section:nth-child(2):hover label,
+.input-section:nth-child(2):focus-within label {
+    color: #34495e;
+    transform: rotate(0deg);
+    font-style: normal;
+    opacity: 1;
+    font-weight: 500;
+    text-shadow: none;
+}
+
+/* Transform title */
+.input-section:nth-child(2):hover h3,
+.input-section:nth-child(2):focus-within h3 {
+    color: #2c3e50;
+    transform: rotate(0deg);
+    font-style: normal;
+    opacity: 1;
+    border-bottom: none;
+    padding-bottom: 15px;
+    text-shadow: none;
+    
+    /* Add modern accent - different color for Physical State */
+    border-left: 4px solid #FF9800;
+    padding-left: 12px;
+    margin-left: -16px;
+}
+
+/* Transform sliders */
+.input-section:nth-child(2):hover input[type="range"],
+.input-section:nth-child(2):focus-within input[type="range"] {
+    background: var(--slider-track-bg, #d5d8dc);
+    border: 1px solid #bdc3c7;
+    border-style: solid;
+    border-radius: 6px;
+    opacity: 1;
+}
+
+.input-section:nth-child(2):hover input[type="range"]::-webkit-slider-thumb,
+.input-section:nth-child(2):focus-within input[type="range"]::-webkit-slider-thumb {
+    background: var(--slider-thumb-bg, #764ba2);
+    border: 3px solid var(--slider-thumb-border, #ffffff);
+    border-style: solid;
+    opacity: 1;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.input-section:nth-child(2):hover input[type="range"]::-moz-range-thumb,
+.input-section:nth-child(2):focus-within input[type="range"]::-moz-range-thumb {
+    background: var(--slider-thumb-bg, #764ba2);
+    border: 3px solid var(--slider-thumb-border, #ffffff);
+    border-style: solid;
+    opacity: 1;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   ✏️ GENTLE SKETCH ANIMATION
+   ============================================ */
+
+/* Very subtle "pencil drawing" animation - slightly offset from Recovery Metrics */
+.input-section:nth-child(2)::before {
+    animation: gentle-sketch-2 18s ease-in-out infinite;
+}
+
+@keyframes gentle-sketch-2 {
+    0%, 100% { 
+        opacity: 0.5;
+    }
+    33% { 
+        opacity: 0.4;
+    }
+    66% { 
+        opacity: 0.45;
+    }
+}
+
+/* Pause animation on hover */
+.input-section:nth-child(2):hover::before {
+    animation-play-state: paused;
+}
+
+/* ============================================
+   📱 MOBILE OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 768px) {
+    .input-section:nth-child(2) {
+        /* Lighter crosshatch on mobile */
+        background-image: 
+            repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 0, 0, 0.05) 3px,
+                rgba(0, 0, 0, 0.05) 4px,
+                transparent 4px,
+                transparent 10px
+            ),
+            repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 0, 0, 0.04) 3px,
+                rgba(0, 0, 0, 0.04) 4px,
+                transparent 4px,
+                transparent 10px
+            );
+    }
+    
+    .input-section:nth-child(2)::after {
+        /* Simpler construction lines on mobile */
+        background-image:
+            repeating-linear-gradient(
+                to bottom,
+                transparent,
+                transparent 35px,
+                rgba(44, 62, 80, 0.08) 35px,
+                rgba(44, 62, 80, 0.08) 36px
+            );
+    }
+}
+
+/* ============================================
+   📐 DA VINCI SKETCH EFFECT - TRAINING HISTORY
+   ============================================ */
+
+/* Training History - Default sketchy graphite state */
+.input-section:nth-child(3) {
+    background: #faf9f7; /* Aged paper color */
+    border: none;
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+    transition: all 0.6s ease;
+    overflow: hidden;
+    
+    /* Remove color - make it grayscale sketch */
+    filter: grayscale(100%) contrast(1.1) brightness(0.95);
+    
+    /* Visible crosshatch texture overlay */
+    background-image: 
+        /* Primary diagonal crosshatch lines */
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.08) 2px,
+            rgba(0, 0, 0, 0.08) 3px,
+            transparent 3px,
+            transparent 8px
+        ),
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.06) 2px,
+            rgba(0, 0, 0, 0.06) 3px,
+            transparent 3px,
+            transparent 8px
+        ),
+        /* Secondary finer crosshatch */
+        repeating-linear-gradient(
+            60deg,
+            transparent,
+            transparent 1px,
+            rgba(0, 0, 0, 0.03) 1px,
+            rgba(0, 0, 0, 0.03) 2px,
+            transparent 2px,
+            transparent 12px
+        ),
+        /* Paper texture */
+        radial-gradient(
+            circle at 50% 50%, 
+            rgba(139, 69, 19, 0.03) 0%, 
+            transparent 50%
+        );
+    
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        inset 0 0 50px rgba(0, 0, 0, 0.03);
+}
+
+/* Clean sketch border */
+.input-section:nth-child(3)::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    border: 2px solid #34495e;
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+    
+    /* Clean hand-drawn style */
+    background: transparent;
+    border-style: dashed;
+    border-width: 1px;
+    
+    /* Subtle shadow for depth */
+    box-shadow: 
+        0 0 0 1px rgba(52, 73, 94, 0.1),
+        inset 0 0 10px rgba(52, 73, 94, 0.05);
+}
+
+/* Construction lines overlay */
+.input-section:nth-child(3)::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.12;
+    
+    /* Clean construction lines */
+    background-image:
+        /* Horizontal guide lines */
+        repeating-linear-gradient(
+            to bottom,
+            transparent,
+            transparent 28px,
+            rgba(44, 62, 80, 0.15) 28px,
+            rgba(44, 62, 80, 0.15) 29px,
+            transparent 29px,
+            transparent 32px
+        ),
+        /* Vertical guide lines */
+        repeating-linear-gradient(
+            to right,
+            transparent,
+            transparent 40px,
+            rgba(44, 62, 80, 0.08) 40px,
+            rgba(44, 62, 80, 0.08) 41px,
+            transparent 41px,
+            transparent 45px
+        );
+}
+
+/* Sketch-style inputs */
+.input-section:nth-child(3) input,
+.input-section:nth-child(3) select,
+.input-section:nth-child(3) textarea {
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px dashed #7f8c8d;
+    border-radius: 4px;
+    color: #2c3e50;
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 2;
+    box-shadow: none;
+    backdrop-filter: blur(1px);
+}
+
+/* Sketch-style labels */
+.input-section:nth-child(3) label {
+    color: #34495e;
+    font-weight: 500;
+    position: relative;
+    z-index: 2;
+    transform: rotate(-0.2deg);
+    font-style: italic;
+    opacity: 0.95;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Sketch h3 title */
+.input-section:nth-child(3) h3 {
+    color: #2c3e50;
+    position: relative;
+    z-index: 2;
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    opacity: 0.95;
+    border-bottom: 1px dashed #7f8c8d;
+    padding-bottom: 8px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Sketch checkboxes special styling */
+.input-section:nth-child(3) .checkbox-group {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px dashed #95a5a6;
+    border-radius: 4px;
+    padding: 12px;
+    backdrop-filter: blur(1px);
+}
+
+.input-section:nth-child(3) .checkbox-group label {
+    transform: rotate(-0.1deg);
+    margin-bottom: 4px;
+}
+
+/* Sketch sliders */
+.input-section:nth-child(3) input[type="range"] {
+    background: rgba(189, 195, 199, 0.6);
+    border: 1px dashed #7f8c8d;
+    opacity: 0.9;
+    border-radius: 3px;
+}
+
+.input-section:nth-child(3) input[type="range"]::-webkit-slider-thumb {
+    background: #34495e;
+    border: 2px solid #2c3e50;
+    border-radius: 50%;
+    opacity: 0.95;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.input-section:nth-child(3) input[type="range"]::-moz-range-thumb {
+    background: #34495e;
+    border: 2px solid #2c3e50;
+    border-radius: 50%;
+    opacity: 0.95;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================
+   📝 DA VINCI SKETCH EFFECT - SESSION NOTES
+   ============================================ */
+
+/* Session Notes - Full width section */
+.input-section[style*="grid-column: 1 / -1"] {
+    background: #faf9f7; /* Aged paper color */
+    border: none;
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+    transition: all 0.6s ease;
+    overflow: hidden;
+    
+    /* Remove color - make it grayscale sketch */
+    filter: grayscale(100%) contrast(1.1) brightness(0.95);
+    
+    /* Visible crosshatch texture overlay */
+    background-image: 
+        /* Primary diagonal crosshatch lines */
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.08) 2px,
+            rgba(0, 0, 0, 0.08) 3px,
+            transparent 3px,
+            transparent 8px
+        ),
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.06) 2px,
+            rgba(0, 0, 0, 0.06) 3px,
+            transparent 3px,
+            transparent 8px
+        ),
+        /* Paper texture */
+        radial-gradient(
+            circle at 30% 70%, 
+            rgba(139, 69, 19, 0.03) 0%, 
+            transparent 50%
+        );
+    
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        inset 0 0 50px rgba(0, 0, 0, 0.03);
+}
+
+/* Clean sketch border */
+.input-section[style*="grid-column: 1 / -1"]::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    border: 2px solid #34495e;
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+    background: transparent;
+    border-style: dashed;
+    border-width: 1px;
+    box-shadow: 
+        0 0 0 1px rgba(52, 73, 94, 0.1),
+        inset 0 0 10px rgba(52, 73, 94, 0.05);
+}
+
+/* Session Notes specific styling */
+.input-section[style*="grid-column: 1 / -1"] h3 {
+    color: #2c3e50;
+    position: relative;
+    z-index: 2;
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    opacity: 0.95;
+    border-bottom: 1px dashed #7f8c8d;
+    padding-bottom: 8px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.input-section[style*="grid-column: 1 / -1"] label {
+    color: #34495e;
+    font-weight: 500;
+    position: relative;
+    z-index: 2;
+    transform: rotate(-0.2deg);
+    font-style: italic;
+    opacity: 0.95;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.input-section[style*="grid-column: 1 / -1"] textarea {
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px dashed #7f8c8d;
+    border-radius: 4px;
+    color: #2c3e50;
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 2;
+    box-shadow: none;
+    backdrop-filter: blur(1px);
+}
+
+/* Transform on hover */
+.input-section[style*="grid-column: 1 / -1"]:hover,
+.input-section[style*="grid-column: 1 / -1"]:focus-within {
+    filter: none;
+    background: white;
+    background-image: none;
+    box-shadow: 
+        0 12px 25px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(52, 152, 219, 0.1);
+    transform: translateY(-3px);
+}
+
+.input-section[style*="grid-column: 1 / -1"]:hover::before,
+.input-section[style*="grid-column: 1 / -1"]:focus-within::before {
+    opacity: 0;
+}
+
+.input-section[style*="grid-column: 1 / -1"]:hover h3,
+.input-section[style*="grid-column: 1 / -1"]:focus-within h3 {
+    color: #2c3e50;
+    transform: rotate(0deg);
+    font-style: normal;
+    opacity: 1;
+    border-bottom: none;
+    text-shadow: none;
+    border-left: 4px solid #8BC34A; /* Green for notes */
+    padding-left: 12px;
+    margin-left: -16px;
+}
+
+.input-section[style*="grid-column: 1 / -1"]:hover label,
+.input-section[style*="grid-column: 1 / -1"]:focus-within label {
+    color: #34495e;
+    transform: rotate(0deg);
+    font-style: normal;
+    opacity: 1;
+    text-shadow: none;
+}
+
+.input-section[style*="grid-column: 1 / -1"]:hover textarea,
+.input-section[style*="grid-column: 1 / -1"]:focus-within textarea {
+    background: white;
+    border: 2px solid #ecf0f1;
+    border-style: solid;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    backdrop-filter: none;
+}
+
+/* Sketch border */
+.personalization-section::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 1px dashed #95a5a6;
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.6;
+}
+
+/* Sketch styling for personalization elements */
+.personalization-section h3 {
+    color: #2c3e50;
+    position: relative;
+    z-index: 2;
+    font-style: italic;
+    transform: rotate(-0.15deg);
+    opacity: 0.95;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px dashed #f39c12;
+    padding-bottom: 8px;
+}
+
+.personalization-card {
+    background: rgba(255, 255, 255, 0.4);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px dashed #bdc3c7;
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(1px);
+}
+
+.personalization-value {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #2c3e50;
+    transform: rotate(-0.1deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Transform on hover */
+.personalization-section:hover,
+.personalization-section:focus-within {
+    filter: none;
+    background: #fdf8e2;
+    background-image: none;
+    border-left: 4px solid #f39c12;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.personalization-section:hover::before {
+    opacity: 0;
+}
+
+.personalization-section:hover h3 {
+    color: #2c3e50;
+    transform: rotate(0deg);
+    font-style: normal;
+    text-shadow: none;
+    border-bottom: none;
+}
+
+.personalization-section:hover .personalization-card {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid #ecf0f1;
+    border-style: solid;
+    backdrop-filter: none;
+}
+
+.personalization-section:hover .personalization-value {
+    transform: rotate(0deg);
+    text-shadow: none;
+}
+
+/* ============================================
+   🎯 DA VINCI SKETCH EFFECT - RECOMMENDATION PANEL
+   ============================================ */
+
+.recommendation-panel {
+    background: #faf9f7 !important; /* Override inline styles */
+    color: #2c3e50 !important;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 15px 0;
+    position: relative;
+    transition: all 0.6s ease;
+    overflow: hidden;
+    
+    /* Remove color - make it grayscale sketch */
+    filter: grayscale(100%) contrast(1.1) brightness(0.95);
+    
+    /* Crosshatch texture */
+    background-image: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.08) 2px,
+            rgba(0, 0, 0, 0.08) 3px,
+            transparent 3px,
+            transparent 8px
+        ),
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.06) 2px,
+            rgba(0, 0, 0, 0.06) 3px,
+            transparent 3px,
+            transparent 8px
+        ) !important;
+    
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        inset 0 0 50px rgba(0, 0, 0, 0.03) !important;
+}
+
+/* Sketch border */
+.recommendation-panel::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 2px dashed #34495e;
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+}
+
+/* Sketch styling for recommendation text */
+.recommendation-panel h2 {
+    color: #2c3e50 !important;
+    position: relative;
+    z-index: 2;
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1) !important;
+}
+
+.recommendation-text {
+    color: #34495e !important;
+    position: relative;
+    z-index: 2;
+    font-style: italic;
+    opacity: 0.95;
+}
+
+.metric-card {
+    background: rgba(255, 255, 255, 0.3) !important;
+    border: 1px dashed #7f8c8d;
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(1px);
+}
+
+.metric-value {
+    color: #2c3e50 !important;
+    transform: rotate(-0.1deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Transform on hover */
+.recommendation-panel:hover {
+    filter: none !important;
+    background-image: none !important;
+    transform: translateY(-2px);
+}
+
+.recommendation-panel:hover::before {
+    opacity: 0;
+}
+
+.recommendation-panel:hover h2 {
+    transform: rotate(0deg);
+    font-style: normal;
+    text-shadow: none !important;
+}
+
+.recommendation-panel:hover .recommendation-text {
+    font-style: normal;
+    opacity: 1;
+}
+
+.recommendation-panel:hover .metric-card {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-style: solid;
+    backdrop-filter: none;
+}
+
+.recommendation-panel:hover .metric-value {
+    transform: rotate(0deg);
+    text-shadow: none;
+}
+
+/* ============================================
+   🎨 TRANSFORMATION TO FULL COLOR ON HOVER
+   ============================================ */
+
+/* When hovering - bring the sketch to life! */
+.input-section:nth-child(3):hover,
+.input-section:nth-child(3):focus-within {
+    /* Remove grayscale filter - reveal full color */
+    filter: none;
+    
+    /* Enhance colors and shadows */
+    background: white;
+    background-image: none;
+    
+    box-shadow: 
+        0 12px 25px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(52, 152, 219, 0.1);
+    
+    /* Add subtle glow and lift */
+    transform: translateY(-3px);
+}
+
+/* Hide sketch overlays on hover */
+.input-section:nth-child(3):hover::before,
+.input-section:nth-child(3):focus-within::before {
+    opacity: 0;
+    transform: scale(0.98);
+}
+
+.input-section:nth-child(3):hover::after,
+.input-section:nth-child(3):focus-within::after {
+    opacity: 0;
+}
+
+/* Transform inputs to modern style */
+.input-section:nth-child(3):hover input,
+.input-section:nth-child(3):hover select,
+.input-section:nth-child(3):hover textarea,
+.input-section:nth-child(3):focus-within input,
+.input-section:nth-child(3):focus-within select,
+.input-section:nth-child(3):focus-within textarea {
+    background: white;
+    border: 2px solid #ecf0f1;
+    border-style: solid;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    color: #2c3e50;
+    backdrop-filter: none;
+}
+
+/* Transform labels */
+.input-section:nth-child(3):hover label,
+.input-section:nth-child(3):focus-within label {
+    color: #34495e;
+    transform: rotate(0deg);
+    font-style: normal;
+    opacity: 1;
+    font-weight: 500;
+    text-shadow: none;
+}
+
+/* Transform title */
+.input-section:nth-child(3):hover h3,
+.input-section:nth-child(3):focus-within h3 {
+    color: #2c3e50;
+    transform: rotate(0deg);
+    font-style: normal;
+    opacity: 1;
+    border-bottom: none;
+    padding-bottom: 15px;
+    text-shadow: none;
+    
+    /* Add modern accent - purple for Training History */
+    border-left: 4px solid #9b59b6;
+    padding-left: 12px;
+    margin-left: -16px;
+}
+
+/* Transform checkbox group */
+.input-section:nth-child(3):hover .checkbox-group,
+.input-section:nth-child(3):focus-within .checkbox-group {
+    background: #f8f9fa;
+    border: 2px solid #ecf0f1;
+    border-style: solid;
+    border-radius: 8px;
+    backdrop-filter: none;
+}
+
+.input-section:nth-child(3):hover .checkbox-group label,
+.input-section:nth-child(3):focus-within .checkbox-group label {
+    transform: rotate(0deg);
+    margin-bottom: 0;
+}
+
+/* Transform sliders */
+.input-section:nth-child(3):hover input[type="range"],
+.input-section:nth-child(3):focus-within input[type="range"] {
+    background: var(--slider-track-bg, #d5d8dc);
+    border: 1px solid #bdc3c7;
+    border-style: solid;
+    border-radius: 6px;
+    opacity: 1;
+}
+
+.input-section:nth-child(3):hover input[type="range"]::-webkit-slider-thumb,
+.input-section:nth-child(3):focus-within input[type="range"]::-webkit-slider-thumb {
+    background: var(--slider-thumb-bg, #764ba2);
+    border: 3px solid var(--slider-thumb-border, #ffffff);
+    border-style: solid;
+    opacity: 1;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.input-section:nth-child(3):hover input[type="range"]::-moz-range-thumb,
+.input-section:nth-child(3):focus-within input[type="range"]::-moz-range-thumb {
+    background: var(--slider-thumb-bg, #764ba2);
+    border: 3px solid var(--slider-thumb-border, #ffffff);
+    border-style: solid;
+    opacity: 1;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   ✏️ GENTLE SKETCH ANIMATION
+   ============================================ */
+
+/* Very subtle "pencil drawing" animation - different timing from others */
+.input-section:nth-child(3)::before {
+    animation: gentle-sketch-3 22s ease-in-out infinite;
+}
+
+@keyframes gentle-sketch-3 {
+    0%, 100% { 
+        opacity: 0.5;
+    }
+    25% { 
+        opacity: 0.45;
+    }
+    50% { 
+        opacity: 0.4;
+    }
+    75% { 
+        opacity: 0.48;
+    }
+}
+
+/* Pause animation on hover */
+.input-section:nth-child(3):hover::before {
+    animation-play-state: paused;
+}
+
+/* ============================================
+   📱 MOBILE OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 768px) {
+    .input-section:nth-child(3) {
+        /* Lighter crosshatch on mobile */
+        background-image: 
+            repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 0, 0, 0.05) 3px,
+                rgba(0, 0, 0, 0.05) 4px,
+                transparent 4px,
+                transparent 10px
+            ),
+            repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 0, 0, 0.04) 3px,
+                rgba(0, 0, 0, 0.04) 4px,
+                transparent 4px,
+                transparent 10px
+            );
+    }
+    
+    .input-section:nth-child(3)::after {
+        /* Simpler construction lines on mobile */
+        background-image:
+            repeating-linear-gradient(
+                to bottom,
+                transparent,
+                transparent 35px,
+                rgba(44, 62, 80, 0.08) 35px,
+                rgba(44, 62, 80, 0.08) 36px
+            );
+    }
+}
+
 /* General input/select/textarea styling */
 input, select, textarea {
     width: 100%;
@@ -864,7 +2612,7 @@ input[type="range"].disabled-input::-moz-range-thumb {
     border-radius: 25px;
     font-size: 16px;
     cursor: pointer;
-    transition: all 0.3s ease;  /* Changed from just transform */
+    transition: all 0.3s ease;
     flex: 1;
     min-width: 140px;
     max-width: 200px;
@@ -872,21 +2620,20 @@ input[type="range"].disabled-input::-moz-range-thumb {
     overflow: hidden;
 }
 
-/* Enhanced hover effect similar to title */
+/* Enhanced hover effect with prominent hop */
 .update-btn:hover {
-    transform: translateY(-2px) scale(1.02);  /* Combined movement like title */
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);  /* Added glow */
-    filter: brightness(1.1);  /* Slight brightness increase */
+    transform: translateY(-4px) scale(1.05);  /* More pronounced hop */
+    box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
+    filter: brightness(1.15);
 }
 
-/* Specific button targeting by ID for different effects */
 #loadDateBtn {
     background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
 }
 
 #loadDateBtn:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+    transform: translateY(-4px) scale(1.05);  /* Enhanced hop effect */
+    box-shadow: 0 10px 25px rgba(52, 152, 219, 0.4);
     color: #ecf0f1;
 }
 
@@ -972,7 +2719,7 @@ input[type="range"].disabled-input::-moz-range-thumb {
             padding: 15px;
             margin-bottom: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #3498db;
+            border-left: 4px solid #8BC34A;
         }
         
         @media (max-width: 768px) {
@@ -1045,13 +2792,24 @@ input[type="range"].disabled-input::-moz-range-thumb {
             }
         }
         
-        .date-selector {
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
+.date-selector {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: space-between;  /* This pushes the button to the right */
+}
+
+/* Make sure the label and input stay together on the left */
+.date-selector > :not(button) {
+    flex-shrink: 0;
+}
+
+/* Keep the button on the right */
+.date-selector button {
+    margin-left: auto;  /* Extra push to the right */
+}
         
         @media (max-width: 768px) {
             .date-selector {
@@ -1115,10 +2873,11 @@ input[type="range"].disabled-input::-moz-range-thumb {
             }
         }
         
-        .delete-btn:hover {
-            background: #c0392b;
-            transform: scale(1.05);
-        }
+.delete-btn:hover {
+    background: #c0392b;
+    transform: translateY(-2px) scale(1.08);  /* Added hop with scale */
+    box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
+}
         
         @media (hover: none) {
             .delete-btn:hover {
@@ -1135,18 +2894,18 @@ input[type="range"].disabled-input::-moz-range-thumb {
     font-size: 14px;
     cursor: pointer;
     margin: 0 5px;
-    transition: all 0.3s ease;  /* Added smooth transitions */
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-weight: 500;
 }
 
-/* General export button hover effect */
+/* General export button hover effect with hop */
 .export-btn:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 6px 16px rgba(39, 174, 96, 0.3);
-    filter: brightness(1.1);
+    transform: translateY(-4px) scale(1.05);  /* Enhanced hop effect */
+    box-shadow: 0 10px 20px rgba(39, 174, 96, 0.4);
+    filter: brightness(1.15);
 }
 
 .export-btn:active {
@@ -1555,18 +3314,22 @@ input[type="range"].disabled-input::-moz-range-thumb {
             color: white;
         }
         
-        .modal-btn-confirm:hover {
-            background: #c0392b;
-        }
+.modal-btn-confirm:hover {
+    background: #c0392b;
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
+}
         
         .modal-btn-cancel {
             background: #ecf0f1;
             color: #7f8c8d;
         }
         
-        .modal-btn-cancel:hover {
-            background: #bdc3c7;
-        }
+.modal-btn-cancel:hover {
+    background: #bdc3c7;
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 4px 12px rgba(189, 195, 199, 0.3);
+}
         
         .validation-modal .modal-content {
             text-align: left;
@@ -1620,10 +3383,10 @@ input[type="range"].disabled-input::-moz-range-thumb {
             color: white;
         }
         
-        .validation-modal .modal-btn:hover {
-            background: #2980b9;
-        }
-        
+.modal-btn:hover {
+    transform: translateY(-2px) scale(1.03);  /* Add hop effect */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
 /* ============================================
     💫 PULSING RINGS MODAL - MOBILE SAFE & RELIABLE
     ============================================ */
@@ -1765,9 +3528,15 @@ div.modal-overlay.welcome-modal div.modal-content::after {
             transition: all 0.3s ease;
         }
         
-        .welcome-modal .qr-link:hover {
-            transform: scale(1.05);
-        }
+.welcome-modal .qr-link:hover {
+    transform: translateY(-3px) scale(1.05);  /* Added hop to QR code */
+}
+
+.welcome-modal .qr-link:hover .paypal-qr {
+    border-color: #667eea;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);  /* Enhanced shadow */
+    transform: translateY(-2px);  /* Additional subtle hop for the QR container */
+}
         
         .welcome-modal .paypal-qr {
             width: 200px;
@@ -1928,14 +3697,21 @@ div.modal-overlay.welcome-modal div.modal-content::after {
             border-bottom: 1px solid #ecf0f1;
         }
         
-        .nav-btn {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+.nav-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;  /* Added transition */
+}
+
+.nav-btn:hover {
+    background: #2980b9;
+    transform: translateY(-3px) scale(1.05);  /* Added hop effect */
+    box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+}
         
         .current-week {
             font-weight: bold;
@@ -1961,16 +3737,531 @@ div.modal-overlay.welcome-modal div.modal-content::after {
             background: #3498db;
             color: white;
         }
+.chart-toggle:hover {
+    transform: translateY(-2px) scale(1.03);  /* Added hop effect */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    filter: brightness(1.1);
+}
 
 .personalization-section {
-    background: #fdf8e2;
+    background: #faf9f7; /* Aged paper color to match others */
     padding: 20px;
     border-radius: 10px;
-    margin-top: 40px;  /* Increased from 20px to 40px */
-    margin-bottom: 20px;  /* Added bottom margin for good measure */
-    border-left: 4px solid #f39c12;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    position: relative;
+    transition: all 0.6s ease;
+    overflow: hidden;
+    
+    /* Remove color - make it grayscale sketch like others */
+    filter: grayscale(100%) contrast(1.1) brightness(0.95);
+    
+    /* Visible crosshatch texture to match others */
+    background-image: 
+        /* Primary diagonal crosshatch lines */
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.08) 2px,
+            rgba(0, 0, 0, 0.08) 3px,
+            transparent 3px,
+            transparent 8px
+        ),
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.06) 2px,
+            rgba(0, 0, 0, 0.06) 3px,
+            transparent 3px,
+            transparent 8px
+        ),
+        /* Paper texture */
+        radial-gradient(
+            circle at 70% 30%, 
+            rgba(139, 69, 19, 0.03) 0%, 
+            transparent 50%
+        );
+    
     /* Add subtle shadow to separate it visually */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        inset 0 0 50px rgba(0, 0, 0, 0.03);
+}
+/* ============================================
+   📅 DA VINCI SKETCH EFFECT - DATE SELECTOR & BUTTONS
+   ============================================ */
+
+/* Date Selector Container */
+.date-selector {
+    background: #faf9f7; /* Aged paper color */
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    position: relative;
+    transition: all 0.6s ease;
+    overflow: hidden;
+    
+    /* Remove color - make it grayscale sketch */
+    filter: grayscale(100%) contrast(1.1) brightness(0.95);
+    
+    /* Visible crosshatch texture */
+    background-image: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.06) 2px,
+            rgba(0, 0, 0, 0.06) 3px,
+            transparent 3px,
+            transparent 10px
+        ),
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.04) 2px,
+            rgba(0, 0, 0, 0.04) 3px,
+            transparent 3px,
+            transparent 10px
+        );
+    
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        inset 0 0 30px rgba(0, 0, 0, 0.02);
+}
+
+/* Sketch border for date selector */
+.date-selector::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 1px dashed #7f8c8d;
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.6;
+}
+
+/* Date selector elements styling */
+.date-selector label {
+    color: #34495e;
+    font-weight: 500;
+    position: relative;
+    z-index: 2;
+    transform: rotate(-0.1deg);
+    font-style: italic;
+    opacity: 0.95;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.date-selector input[type="date"] {
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px dashed #7f8c8d;
+    border-radius: 4px;
+    color: #2c3e50;
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(1px);
+    font-style: italic;
+    transform: rotate(-0.1deg);
+}
+
+/* Date selector hover - bring to life */
+.date-selector:hover,
+.date-selector:focus-within {
+    filter: none;
+    background: white;
+    background-image: none;
+    box-shadow: 
+        0 8px 16px rgba(0, 0, 0, 0.12),
+        0 0 0 1px rgba(255, 225, 53, 0.2);
+    transform: translateY(-2px);
+}
+
+.date-selector:hover::before,
+.date-selector:focus-within::before {
+    opacity: 0;
+}
+
+.date-selector:hover label,
+.date-selector:focus-within label {
+    color: #34495e;
+    transform: rotate(0deg);
+    font-style: normal;
+    opacity: 1;
+    text-shadow: none;
+    font-weight: 600;
+}
+
+.date-selector:hover input[type="date"],
+.date-selector:focus-within input[type="date"] {
+    background: white;
+    border: 2px solid #ecf0f1;
+    border-style: solid;
+    border-radius: 8px;
+    backdrop-filter: none;
+    font-style: normal;
+    transform: rotate(0deg);
+}
+
+/* ============================================
+   🎯 DA VINCI SKETCH EFFECT - BUTTON GROUP
+   ============================================ */
+
+/* Button Group Container */
+.button-group {
+    background: #faf9f7; /* Aged paper color */
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    position: relative;
+    transition: all 0.6s ease;
+    overflow: hidden;
+    
+    /* Remove color - make it grayscale sketch */
+    filter: grayscale(100%) contrast(1.1) brightness(0.95);
+    
+    /* Visible crosshatch texture */
+    background-image: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.08) 2px,
+            rgba(0, 0, 0, 0.08) 3px,
+            transparent 3px,
+            transparent 8px
+        ),
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.06) 2px,
+            rgba(0, 0, 0, 0.06) 3px,
+            transparent 3px,
+            transparent 8px
+        );
+    
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        inset 0 0 40px rgba(0, 0, 0, 0.03);
+}
+
+/* Sketch border for button group */
+.button-group::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    border: 2px dashed #34495e;
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.4;
+}
+
+/* Sketch styling for buttons */
+.button-group .update-btn {
+    background: rgba(189, 195, 199, 0.6) !important;
+    color: #2c3e50 !important;
+    border: 1px dashed #7f8c8d !important;
+    border-radius: 4px !important;
+    position: relative;
+    z-index: 2;
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    backdrop-filter: blur(1px);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease !important;
+}
+
+/* Button group hover - bring to life */
+.button-group:hover,
+.button-group:focus-within {
+    filter: none;
+    background: white;
+    background-image: none;
+    box-shadow: 
+        0 12px 25px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(255, 225, 53, 0.2);
+    transform: translateY(-3px);
+}
+
+.button-group:hover::before,
+.button-group:focus-within::before {
+    opacity: 0;
+    transform: scale(0.98);
+}
+
+/* Transform buttons when container is hovered */
+.button-group:hover .update-btn,
+.button-group:focus-within .update-btn {
+    font-style: normal !important;
+    transform: rotate(0deg) !important;
+    backdrop-filter: none !important;
+    text-shadow: none !important;
+    border-style: solid !important;
+    border-radius: 25px !important;
+}
+
+/* Restore original button colors on hover */
+.button-group:hover #updateRecBtn,
+.button-group:focus-within #updateRecBtn {
+    background: var(--primary-gradient) !important;
+    color: white !important;
+    border: none !important;
+}
+
+.button-group:hover #loadDateBtn,
+.button-group:focus-within #loadDateBtn {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%) !important;
+    color: white !important;
+    border: none !important;
+}
+
+.button-group:hover #saveEntryBtn,
+.button-group:focus-within #saveEntryBtn {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%) !important;
+    color: white !important;
+    border: none !important;
+}
+
+.button-group:hover #clearEntryBtn,
+.button-group:focus-within #clearEntryBtn {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important;
+    color: white !important;
+    border: none !important;
+}
+
+/* Individual button hover effects when group is active */
+.button-group:hover .update-btn:hover,
+.button-group:focus-within .update-btn:hover {
+    transform: translateY(-4px) scale(1.05) rotate(0deg) !important;
+    filter: brightness(1.15) !important;
+}
+
+/* Gentle sketch animation for button group */
+.button-group::before {
+    animation: gentle-sketch-buttons 25s ease-in-out infinite;
+}
+
+@keyframes gentle-sketch-buttons {
+    0%, 100% { 
+        opacity: 0.4;
+    }
+    33% { 
+        opacity: 0.3;
+    }
+    66% { 
+        opacity: 0.45;
+    }
+}
+
+/* Pause animation on hover */
+.button-group:hover::before {
+    animation-play-state: paused;
+}
+
+/* ============================================
+   📱 MOBILE OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 768px) {
+    .date-selector {
+        /* Lighter crosshatch on mobile */
+        background-image: 
+            repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 0, 0, 0.04) 3px,
+                rgba(0, 0, 0, 0.04) 4px,
+                transparent 4px,
+                transparent 12px
+            ),
+            repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 0, 0, 0.03) 3px,
+                rgba(0, 0, 0, 0.03) 4px,
+                transparent 4px,
+                transparent 12px
+            );
+    }
+    
+    .button-group {
+        /* Lighter crosshatch on mobile */
+        background-image: 
+            repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 0, 0, 0.05) 3px,
+                rgba(0, 0, 0, 0.05) 4px,
+                transparent 4px,
+                transparent 10px
+            ),
+            repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 0, 0, 0.04) 3px,
+                rgba(0, 0, 0, 0.04) 4px,
+                transparent 4px,
+                transparent 10px
+            );
+    }
+    
+    /* Reduce hover effects on mobile */
+    .date-selector:hover,
+    .button-group:hover {
+        transform: translateY(-1px);
+    }
+}
+/* Clean sketch border like the others */
+.personalization-section::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    border: 2px solid #34495e;
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+    background: transparent;
+    border-style: dashed;
+    border-width: 1px;
+    box-shadow: 
+        0 0 0 1px rgba(52, 73, 94, 0.1),
+        inset 0 0 10px rgba(52, 73, 94, 0.05);
+}
+
+/* Sketch styling for personalization elements */
+.personalization-section h3 {
+    color: #2c3e50;
+    position: relative;
+    z-index: 2;
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    opacity: 0.95;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px dashed #7f8c8d;
+    padding-bottom: 8px;
+}
+
+.personalization-card {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 15px;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px dashed #95a5a6;
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(1px);
+}
+
+.personalization-value {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #2c3e50;
+    transform: rotate(-0.1deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Transform on hover - bring to life like the others */
+.personalization-section:hover,
+.personalization-section:focus-within {
+    /* Remove grayscale filter - reveal full color */
+    filter: none;
+    
+    /* Enhance colors and shadows */
+    background: #fdf8e2;
+    background-image: none;
+    border-left: 4px solid #f39c12;
+    
+    box-shadow: 
+        0 12px 25px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(241, 196, 15, 0.1);
+    
+    /* Add subtle glow and lift */
+    transform: translateY(-3px);
+}
+
+/* Hide sketch overlays on hover */
+.personalization-section:hover::before,
+.personalization-section:focus-within::before {
+    opacity: 0;
+    transform: scale(0.98);
+}
+
+/* Transform title */
+.personalization-section:hover h3,
+.personalization-section:focus-within h3 {
+    color: #2c3e50;
+    transform: rotate(0deg);
+    font-style: normal;
+    opacity: 1;
+    text-shadow: none;
+    border-bottom: none;
+    padding-bottom: 15px;
+    
+    /* Add modern accent - orange for personalization */
+    border-left: 4px solid #f39c12;
+    padding-left: 12px;
+    margin-left: -16px;
+}
+
+/* Transform cards */
+.personalization-section:hover .personalization-card,
+.personalization-section:focus-within .personalization-card {
+    background: rgba(255, 255, 255, 0.7);
+    border: 2px solid #ecf0f1;
+    border-style: solid;
+    border-radius: 8px;
+    backdrop-filter: none;
+}
+
+/* Transform values */
+.personalization-section:hover .personalization-value,
+.personalization-section:focus-within .personalization-value {
+    transform: rotate(0deg);
+    text-shadow: none;
+}
+
+/* Gentle sketch animation like the others */
+.personalization-section::before {
+    animation: gentle-sketch-personalization 20s ease-in-out infinite;
+}
+
+@keyframes gentle-sketch-personalization {
+    0%, 100% { 
+        opacity: 0.5;
+    }
+    40% { 
+        opacity: 0.4;
+    }
+    80% { 
+        opacity: 0.45;
+    }
+}
+
+/* Pause animation on hover */
+.personalization-section:hover::before {
+    animation-play-state: paused;
 }
         .personalization-section h3 {
             color: #2c3e50;
@@ -2074,12 +4365,14 @@ div.modal-overlay.welcome-modal div.modal-content::after {
             font-size: 1.6em;
         }
         
-        .sync-description {
-            color: #7f8c8d;
-            margin-bottom: 25px;
-            text-align: center;
-            line-height: 1.6;
-        }
+.sync-description {
+    color: #2c3e50;  /* Much darker for better contrast */
+    margin-bottom: 25px;
+    text-align: center;
+    line-height: 1.6;
+    font-weight: 500;  /* Slightly bolder */
+    font-size: 1.05em;  /* Slightly larger */
+}
         
         .qr-section {
             display: flex;
@@ -2102,17 +4395,22 @@ div.modal-overlay.welcome-modal div.modal-content::after {
             position: relative;
         }
         
-        .qr-placeholder {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            width: 100%;
-            color: #7f8c8d;
-            font-style: italic;
-            text-align: center;
-            padding: 10px;
-        }
+.qr-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    color: #000000;  /* Lighter text */
+    font-style: italic;
+    text-align: center;
+    padding: 10px;
+    background: #a9a9a9;  
+    border-radius: 8px;
+    border: 2px dashed #000000;  /* Dashed border to indicate placeholder */
+    font-size: 13px;
+    font-weight: 500;
+}
         
         .qr-error {
             display: flex;
@@ -2213,10 +4511,10 @@ div.modal-overlay.welcome-modal div.modal-content::after {
             color: #7f8c8d;
         }
         
-        .sync-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+.sync-btn:hover {
+    transform: translateY(-4px) scale(1.05);  /* Added hop effect */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
         
         .sync-progress {
             height: 6px;
@@ -2280,16 +4578,18 @@ div.modal-overlay.welcome-modal div.modal-content::after {
             color: white;
         }
         
-        .sync-step-text {
-            color: #2c3e50;
-            font-size: 0.9em;
-            text-align: center;
-            max-width: 100px;
-        }
-        
-        .sync-step.active .sync-step-text {
-            font-weight: bold;
-        }
+.sync-step-text {
+    color: #2c3e50;
+    font-size: 0.95em;  /* Slightly larger */
+    text-align: center;
+    max-width: 100px;
+    font-weight: 600;  /* Bolder by default */
+}
+
+.sync-step.active .sync-step-text {
+    font-weight: 800;  /* Even bolder for active */
+    color: #1a252f;  /* Darker for active state */
+}
         
         @media (max-width: 768px) {
             .sync-steps {
@@ -2389,18 +4689,17 @@ div.modal-overlay.welcome-modal div.modal-content::after {
             backdrop-filter: blur(5px);
         }
         
-        .camera-btn:hover {
-            background: white;
-        }
-        
-        .camera-btn.danger {
-            background: rgba(231, 76, 60, 0.8);
-            color: white;
-        }
-        
-        .camera-btn.danger:hover {
-            background: #e74c3c;
-        }
+.camera-btn:hover {
+    background: white;
+    transform: translateY(-2px) scale(1.05);  /* Added hop effect */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.camera-btn.danger:hover {
+    background: #e74c3c;
+    transform: translateY(-2px) scale(1.05);  /* Added hop effect */
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
     </style>
 </head>
 <body>
@@ -2417,12 +4716,12 @@ div.modal-overlay.welcome-modal div.modal-content::after {
     <div class="modal-content">
         <h2>Welcome to ClimbSmart!</h2>
         <div class="intro-text">
-            <p>Hi there! I'm a climber who developed this tool to optimize my training and reduce injuries.</p>
-            <p>This tracker uses custom Nonlinear Dynamic algorithms to analyze your inputs and provide a readiness score.</p>
+            <p>Fill out the required fields and press "Update Recommendation" to receive a readiness score!</p>
+            </p> Save entries and view trends in the "Analyze" tab, all while keeping your data local, offline, and secure. </p>
         </div>
         
         <div class="support-section">
-            <h3>Support the Project</h3>
+            <h3>Support the Project ☕</h3>
             <a href="https://www.paypal.me/futurefusionpcs" target="_blank" rel="noopener noreferrer" class="qr-link">
                 <div class="paypal-qr">
                     <img src="data:image/png;base64,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" alt="PayPal">
@@ -2430,7 +4729,7 @@ div.modal-overlay.welcome-modal div.modal-content::after {
             </a>
             <p style="font-size: 0.9em; color: #7f8c8d; margin-top: 10px;"></p>
             <p class="support-text">
-                Give me your 2 cents! Please share your experiences, feedback, or any support you'd like to offer.
+                Press or scan the QR code to give me your 2 cents! Id love to hear about any experiences or feedback you have to offer!
             </p>
         </div>
         
@@ -2697,7 +4996,7 @@ Please add at least one entry.
                 
                 <div class="qr-section">
                     <div class="qr-container" id="sendQrContainer">
-                        <div class="qr-placeholder">Click "Generate Code" to start</div>
+                        <div class="qr-placeholder"></div>
                     </div>
                     <div class="peer-id-display" id="peerIdDisplay">CLICK "GENERATE CODE"</div>
                 </div>
@@ -4359,20 +6658,20 @@ updateAnalytics() {
                         pointBorderColor: '#ffffff',
                         pointBorderWidth: 1
                     },
-                    { 
-                        label: 'Sleep Duration (hrs)', 
-                        data: sleepDuration, 
-                        borderColor: '#34495e',  // DARK BLUE - Professional
-                        backgroundColor: 'rgba(52, 73, 94, 0.1)',
-                        tension: 0.1, 
-                        yAxisID: 'y2', 
-                        borderWidth: 2,
-                        pointRadius: 3,
-                        pointHoverRadius: 5,
-                        pointBackgroundColor: '#34495e',
-                        pointBorderColor: '#ffffff',
-                        pointBorderWidth: 1
-                    },
+{ 
+    label: 'Sleep Duration (hrs)', 
+    data: sleepDuration, 
+    borderColor: '#34495e',
+    backgroundColor: 'rgba(52, 73, 94, 0.1)',
+    tension: 0.1, 
+    yAxisID: 'y', 
+    borderWidth: 2,
+    pointRadius: 3,
+    pointHoverRadius: 5,
+    pointBackgroundColor: '#34495e',
+    pointBorderColor: '#ffffff',
+    pointBorderWidth: 1
+},
                     { 
                         label: 'Mood', 
                         data: mood, 
