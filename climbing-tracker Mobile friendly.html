@@ -5788,33 +5788,34 @@ div.modal-overlay.welcome-modal div.modal-content::after {
             </div>
         </div>
         
-<div class="recommendation-panel" id="recommendationPanel">
-    <h2 id="recommendationTitle">Tomorrow's Training Recommendation</h2>
-    <div class="recommendation-text" id="recommendationText">Enter your metrics above to get a recommendation</div>
-    <div class="metrics-grid" id="metricsGrid"></div>
-</div>
+        <div class="personalization-section">
+            <h3>Personalization Factors (Historical)</h3>
+            <div class="personalization-grid">
+                <div class="personalization-card">
+                    <div>Sleep Adaptation</div>
+                    <div class="personalization-value" id="sleepFactor">1.0x</div>
+                    <div>Based on your average sleep patterns</div>
+                </div>
+                <div class="personalization-card">
+                    <div>Injury Risk</div>
+                    <div class="personalization-value" id="injuryRisk">Low</div>
+                    <div>Based on your tendon and muscle history</div>
+                </div>
+            </div>
+        </div>
+        
         <div class="button-group">
             <button class="update-btn" id="updateRecBtn">Update Recommendation</button>
             <button class="update-btn" id="saveEntryBtn">Save Entry</button>
             <button class="update-btn" id="clearEntryBtn" style="background: #e74c3c;">Clear Data</button>
         </div>
         
-<div class="personalization-section">
-    <h3>Personalization Factors (Historical)</h3>
-    <div class="personalization-grid">
-        <div class="personalization-card">
-            <div>Sleep Adaptation</div>
-            <div class="personalization-value" id="sleepFactor">1.0x</div>
-            <div>Based on your average sleep patterns</div>
-        </div>
-        <div class="personalization-card">
-            <div>Injury Risk</div>
-            <div class="personalization-value" id="injuryRisk">Low</div>
-            <div>Based on your tendon and muscle history</div>
+        <div class="recommendation-panel" id="recommendationPanel">
+            <h2 id="recommendationTitle">Tomorrow's Training Recommendation</h2>
+            <div class="recommendation-text" id="recommendationText">Enter your metrics above to get a recommendation</div>
+            <div class="metrics-grid" id="metricsGrid"></div>
         </div>
     </div>
-</div>
-
     
     <div id="history" class="tab-content" role="tabpanel">
         <div class="history-nav">
@@ -6855,7 +6856,7 @@ validateFields() {
             if (readinessScore >= 8.5) return { type: "HIGH INTENSITY", description: "Perfect conditions for limit bouldering or project attempts.", volume: trainingVolume.high, risk: "Low", color: "#27ae60" };
             if (readinessScore >= 7) return { type: "MODERATE INTENSITY", description: "Good for technical climbing and strength training.", volume: trainingVolume.moderate, risk: "Low-Moderate", color: "#f39c12" };
             if (readinessScore >= 5) return { type: "LIGHT TRAINING", description: "Focus on technique, mobility, or easy volume.", volume: trainingVolume.light, risk: "Moderate", color: "#e67e22" };
-            if (readinessScore >= 3) return { type: "RECOVERY FOCUS", description: "Active recovery, stretching.", volume: training Volume.recovery, risk: "Moderate-High", color: "#e74c3c" };
+            if (readinessScore >= 3) return { type: "RECOVERY FOCUS", description: "Active recovery, stretching, or very light movement.", volume: trainingVolume.recovery, risk: "Moderate-High", color: "#e74c3c" };
             return { type: "REST DAY", description: "Complete rest recommended - address limiting factors.", volume: "0 hours", risk: "High", color: "#c0392b" };
         }
         
