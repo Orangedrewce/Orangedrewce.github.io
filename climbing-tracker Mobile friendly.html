@@ -1624,47 +1624,106 @@ input[type="range"].disabled-input::-moz-range-thumb {
             background: #2980b9;
         }
         
+/* ============================================
+    💫 PULSING RINGS MODAL - MOBILE SAFE & RELIABLE
+    ============================================ */
+
 div.modal-overlay.welcome-modal div.modal-content {
-    background: rgba(255, 255, 255, 2) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
     position: relative !important;
     overflow: hidden !important;
-    backdrop-filter: blur(50px) !important;
+    backdrop-filter: blur(30px) !important;
 }
 
+/* First pulsing ring */
 div.modal-overlay.welcome-modal div.modal-content::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: conic-gradient(
-        from 0deg,
-        rgba(39, 174, 96, .5),
-        rgba(155, 89, 182, .5),
-        rgba(52, 152, 219, .5),
-        rgba(231, 76, 60, .5),
-        rgba(39, 174, 96, .5)
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(
+        circle, 
+        rgba(52, 152, 219, 0.4) 0%, 
+        rgba(52, 152, 219, 0.2) 40%,
+        transparent 70%
     );
-    animation: conic-spin 10s linear infinite;
+    border-radius: 50%;
+    animation: pulse-ring 4s ease-in-out infinite;
     pointer-events: none;
     z-index: -1;
+    transform: translate(-50%, -50%);
 }
 
-@keyframes conic-spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+/* Second pulsing ring (delayed) */
+div.modal-overlay.welcome-modal div.modal-content::after {
+    content: '';
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(
+        circle, 
+        rgba(155, 89, 182, 0.3) 0%, 
+        rgba(155, 89, 182, 0.15) 40%,
+        transparent 70%
+    );
+    border-radius: 50%;
+    animation: pulse-ring 4s ease-in-out infinite 2s;
+    pointer-events: none;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+}
+
+/* Pulsing animation */
+@keyframes pulse-ring {
+    0%, 100% { 
+        transform: translate(-50%, -50%) scale(0.7); 
+        opacity: 0.8; 
+    }
+    50% { 
+        transform: translate(-50%, -50%) scale(2); 
+        opacity: 2; 
+    }
 }
 
 /* ============================================
-   📱 MOBILE OPTIMIZATION
-   ============================================ */
-
+    📱 MOBILE OPTIMIZATION
+    ============================================ */
 @media (max-width: 768px) {
     div.modal-overlay.welcome-modal div.modal-content::before {
-        animation-duration: 15s; /* Slower on mobile */
+        width: 150px;
+        height: 150px;
+        animation-duration: 5s;
+    }
+    
+    div.modal-overlay.welcome-modal div.modal-content::after {
+        width: 220px;
+        height: 220px;
+        animation-duration: 5s;
     }
 }
+
+
+/* ============================================
+    📱 MOBILE OPTIMIZATION
+    ============================================ */
+@media (max-width: 768px) {
+    div.modal-overlay.welcome-modal div.modal-content::before {
+        width: 150px;
+        height: 150px;
+        animation-duration: 5s;
+    }
+    
+    div.modal-overlay.welcome-modal div.modal-content::after {
+        width: 220px;
+        height: 220px;
+        animation-duration: 5s;
+    }
+}
+
         
         .welcome-modal h2 {
             color: #667eea;
