@@ -1786,7 +1786,7 @@ body {
 .input-section:nth-child(2):hover input[type="range"]::-webkit-slider-thumb,
 .input-section:nth-child(2):focus-within input[type="range"]::-webkit-slider-thumb {
     background: var(--slider-thumb-bg, #fa3f08);
-    border: 2px solid var(--slider-thumb-border, #ffffff);
+    border: 2px solid var(--slider-thumb-border, #d1d1d1);
     border-style: solid;
     opacity: 1;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -2925,20 +2925,13 @@ input[type="range"]::-webkit-slider-runnable-track {
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 28px;
-    height: 26px;
-    background: 
-        radial-gradient(circle at 20% 30%, #6B5B47 0%, transparent 40%),
-        radial-gradient(circle at 80% 20%, #A0937D 0%, transparent 35%),
-        radial-gradient(circle at 60% 80%, #8B7355 0%, transparent 30%),
-        #8B7355;
-    border-radius: 20% 80% 40% 60% / 60% 30% 70% 40%;
-    border: 2px solid #4A3F35;
-    transform: rotate(25deg);
-    box-shadow: 
-        0 3px 8px rgba(0, 0, 0, 0.4),
-        inset 1px 1px 3px rgba(255, 255, 255, 0.2);
-    margin-top: -7px;
+    width: 24px;
+    height: 24px;
+    background: var(--slider-thumb-bg, #764ba2);
+    border-radius: 50%;
+    border: 2px solid var(--slider-thumb-border, #ffffff);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    margin-top: -7px; /* Adjust to center thumb vertically */
     transition: all 0.2s ease;
     cursor: grab;
     position: relative;
@@ -2965,16 +2958,12 @@ input[type="range"]::-moz-range-track {
 }
 
 input[type="range"]::-moz-range-thumb {
-    width: 32px;
-    height: 30px;
-    background: linear-gradient(135deg, #8B7355 0%, #A0937D 30%, #6B5B47 100%);
-    border: none;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 30'%3E%3Cpath d='M5,8 L12,2 L18,4 L25,1 L30,7 L28,15 L31,22 L25,28 L18,29 L10,27 L3,24 L1,18 L2,12 Z'/%3E%3C/svg%3E");
-    mask-size: contain;
-    mask-repeat: no-repeat;
-    box-shadow: 
-        0 3px 8px rgba(0, 0, 0, 0.4),
-        inset 1px 1px 3px rgba(255, 255, 255, 0.2);
+    width: 24px;
+    height: 24px;
+    background: var(--slider-thumb-bg, #764ba2);
+    border-radius: 50%;
+    border: 2px solid var(--slider-thumb-border, #ffffff);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     cursor: grab;
     position: relative;
     z-index: 2;
@@ -5598,7 +5587,7 @@ div.modal-overlay.welcome-modal div.modal-content::after {
             <h2>Welcome to ClimbSmart!</h2>
             <div class="intro-text">
                 <p>Fill out the required fields and press "Update Recommendation" to receive a readiness score!</p>
-                <p>Save entries and view trends in the "Analyze" tab, all while keeping your data local, offline, and secure.</p>
+                <p>Save entries and view trends in the "Analytics" tab, all while keeping your data local, offline, and secure.</p>
             </div>
 
             <div class="support-section">
@@ -7103,10 +7092,10 @@ calculateAdvancedReadiness(inputs) {
     const sleepOptimal = sleepDuration >= 7 && sleepDuration <= 9 ? 1 : Math.exp(-Math.pow((sleepDuration - 8) / 2, 2));
     const sleepScore = (sleepQuality / 10) * sleepOptimal * sleepFactor;
     const recoveryScore = this.recoveryDecay(daysSince);
-    const stressScore = 1 - (this.stressImpact(stress) / 10);
+    const stressScore = 1 - (1 / (1 + Math.exp(-1 * (stress - 5))));
     const physicalScore = Math.exp(-((doms - 1) + (tendons - 1)) / 5);
     const fatigueScore = 1 - this.cumulativeFatigue(effectiveRPE, daysSince);
-    const moodScore = Math.pow((11 - mood) / 10, 1.5);
+    const moodScore = Math.exp(-Math.pow((mood - 2), 2) / 10);
     const skinScore = skin <= 3 ? 1 : skin <= 5 ? 0.7 : skin <= 7 ? 0.4 : 0.1;
     
     const mealFactor = mealBeforeTraining === 'yes' ? 1.05 : 0.95;
@@ -7116,8 +7105,15 @@ calculateAdvancedReadiness(inputs) {
         physicalScore * 0.20 + fatigueScore * 0.10 + moodScore * 0.10
     ) * skinScore * mealFactor * injuryRiskFactor;
     
-    const interactionMultiplier = this.calculateInteractions(inputs);
-    return Math.max(0, Math.min(10, baseReadiness * 10 * interactionMultiplier));
+const interactionMultiplier = this.calculateInteractions(inputs);
+
+// Apply hard sleep penalty override
+if (sleepDuration < 3) {
+    return 0.2;  // Absolute cap when sleep is dangerously low
+}
+
+// Final return with full logic
+return Math.max(0, Math.min(10, baseReadiness * 10 * interactionMultiplier));
 }
         
         calculateSleepFactor() {
@@ -7279,10 +7275,10 @@ validateFields() {
             const riskFactors = this.assessRiskFactors(inputs);
             const trainingVolume = this.calculateOptimalVolume(readinessScore, riskFactors);
             
-            if (readinessScore >= 8.5) return { type: "HIGH INTENSITY", description: "Perfect conditions for limit bouldering or project attempts.", volume: trainingVolume.high, risk: "Low", color: "#27ae60" };
-            if (readinessScore >= 7) return { type: "MODERATE INTENSITY", description: "Good for technical climbing and strength training.", volume: trainingVolume.moderate, risk: "Low-Moderate", color: "#f39c12" };
-            if (readinessScore >= 5) return { type: "LIGHT TRAINING", description: "Focus on technique, mobility, or easy volume.", volume: trainingVolume.light, risk: "Moderate", color: "#e67e22" };
-            if (readinessScore >= 3) return { type: "RECOVERY FOCUS", description: "Active recovery, stretching, or very light movement.", volume: trainingVolume.recovery, risk: "Moderate-High", color: "#e74c3c" };
+            if (readinessScore >= 8.5) return { type: "HIGH INTENSITY", description: "Have fun.", volume: trainingVolume.high, risk: "Minimal", color: "#27ae60" };
+            if (readinessScore >= 7) return { type: "MODERATE INTENSITY", description: "Technical climbing and strength training.", volume: trainingVolume.moderate, risk: "Low", color: "#f39c12" };
+            if (readinessScore >= 5) return { type: "LIGHT TRAINING", description: "Focus on technique, mobility.", volume: trainingVolume.light, risk: "Moderate", color: "#e67e22" };
+            if (readinessScore >= 3) return { type: "RECOVERY FOCUS", description: "Active recovery, stretching.", volume: trainingVolume.recovery, risk: "Moderate-High", color: "#e74c3c" };
             return { type: "REST DAY", description: "Complete rest recommended - address limiting factors.", volume: "0 hours", risk: "High", color: "#c0392b" };
         }
         
