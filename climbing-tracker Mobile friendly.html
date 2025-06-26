@@ -7,7 +7,7 @@ ClimbSmart addresses the core issue of load management and adequate recovery, wh
 The algorithm combines multiple sub-scores (sleep, recovery, stress, physical state, fatigue, mood, skin condition) with personalization factors based on your training history.
 
  Research-Based Approach
-- Mathematical relationships align with established exercise physiology principles
+- Mathematical relationships align with exercise physiology principles
 - Incorporates supercompensation theory for optimal training timing
 - Inspired by current research on climbing injury prevention and load management
 
@@ -19,7 +19,7 @@ References:
 
 Key Features
 - Metrics: Tracks all key factors affecting climbing performance
-- Personalized Recommendations: Beyond simple scoring
+- Recommendations: Beyond simple scoring
 - Data Portability: Multiple ways to backup and transfer data
 - Offline Functionality: Works completely client-side with local storage
 - User Experience: some what useable interface with visual feedback
@@ -122,7 +122,7 @@ body {
         );
 }
 
-/* Torn top edge with holes */
+/* Torn top edge */
 .container::before {
     content: '';
     position: absolute;
@@ -211,16 +211,23 @@ body {
             }
         }
         
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            font-size: 2.2em;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            user-select: none;
-        }
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;  /* Increased from 20px to 30px */
+    font-size: 2.2em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+    position: relative;
+    z-index: 0;  /* Lower than tabs */
+}
+
+h1:hover {
+    color: #667eea;
+    transform: scale(1.01);  /* Reduced from 1.02 to 1.01 */
+}
         
         h1:hover {
             color: #667eea;
@@ -238,13 +245,15 @@ body {
             }
         }
         
-        .nav-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
+.nav-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    z-index: 10;  /* Ensure tabs stay on top */
+}
         
         @media (max-width: 768px) {
             .nav-tabs {
@@ -264,8 +273,8 @@ body {
     flex-shrink: 0;
     position: relative;
     overflow: hidden;
+    z-index: 10;  /* Higher than title */
 }
-
 /* Individual tab standby colors - subtle Post-it tints */
 .tab-button[data-tab="daily"] {
     background: linear-gradient(135deg, #FFFDE7 0%, #FFF8E1 100%);
@@ -402,11 +411,6 @@ body {
    ============================================ */
 
 /* History Navigation - Individual sketch effect */
-/* ============================================
-   🎨 FIXED HISTORY TAB - NO STRETCH, NO TRIPLE BUFFER
-   ============================================ */
-
-/* History Navigation - Fixed borders and minimal movement */
 .history-nav {
     background: #faf9f7;
     border: 2px solid transparent; /* Start with 2px to match hover */
@@ -483,7 +487,7 @@ body {
     position: relative;
     z-index: 2;
     backdrop-filter: blur(1px);
-    margin: 0 3px; /* Bring buttons closer */
+    margin: 0 5px; /* Bring buttons closer */
 }
 
 /* Minimal hover effect - no movement */
@@ -779,7 +783,7 @@ body {
 }
 
 /* ============================================
-   🚫 LOG ENTRIES - NO TRIPLE BUFFER, INSTANT TRANSFORM
+   🚫 LOG ENTRIES
    ============================================ */
 
 .log-entry {
@@ -896,7 +900,7 @@ body {
     transition: all 0.2s ease;
 }
 
-/* INSTANT HOVER TRANSFORM - NO TRIPLE BUFFER */
+/* INSTANT HOVER 
 .log-entry:hover,
 .log-entry:focus-within {
     filter: none;
@@ -1405,11 +1409,13 @@ body {
             }
         }
         
-        .input-section h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.2em;
-        }
+.input-section h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    font-family: 'Kalam', cursive;
+    font-weight: 400;
+}
         
         @media (max-width: 768px) {
             .input-section h3 {
@@ -2844,6 +2850,121 @@ input[type="range"] {
     border: 1px solid #bdc3c7;
 }
 
+/* 🧗 Individual Climbing Hold Colors */
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 12px;
+    background: #d5d8dc;
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    border: 1px solid #bdc3c7;
+}
+
+/* Webkit Thumb */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    background: #ffffff;
+    border: 3px solid #333;
+    border-radius: 50%;
+    cursor: grab;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+}
+
+/* Firefox Thumb */
+input[type="range"]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    background: #ffffff;
+    border: 3px solid #333;
+    border-radius: 50%;
+    cursor: grab;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Individual Hold Colors for Thumbs */
+#sleepQualitySlider::-webkit-slider-thumb,
+#sleepQualitySlider::-moz-range-thumb {
+    border-color: #0088ff;
+}
+
+#stressSlider::-webkit-slider-thumb,
+#stressSlider::-moz-range-thumb {
+    border-color: #ff0080;
+}
+
+#daysSinceSlider::-webkit-slider-thumb,
+#daysSinceSlider::-moz-range-thumb {
+    border-color: #00ff00;
+}
+
+#lastRPESlider::-webkit-slider-thumb,
+#lastRPESlider::-moz-range-thumb {
+    border-color: #ff4a18;
+}
+#sleepQualitySlider::-webkit-slider-thumb {
+    background: #0088ff !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+}
+#sleepQualitySlider::-moz-range-thumb {
+    background: #0088ff !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+}
+
+/* Stress Level - Hot Pink Hold */
+#stressSlider {
+    background: linear-gradient(to right, #ff1493, #cc0066);
+}
+#stressSlider::-webkit-slider-thumb {
+    background: #ff0080 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 0 8px rgba(255, 20, 147, 0.5);
+}
+#stressSlider::-moz-range-thumb {
+    background: #ff0080 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 0 8px rgba(255, 20, 147, 0.5);
+}
+
+/* Days Since - Neon Green Hold */
+#daysSinceSlider {
+    background: linear-gradient(to right, #39ff14, #32cd32);
+}
+#daysSinceSlider::-webkit-slider-thumb {
+    background: #00ff00 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 0 8px rgba(57, 255, 20, 0.5);
+}
+#daysSinceSlider::-moz-range-thumb {
+    background: #00ff00 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 0 8px rgba(57, 255, 20, 0.5);
+}
+
+/* Last RPE - Bright Orange Hold (Keep Current) */
+#lastRPESlider {
+    background: linear-gradient(to right, #ff6600, #ff4400);
+}
+#lastRPESlider::-webkit-slider-thumb {
+    background: #ff4a18 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 0 8px rgba(255, 74, 24, 0.5);
+}
+#lastRPESlider::-moz-range-thumb {
+    background: #ff4a18 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 0 8px rgba(255, 74, 24, 0.5);
+}
+
 /* Webkit (Chrome, Edge, Safari) */
 input[type="range"]::-webkit-slider-runnable-track {
     width: 100%;
@@ -3906,6 +4027,76 @@ input[type="range"].disabled-input::-moz-range-thumb {
     transform: translateY(-2px) scale(1.03);  /* Add hop effect */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
+
+/* Help Button Styling */
+.help-button {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.help-button:hover {
+    transform: translateY(-2px) scale(1.1);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+    background: linear-gradient(135deg, #2980b9 0%, #21618c 100%);
+}
+
+/* Help Modal Content */
+.help-modal-content {
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.help-content {
+    text-align: left;
+    margin-bottom: 25px;
+}
+
+.help-content p {
+    margin-bottom: 15px;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.help-content strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .help-button {
+        right: 10px;
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
+    }
+    
+    .help-modal-content {
+        max-width: 95%;
+        margin: 20px auto;
+    }
+    
+    .help-content p {
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+}
+
 /* ============================================
     💫 PULSING RINGS MODAL - MOBILE SAFE & RELIABLE
     ============================================ */
@@ -5064,10 +5255,12 @@ div.modal-overlay.welcome-modal div.modal-content::after {
 .personalization-section:hover::before {
     animation-play-state: paused;
 }
-        .personalization-section h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-        }
+.personalization-section h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-family: 'Kalam', cursive;
+    font-weight: 400;
+}
         
         .personalization-grid {
             display: grid;
@@ -5539,7 +5732,10 @@ div.modal-overlay.welcome-modal div.modal-content::after {
     </div>
 
     <div class="container">
-        <h1 id="appTitle">ClimbSmart Training Tracker</h1>
+        <div style="position: relative; text-align: center;">
+    <h1 id="appTitle">ClimbSmart Training Tracker</h1>
+    <button id="helpBtn" class="help-button">?</button>
+</div>
 
         <div class="nav-tabs" role="tablist">
             <button class="tab-button active" data-tab="daily" role="tab" aria-selected="true">Daily Entry</button>
@@ -5900,6 +6096,26 @@ div.modal-overlay.welcome-modal div.modal-content::after {
             </div>
         </div>
     </div>
+    <div id="helpModal" class="modal-overlay">
+    <div class="modal-content help-modal-content">
+        <h3>How to Use ClimbSmart</h3>
+        <div class="help-content">
+            <p><strong>Sleep Quality (1-10):</strong> Rate how well you slept. 1 = terrible, 10 = perfect.</p>
+            <p><strong>Snooze/Wake Time:</strong> When you went to bed and woke up. App calculates sleep duration automatically.</p>
+            <p><strong>Mood State:</strong> How you feel mentally. "Psyched" = excited to climb, "Exhausted" = need rest.</p>
+            <p><strong>Stress Level (1-10):</strong> Life stress affecting you today. 1 = zen, 10 = overwhelmed.</p>
+            <p><strong>DOMS & Tendons:</strong> How sore your muscles and tendons feel. Higher = more pain.</p>
+            <p><strong>Skin Condition:</strong> "Perfect" = ready to grip, "Raw/Burning" = needs recovery.</p>
+            <p><strong>Days Since Last Session:</strong> How many days since you last climbed or trained.</p>
+            <p><strong>Last Session RPE (1-10):</strong> How hard your last workout felt. Skip if it was a rest day.</p>
+            <p><strong>Completed Today:</strong> Check all activities you did today (climbing, weights, cardio, etc).</p>
+            <p><strong>Pre-Training Meal:</strong> Did you eat before training? Affects energy levels.</p>
+        </div>
+        <div class="modal-buttons">
+            <button class="modal-btn" id="helpCloseBtn">Close</button>
+        </div>
+    </div>
+</div>
 </body>
 <script>
     // --- TOAST NOTIFICATIONS ---
@@ -7256,7 +7472,12 @@ validateFields() {
             document.getElementById('modalCancelBtn').addEventListener('click', () => this.hideModal('customModal'));
             document.getElementById('validationOkBtn').addEventListener('click', () => this.hideModal('validationModal'));
             document.getElementById('closeWelcomeBtn').addEventListener('click', () => this.closeWelcomeModal());
-
+            document.getElementById('validationOkBtn').addEventListener('click', () => this.hideModal('validationModal'));
+            document.getElementById('closeWelcomeBtn').addEventListener('click', () => this.closeWelcomeModal());
+            
+            // Help modal events
+            document.getElementById('helpBtn').addEventListener('click', () => showModal('helpModal'));
+            document.getElementById('helpCloseBtn').addEventListener('click', () => hideModal('helpModal'));
             // Link sliders to number inputs
             this.setupSlider('sleepQuality', 'sleepQualitySlider');
             this.setupSlider('stress', 'stressSlider');
@@ -7354,7 +7575,6 @@ updateSliderFill(slider) {
     const max = parseFloat(slider.max) || 100;
     const val = parseFloat(slider.value) || min;
 
-    // Better validation
     if (isNaN(val) || isNaN(min) || isNaN(max)) {
         console.log('Invalid slider values:', { val, min, max });
         return;
@@ -7363,26 +7583,37 @@ updateSliderFill(slider) {
     const clampedVal = Math.min(max, Math.max(min, val));
     const percentage = max === min ? 0 : ((clampedVal - min) / (max - min)) * 100;
     
-    // Enhanced gradient colors
-    const fillStart = '#3498db';  // Blue
-    const fillEnd = '#9b59b6';    // Purple
-    const trackColor = '#d5d8dc';  // Light gray
-
-    // Create the gradient background
-    const gradientFill = `linear-gradient(to right, ${fillStart}, ${fillEnd})`;
+    // 🧗 SOLID CLIMBING HOLD COLORS (No gradients!)
+    let fillColor = '#3498db';  // Default blue
+    const trackColor = '#d5d8dc';  // Light gray track
     
-    // Apply the background with proper percentage
-    slider.style.background = `linear-gradient(to right, ${gradientFill} 0%, ${gradientFill} ${percentage}%, ${trackColor} ${percentage}%, ${trackColor} 100%)`;
+    // Assign specific colors based on slider ID
+    switch(slider.id) {
+        case 'sleepQualitySlider':
+            fillColor = '#0088ff';  // Electric Blue Hold
+            break;
+        case 'stressSlider':
+            fillColor = '#ff0080';  // Hot Pink Hold
+            break;
+        case 'daysSinceSlider':
+            fillColor = '#00ff00';  // Neon Green Hold
+            break;
+        case 'lastRPESlider':
+            fillColor = '#ff4a18';  // Bright Orange Hold
+            break;
+        default:
+            fillColor = '#3498db';  // Default blue
+    }
     
-    // Optional glow effect
+    // 🔥 CROSS-BROWSER COMPATIBLE: Use solid colors only
+    slider.style.background = `linear-gradient(to right, ${fillColor} 0%, ${fillColor} ${percentage}%, ${trackColor} ${percentage}%, ${trackColor} 100%)`;
+    
+    // Clean glow effect
     if (percentage > 0) {
-        slider.style.boxShadow = 'inset 0 0 5px rgba(52, 152, 219, 0.3)';
+        slider.style.boxShadow = `inset 0 0 3px ${fillColor}40`;  // 40 = 25% opacity
     } else {
         slider.style.boxShadow = 'none';
     }
-    
-    // Debug output (remove after testing)
-    console.log(`Slider fill: ${percentage.toFixed(1)}% (value: ${clampedVal})`);
 }
 
 setupSlider(inputId, sliderId) {
@@ -7668,7 +7899,7 @@ loadDataForDate() {
 
             if (readinessScore === null) {
                 titleEl.innerText = "Incomplete Data";
-                textEl.innerText = "Please fill in all metric fields to generate a recommendation.";
+                textEl.innerText = "Fill in all fields to generate a readiness estimation!";
                 metricsGrid.innerHTML = '';
                 panel.style.background = `linear-gradient(135deg, #bdc3c7 0%, #2c3e50 100%)`;
                 return;
@@ -7790,6 +8021,26 @@ clearCurrentEntry(clearDate = true) {
             if(el.type === 'number') {
                 el.dispatchEvent(new Event('input'));
             }
+        }
+    });
+    
+    // Reset all sliders to minimum values
+    const sliderResets = [
+        { numberId: 'sleepQuality', sliderId: 'sleepQualitySlider', minValue: 1 },
+        { numberId: 'stress', sliderId: 'stressSlider', minValue: 1 },
+        { numberId: 'daysSince', sliderId: 'daysSinceSlider', minValue: 0 },
+        { numberId: 'lastRPE', sliderId: 'lastRPESlider', minValue: 0 }
+    ];
+    
+    sliderResets.forEach(({ numberId, sliderId, minValue }) => {
+        const numberInput = document.getElementById(numberId);
+        const slider = document.getElementById(sliderId);
+        
+        if (numberInput && slider) {
+            numberInput.value = minValue;
+            slider.value = minValue;
+            // Update visual fill
+            this.updateSliderFill(slider);
         }
     });
     
