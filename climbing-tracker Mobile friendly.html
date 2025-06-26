@@ -5751,6 +5751,14 @@ div.modal-overlay.welcome-modal div.modal-content::after {
                                 <input type="checkbox" id="climbingLead" value="Lead">
                                 Lead
                             </label>
+                            <label for="climbingWeights">
+                                <input type="checkbox" id="climbingWeights" value="Weights">
+                                Weights
+                            </label>
+                            <label for="climbingCardio">
+                                <input type="checkbox" id="climbingCardio" value="Cardio">
+                                Cardio
+                            </label>
                             <label for="climbingNone">
                                 <input type="checkbox" id="climbingNone" value="No Training">
                                 No Training
@@ -6988,7 +6996,7 @@ drawTornEdgeShadows(currentIndex) {
                     }
                 });
                 
-                const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingNone'];
+                const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingWeights', 'climbingCardio', 'climbingNone'];
                 climbingCheckboxes.forEach(id => document.getElementById(id).checked = false);
 
                 if(data.inputs.climbingType){
@@ -7279,7 +7287,7 @@ validateFields() {
             if (readinessScore >= 7) return { type: "MODERATE INTENSITY", description: "Technical climbing and strength training.", volume: trainingVolume.moderate, risk: "Low", color: "#f39c12" };
             if (readinessScore >= 5) return { type: "LIGHT TRAINING", description: "Focus on technique, mobility.", volume: trainingVolume.light, risk: "Moderate", color: "#e67e22" };
             if (readinessScore >= 3) return { type: "RECOVERY FOCUS", description: "Active recovery, stretching.", volume: trainingVolume.recovery, risk: "Moderate-High", color: "#e74c3c" };
-            return { type: "REST DAY", description: "Complete rest recommended - address limiting factors.", volume: "0 hours", risk: "High", color: "#c0392b" };
+            return { type: "REST DAY", description: "Take it easy", volume: "0 hours", risk: "Higher", color: "#c0392b" };
         }
         
         assessRiskFactors(inputs) {
@@ -7328,18 +7336,18 @@ validateFields() {
             document.getElementById('snoozeTime').addEventListener('input', () => this.calculateAndDisplaySleepDuration());
             document.getElementById('wakeTime').addEventListener('input', () => this.calculateAndDisplaySleepDuration());
 
-            // Climbing type checkboxes
-            const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead'];
-            const noneCheckbox = document.getElementById('climbingNone');
+// Climbing type checkboxes
+const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingWeights', 'climbingCardio'];
+const noneCheckbox = document.getElementById('climbingNone');
 
-            climbingCheckboxes.forEach(id => {
-                document.getElementById(id).addEventListener('change', (e) => {
-                    if (e.target.checked) {
-                        noneCheckbox.checked = false;
-                        document.getElementById('climbingTypeGroup').classList.remove('error');
-                    }
-                });
-            });
+climbingCheckboxes.forEach(id => {
+    document.getElementById(id).addEventListener('change', (e) => {
+        if (e.target.checked) {
+            noneCheckbox.checked = false;
+            document.getElementById('climbingTypeGroup').classList.remove('error');
+        }
+    });
+});
 
             noneCheckbox.addEventListener('change', (e) => {
                 if (e.target.checked) {
@@ -7446,7 +7454,6 @@ updateSliderFill(slider) {
     console.log(`Slider fill: ${percentage.toFixed(1)}% (value: ${clampedVal})`);
 }
 
-// FIND THIS FUNCTION AND REPLACE IT:
 setupSlider(inputId, sliderId) {
     const numberInput = document.getElementById(inputId);
     const sliderInput = document.getElementById(sliderId);
@@ -7458,33 +7465,114 @@ setupSlider(inputId, sliderId) {
 
     const min = parseFloat(sliderInput.min) || 0;
     const max = parseFloat(sliderInput.max) || 100;
+    const step = parseFloat(sliderInput.step) || 1;
     
-    console.log(`Setting up slider: ${inputId}, range: ${min}-${max}`);
+    console.log(`Setting up slider: ${inputId}, range: ${min}-${max}, step: ${step}`);
 
-    // Number input change handler
-    numberInput.addEventListener('input', () => {
-        let value = parseFloat(numberInput.value);
-        
-        if (isNaN(value)) {
-            value = min;
-            numberInput.value = min;
+    // 🔥 Block invalid characters while typing
+    numberInput.addEventListener('keydown', (e) => {
+        // Allow: backspace, delete, tab, escape, enter
+        if ([8, 9, 27, 13, 46].indexOf(e.keyCode) !== -1 ||
+            // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+            (e.keyCode === 65 && e.ctrlKey === true) ||
+            (e.keyCode === 67 && e.ctrlKey === true) ||
+            (e.keyCode === 86 && e.ctrlKey === true) ||
+            (e.keyCode === 88 && e.ctrlKey === true) ||
+            // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+            return;
         }
         
-        // Clamp value to min and max
-        value = Math.min(max, Math.max(min, value));
+        // Block everything except numbers and ONE decimal point
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && 
+            (e.keyCode < 96 || e.keyCode > 105) && 
+            e.keyCode !== 190 && e.keyCode !== 110) {
+            e.preventDefault();
+        }
+        
+        // Block multiple decimal points
+        if ((e.keyCode === 190 || e.keyCode === 110) && 
+            numberInput.value.indexOf('.') !== -1) {
+            e.preventDefault();
+        }
+        
+        // Block decimal points if step is 1 (integers only)
+        if ((e.keyCode === 190 || e.keyCode === 110) && step === 1) {
+            e.preventDefault();
+        }
+    });
+
+    // 🔥 NEW: Limit decimal places while typing
+    numberInput.addEventListener('input', (e) => {
+        let value = numberInput.value;
+        
+        // If there's a decimal point, limit decimal places
+        if (value.includes('.')) {
+            const parts = value.split('.');
+            if (parts[1] && parts[1].length > 1) {
+                // Limit to 1 decimal place maximum
+                numberInput.value = parts[0] + '.' + parts[1].substring(0, 1);
+            }
+        }
+    });
+
+    // 🔥 Validate on paste
+    numberInput.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const paste = (e.clipboardData || window.clipboardData).getData('text');
+        const numericValue = parseFloat(paste);
+        
+        if (!isNaN(numericValue)) {
+            const clampedValue = Math.min(max, Math.max(min, numericValue));
+            const finalValue = this.limitDecimalPlaces(clampedValue, step);
+            numberInput.value = finalValue;
+            sliderInput.value = finalValue;
+            this.updateSliderFill(sliderInput);
+        }
+    });
+
+    // 🔥 Validate when user finishes typing
+    numberInput.addEventListener('change', () => {
+        let value = parseFloat(numberInput.value);
+        
+        if (isNaN(value) || numberInput.value === '') {
+            numberInput.value = min;
+            value = min;
+        } else {
+            // Clamp to min/max
+            value = Math.min(max, Math.max(min, value));
+            // 🔥 NEW: Limit decimal places based on step
+            value = this.limitDecimalPlaces(value, step);
+        }
+        
         numberInput.value = value;
         sliderInput.value = value;
-        
-        // Update the visual fill
         this.updateSliderFill(sliderInput);
     });
 
-    // Slider input change handler
+    // 🔥 Validate when user clicks away
+    numberInput.addEventListener('blur', () => {
+        let value = parseFloat(numberInput.value);
+        
+        if (isNaN(value) || numberInput.value === '') {
+            numberInput.value = min;
+            value = min;
+        } else {
+            // Clamp to min/max
+            value = Math.min(max, Math.max(min, value));
+            // 🔥 NEW: Limit decimal places based on step
+            value = this.limitDecimalPlaces(value, step);
+        }
+        
+        numberInput.value = value;
+        sliderInput.value = value;
+        this.updateSliderFill(sliderInput);
+    });
+
+    // Slider input change handler (unchanged)
     sliderInput.addEventListener('input', () => {
         const value = parseFloat(sliderInput.value);
         numberInput.value = value;
-        
-        // Update the visual fill
         this.updateSliderFill(sliderInput);
     });
 
@@ -7498,6 +7586,17 @@ setupSlider(inputId, sliderId) {
     
     // Apply initial fill
     this.updateSliderFill(sliderInput);
+}
+
+// 🔥 NEW: Helper function to limit decimal places
+limitDecimalPlaces(value, step) {
+    if (step === 1) {
+        return Math.round(value); // No decimals for integers
+    } else if (step === 0.5) {
+        return Math.round(value * 2) / 2; // Only .0 or .5
+    } else {
+        return Math.round(value * 10) / 10; // Max 1 decimal place
+    }
 }
 
 /* ============================================
@@ -7527,7 +7626,7 @@ loadDataForDate() {
             }
         });
         
-        const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingNone'];
+        const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingWeights', 'climbingCardio', 'climbingNone'];
         climbingCheckboxes.forEach(id => document.getElementById(id).checked = false);
 
         if(data.inputs.climbingType){
@@ -7597,7 +7696,7 @@ loadDataForDate() {
             inputs.sleepDuration = this.calculateAndDisplaySleepDuration();
 
             const climbingTypes = [];
-            const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingNone'];
+            const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingWeights', 'climbingCardio', 'climbingNone'];
             climbingCheckboxes.forEach(id => {
                 const checkbox = document.getElementById(id);
                 if (checkbox.checked) {
@@ -7731,7 +7830,7 @@ loadDataForDate() {
                     }
                 });
                 
-                const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingNone'];
+                const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingWeights', 'climbingCardio', 'climbingNone'];
                 climbingCheckboxes.forEach(id => document.getElementById(id).checked = false);
 
                 if(data.inputs.climbingType){
@@ -7765,7 +7864,7 @@ clearCurrentEntry(clearDate = true) {
     
     document.getElementById('sleepDurationDisplay').textContent = '--:-- hours';
 
-    const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingNone'];
+    const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingWeights', 'climbingCardio', 'climbingNone'];
     climbingCheckboxes.forEach(id => document.getElementById(id).checked = false);
     document.getElementById('climbingTypeGroup').classList.remove('error');
 
@@ -7906,7 +8005,7 @@ async clearDataWithTearEffect() {
                             <div class="log-metric"><strong>Stress:</strong> ${entry.inputs.stress}/10</div>
                             <div class="log-metric"><strong>DOMS:</strong> ${entry.inputs.doms}/7</div>
                             <div class="log-metric"><strong>Tendons:</strong> ${entry.inputs.tendons}/6</div>
-                            <div class="log-metric"><strong>Climbing:</strong> ${entry.inputs.climbingType || 'N/A'}</div>
+                            <div class="log-metric"><strong>Completed Today:</strong> ${entry.inputs.climbingType || 'N/A'}</div>
                         </div>
                         <div class="log-recommendation" style="color: ${entry.recommendation.color};">
                             <strong>Recommendation:</strong> ${entry.recommendation.type} - ${entry.recommendation.description}
