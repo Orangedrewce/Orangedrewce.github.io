@@ -91,10 +91,9 @@ body {
     box-shadow: 
         0 15px 30px rgba(0, 0, 0, 0.1),
         inset 0 2px 4px rgba(0, 0, 0, 0.05);  /* Subtle inset shadow */
-    backdrop-filter: blur(10px);
     position: relative;
     z-index: 1;
-    overflow: hidden;  /* Allow torn edge to show */
+    overflow: visible;  /* Allow torn edge to show */
     
     /* Yellow legal pad lines */
     background-image: 
@@ -191,74 +190,6 @@ body {
         0% 100%
     );
     
-    /* Add spiral holes */
-    background-image: 
-        repeating-linear-gradient(
-            90deg,
-            transparent 0px,
-            transparent 40px,
-            radial-gradient(circle, #333 25%, transparent 35%) 50px,
-            transparent 60px
-        );
-    background-size: 80px 20px;
-    background-position: 20px 10px;
-}
-
-/* Paper crumples and wrinkles */
-.container::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-    z-index: 0;
-    
-    /* Crumple effects */
-    background-image: 
-        /* Corner crumple */
-        radial-gradient(
-            ellipse at 95% 5%, 
-            rgba(0, 0, 0, 0.08) 0%, 
-            rgba(0, 0, 0, 0.04) 30%,
-            transparent 60%
-        ),
-        /* Side wrinkle */
-        radial-gradient(
-            ellipse at 2% 60%, 
-            rgba(0, 0, 0, 0.05) 0%, 
-            rgba(0, 0, 0, 0.02) 40%,
-            transparent 70%
-        ),
-        /* Fold line */
-        linear-gradient(
-            135deg,
-            transparent 20%,
-            rgba(0, 0, 0, 0.03) 45%,
-            rgba(0, 0, 0, 0.06) 50%,
-            rgba(0, 0, 0, 0.03) 55%,
-            transparent 80%
-        ),
-        /* Random small crumples */
-        radial-gradient(
-            circle at 70% 80%, 
-            rgba(0, 0, 0, 0.03) 0%, 
-            transparent 20%
-        ),
-        radial-gradient(
-            circle at 30% 30%, 
-            rgba(0, 0, 0, 0.02) 0%, 
-            transparent 25%
-        );
-}
-
-/* Add slight yellowing/aging around edges */
-.container {
-    box-shadow: 
-        0 15px 30px rgba(0, 0, 0, 0.1),
-        inset 0 0 50px rgba(218, 165, 32, 0.1),  /* Golden aging */
-        inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 /* Mobile adjustments */
@@ -6567,17 +6498,17 @@ initializeTearPoints() {
         direction: 'left-to-right',  // Change this to control direction
         
         // Vertical position (0-1, where tear crosses screen)
-        verticalPosition: 0.2,       // 0 = top, 1 = bottom
+        verticalPosition: 0.4,       // 0 = top, 1 = bottom
         
         // Angle variation (-45 to 45 degrees from horizontal)
-        angleVariation: -10,         // Negative = upward angle, positive = downward
+        angleVariation: -5,         // Negative = upward angle, positive = downward
         
         // Wave effects
-        waviness: 30,               // How wavy the tear is (0-50)
-        chaos: 30                   // Random variation (0-30)
+        waviness: 50,               // How wavy the tear is (0-50)
+        chaos: 25                  // Random variation (0-30)
     };
     
-    const steps = 60; // More steps for smoother edge-to-edge
+    const steps = 300; // More steps for smoother edge-to-edge
     
     for (let i = 0; i <= steps; i++) {
         const progress = i / steps;
@@ -6793,10 +6724,10 @@ drawPaperDebris(progress) {
         startAt: 0.5,           // When debris starts (0-1)
         intensity: 20,          // Max number of debris pieces
         sizeMin: 2,             // Minimum debris size
-        sizeMax: 10,            // Maximum debris size
-        opacity: 0.6,           // Debris transparency
+        sizeMax: 5,            // Maximum debris size
+        opacity: 0,           // Debris transparency
         colors: ['#f5f2e8', '#e8dcc6', '#f0ead6'], // Paper colors
-        physics: true           // Enable falling physics
+        physics: false           // Enable falling physics
     };
     
     if (!DEBRIS_SETTINGS.enabled || progress < DEBRIS_SETTINGS.startAt) return;
@@ -6846,12 +6777,12 @@ drawTornEdgeShadows(currentIndex) {
     // 🌟 SHADOW EFFECT CONTROLS
     const SHADOW_SETTINGS = {
         enabled: true,
-        thickness: 3,           // Line thickness
-        opacity: 0.3,           // Shadow opacity
-        blur: 8,                // Shadow blur amount
-        offsetX: 2,             // Shadow X offset
-        offsetY: 2,             // Shadow Y offset
-        glowEffect: true,       // Add glow effect
+        thickness: 15,           // Line thickness
+        opacity: 0,           // Shadow opacity
+        blur: 0,                // Shadow blur amount
+        offsetX: 15,             // Shadow X offset
+        offsetY: 15,             // Shadow Y offset
+        glowEffect: false,       // Add glow effect
         glowColor: '#ff6b9d'    // Glow color
     };
     
