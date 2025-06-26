@@ -36,15 +36,17 @@ Key Features
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.4.7/peerjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
 :root {
     --slider-track-bg: #d5d8dc;
-    --slider-thumb-bg: #764ba2;
+    --slider-thumb-bg: #ff4a18;
     --slider-fill-color: #3498db;
     --primary-gradient: linear-gradient(135deg, #FF6B9D 0%, #F06292 100%); /* Pink Post-it */
     --slider-fill-start: #3498db;
     --slider-fill-end: #9b59b6;
-    --slider-thumb-border: #ffffff;
+    --slider-thumb-border: #;
     --success-color: #27ae60;
     --warning-color: #f39c12;
     --danger-color: #e74c3c;
@@ -70,26 +72,8 @@ body {
     color: #2c3e50;
     overflow-x: hidden;
     
-    /* Subtle paper-themed background with fade */
-    background: 
-        radial-gradient(
-            circle at 20% 20%, 
-            rgba(255, 250, 205, 0.3) 0%, 
-            transparent 50%
-        ),
-        radial-gradient(
-            circle at 80% 80%, 
-            rgba(245, 222, 179, 0.2) 0%, 
-            transparent 50%
-        ),
-        linear-gradient(
-            135deg, 
-            #f7f3e9 0%, 
-            #f0ead6 25%, 
-            #e8dcc6 50%, 
-            #f2e7d5 75%, 
-            #f7f3e9 100%
-        );
+    /* Black background */
+    background: #000000;
 }
         
         @media (max-width: 768px) {
@@ -110,7 +94,7 @@ body {
     backdrop-filter: blur(10px);
     position: relative;
     z-index: 1;
-    overflow: visible;  /* Allow torn edge to show */
+    overflow: hidden;  /* Allow torn edge to show */
     
     /* Yellow legal pad lines */
     background-image: 
@@ -143,10 +127,10 @@ body {
 .container::before {
     content: '';
     position: absolute;
-    top: -20px;
+    top: -15px;
     left: 0;
     right: 0;
-    height: 40px;
+    height: 30px;
     background: #fffacd;
     z-index: -1;
     
@@ -229,7 +213,7 @@ body {
     right: 0;
     bottom: 0;
     pointer-events: none;
-    z-index: 1;
+    z-index: 0;
     
     /* Crumple effects */
     background-image: 
@@ -1398,8 +1382,7 @@ body {
 
 .input-section:first-child:hover input[type="range"]::-webkit-slider-thumb,
 .input-section:first-child:focus-within input[type="range"]::-webkit-slider-thumb {
-    background: var(--slider-thumb-bg, #764ba2);
-    border: 2px solid var(--slider-thumb-border, #ffffff);
+    background: var(--slider-thumb-bg, #fa3f08);
     border-style: solid;
     opacity: 1;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -1407,8 +1390,7 @@ body {
 
 .input-section:first-child:hover input[type="range"]::-moz-range-thumb,
 .input-section:first-child:focus-within input[type="range"]::-moz-range-thumb {
-    background: var(--slider-thumb-bg, #764ba2);
-    border: 2px solid var(--slider-thumb-border, #ffffff);
+    background: var(--slider-thumb-bg, #ff4a18);
     border-style: solid;
     opacity: 1;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -1803,7 +1785,7 @@ body {
 
 .input-section:nth-child(2):hover input[type="range"]::-webkit-slider-thumb,
 .input-section:nth-child(2):focus-within input[type="range"]::-webkit-slider-thumb {
-    background: var(--slider-thumb-bg, #764ba2);
+    background: var(--slider-thumb-bg, #fa3f08);
     border: 2px solid var(--slider-thumb-border, #ffffff);
     border-style: solid;
     opacity: 1;
@@ -1812,7 +1794,7 @@ body {
 
 .input-section:nth-child(2):hover input[type="range"]::-moz-range-thumb,
 .input-section:nth-child(2):focus-within input[type="range"]::-moz-range-thumb {
-    background: var(--slider-thumb-bg, #764ba2);
+    background: var(--slider-thumb-bg, #fa3f08);
     border: 2px solid var(--slider-thumb-border, #ffffff);
     border-style: solid;
     opacity: 1;
@@ -2555,8 +2537,7 @@ body {
 
 .input-section:nth-child(3):hover input[type="range"]::-webkit-slider-thumb,
 .input-section:nth-child(3):focus-within input[type="range"]::-webkit-slider-thumb {
-    background: var(--slider-thumb-bg, #764ba2);
-    border: 2px solid var(--slider-thumb-border, #ffffff);
+    background: var(--slider-thumb-bg, #fa3f08);
     border-style: solid;
     opacity: 1;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -2564,8 +2545,7 @@ body {
 
 .input-section:nth-child(3):hover input[type="range"]::-moz-range-thumb,
 .input-section:nth-child(3):focus-within input[type="range"]::-moz-range-thumb {
-    background: var(--slider-thumb-bg, #764ba2);
-    border: 2px solid var(--slider-thumb-border, #ffffff);
+    background: var(--slider-thumb-bg, #ff4a18);
     border-style: solid;
     opacity: 1;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -2797,6 +2777,7 @@ textarea:hover:not(:focus):not(:disabled) {
     background-color: #f8f4ff;
 }
 
+
 /* ============================================
    SLIDER CONTAINER HOVER ENHANCEMENT
    ============================================ */
@@ -2944,13 +2925,20 @@ input[type="range"]::-webkit-slider-runnable-track {
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 24px;
-    height: 24px;
-    background: var(--slider-thumb-bg, #764ba2);
-    border-radius: 50%;
-    border: 2px solid var(--slider-thumb-border, #ffffff);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    margin-top: -7px; /* Adjust to center thumb vertically */
+    width: 28px;
+    height: 26px;
+    background: 
+        radial-gradient(circle at 20% 30%, #6B5B47 0%, transparent 40%),
+        radial-gradient(circle at 80% 20%, #A0937D 0%, transparent 35%),
+        radial-gradient(circle at 60% 80%, #8B7355 0%, transparent 30%),
+        #8B7355;
+    border-radius: 20% 80% 40% 60% / 60% 30% 70% 40%;
+    border: 2px solid #4A3F35;
+    transform: rotate(25deg);
+    box-shadow: 
+        0 3px 8px rgba(0, 0, 0, 0.4),
+        inset 1px 1px 3px rgba(255, 255, 255, 0.2);
+    margin-top: -7px;
     transition: all 0.2s ease;
     cursor: grab;
     position: relative;
@@ -2977,12 +2965,16 @@ input[type="range"]::-moz-range-track {
 }
 
 input[type="range"]::-moz-range-thumb {
-    width: 24px;
-    height: 24px;
-    background: var(--slider-thumb-bg, #764ba2);
-    border-radius: 50%;
-    border: 2px solid var(--slider-thumb-border, #ffffff);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    width: 32px;
+    height: 30px;
+    background: linear-gradient(135deg, #8B7355 0%, #A0937D 30%, #6B5B47 100%);
+    border: none;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 30'%3E%3Cpath d='M5,8 L12,2 L18,4 L25,1 L30,7 L28,15 L31,22 L25,28 L18,29 L10,27 L3,24 L1,18 L2,12 Z'/%3E%3C/svg%3E");
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    box-shadow: 
+        0 3px 8px rgba(0, 0, 0, 0.4),
+        inset 1px 1px 3px rgba(255, 255, 255, 0.2);
     cursor: grab;
     position: relative;
     z-index: 2;
@@ -4118,7 +4110,7 @@ div.modal-overlay.welcome-modal div.modal-content::after {
 .welcome-modal .support-section {
     text-align: center;
     padding: 15px;             /* Reduced from 20px */
-    background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+    background: linear-gradient(135deg, #667eea15 0%, #fa3f0815 100%);
     border-radius: 8px;        /* Reduced from 12px */
     margin-bottom: 15px;       /* Reduced from 20px */
 }
@@ -4360,7 +4352,7 @@ div.modal-overlay.welcome-modal div.modal-content::after {
     transition: all 0.6s ease;
     overflow: hidden;
     
-    /* Remove color - make it grayscale sketch like others */
+    /* Grayscale sketch like others */
     filter: grayscale(100%) contrast(1.1) brightness(0.95);
     
     /* Visible crosshatch texture to match others */
@@ -5592,396 +5584,395 @@ div.modal-overlay.welcome-modal div.modal-content::after {
     </style>
 </head>
 <body>
-<div id="toast"></div>
+    <div id="toast"></div>
 
-<div id="loader" class="loader">
-    <div class="loader-content">
-        <div class="spinner"></div>
-        <p>Saving your data...</p>
-    </div>
-</div>
-
-<div id="welcomeModal" class="modal-overlay welcome-modal">
-    <div class="modal-content">
-        <h2>Welcome to ClimbSmart!</h2>
-        <div class="intro-text">
-            <p>Fill out the required fields and press "Update Recommendation" to receive a readiness score!</p>
-            </p> Save entries and view trends in the "Analyze" tab, all while keeping your data local, offline, and secure. </p>
+    <div id="loader" class="loader">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <p>Saving your data...</p>
         </div>
-        
-        <div class="support-section">
-            <h3>Support the Project ☕</h3>
-            <a href="https://www.paypal.me/futurefusionpcs" target="_blank" rel="noopener noreferrer" class="qr-link">
-                <div class="paypal-qr">
-                    <img src="data:image/png;base64,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" alt="PayPal">
-                </div>
-            </a>
-            <p style="font-size: 0.9em; color: #7f8c8d; margin-top: 10px;"></p>
-            <p class="support-text">
-                Press or scan the QR code to give me your 2 cents! Id love to hear about any experiences or feedback you have to offer!
-            </p>
-        </div>
-        
-        <button class="close-welcome-btn" id="closeWelcomeBtn">Start Tracking</button>
-    </div>
-</div>
-
-<div class="container">
-    <h1 id="appTitle">ClimbSmart Training Tracker</h1>
-    
-    <div class="nav-tabs" role="tablist">
-        <button class="tab-button active" data-tab="daily" role="tab" aria-selected="true">Daily Entry</button>
-        <button class="tab-button" data-tab="history" role="tab" aria-selected="false">Training History</button>
-        <button class="tab-button" data-tab="analytics" role="tab" aria-selected="false">Analytics</button>
-        <button class="tab-button" data-tab="sync" role="tab" aria-selected="false">Sync</button>
-    </div>
-    
-    <div id="daily" class="tab-content active" role="tabpanel">
-        <div class="date-selector">
-            <label for="currentDate">Date:</label>
-            <input type="date" id="currentDate">
-            <button class="update-btn" id="loadDateBtn">Load Date</button>
-        </div>
-        
-        <div class="dashboard">
-            <div class="input-section">
-                <h3>Recovery Metrics</h3>
-                <div class="input-group slider-group">
-                    <label for="sleepQuality">Sleep Quality (1-10)</label>
-                    <div class="slider-container">
-                        <input type="number" id="sleepQuality" min="1" max="10" step="0.5" placeholder="1-10">
-                        <input type="range" id="sleepQualitySlider" min="1" max="10" step="0.5">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label for="snoozeTime">Snooze Time</label>
-                    <input type="time" id="snoozeTime">
-                </div>
-                <div class="input-group">
-                    <label for="wakeTime">Wake Time</label>
-                    <input type="time" id="wakeTime">
-                </div>
-                <div class="input-group">
-                    <label>Calculated Sleep Duration</label>
-                    <div id="sleepDurationDisplay" class="calculated-value">--:-- hours</div>
-                </div>
-                <div class="input-group">
-                    <label for="mood">Mood State</label>
-                    <select id="mood">
-                        <option value="">Select mood...</option>
-                        <option value="1">Psyched</option>
-                        <option value="2">Optimistic</option>
-                        <option value="3">Focused</option>
-                        <option value="4">Ready</option>
-                        <option value="5">Composed</option>
-                        <option value="6">Neutral</option>
-                        <option value="7">Apathetic</option>
-                        <option value="8">Frustrated</option>
-                        <option value="9">Lethargic</option>
-                        <option value="10">Exhausted</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="input-section">
-                <h3>Physical State</h3>
-                <div class="input-group slider-group">
-                    <label for="stress">Stress Level (1-10)</label>
-                    <div class="slider-container">
-                        <input type="number" id="stress" min="1" max="10" step="1" placeholder="1-10">
-                        <input type="range" id="stressSlider" min="1" max="10" step="1">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label for="doms">Muscle Soreness (DOMS)</label>
-                    <select id="doms">
-                        <option value="">Select condition...</option>
-                        <option value="1">Absent</option>
-                        <option value="2">Noticeable</option>
-                        <option value="3">Slightly Stiff</option>
-                        <option value="4">Mild Ache</option>
-                        <option value="5">Noticeable Ache</option>
-                        <option value="6">Moderate Discomfort</option>
-                        <option value="7">Significant Pain</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="tendons">Tendon Condition</label>
-                    <select id="tendons">
-                        <option value="">Select condition...</option>
-                        <option value="1">Absent</option>
-                        <option value="2">Noticeable</option>
-                        <option value="3">Highlighted</option>
-                        <option value="4">Mild Ache</option>
-                        <option value="5">Annoying Ache</option>
-                        <option value="6">Moderate Discomfort</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="skin">Skin Condition</label>
-                    <select id="skin">
-                        <option value="">Select condition...</option>
-                        <option value="1">Perfect</option>
-                        <option value="1.5">Robust</option>
-                        <option value="3">Slightly Worn</option>
-                        <option value="4">Tender Spots</option>
-                        <option value="5">Sensitive</option>
-                        <option value="6">Raw/Burning</option>
-                        <option value="7">Edge Tears</option>
-                    </select>
-                </div>
-                 <div class="input-group">
-                    <label for="mealBeforeTraining">Pre-Training Meal</label>
-                    <select id="mealBeforeTraining">
-                        <option value="">Select...</option>
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="input-section">
-                <h3>Training History</h3>
-                <div class="input-group slider-group">
-                    <label for="daysSince">Days Since Last Session (0-14)</label>
-                     <div class="slider-container">
-                        <input type="number" id="daysSince" min="0" max="14" step="1" placeholder="0-14">
-                        <input type="range" id="daysSinceSlider" min="0" max="14" step="1">
-                    </div>
-                </div>
-                <div class="input-group slider-group">
-                    <label for="lastRPE">Last Session RPE (1-10, 0=rest)</label>
-                     <div class="slider-container">
-                        <input type="number" id="lastRPE" min="0" max="10" step="0.5" placeholder="0-10">
-                         <input type="range" id="lastRPESlider" min="0" max="10" step="0.5">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label>Completed today (select all that apply)</label>
-                    <div class="checkbox-group" id="climbingTypeGroup" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
-                        <label for="climbingBouldering">
-                            <input type="checkbox" id="climbingBouldering" value="Bouldering">
-                            Bouldering
-                        </label>
-                        <label for="climbingTopRope">
-                            <input type="checkbox" id="climbingTopRope" value="Top Rope">
-                            Top Rope
-                        </label>
-                        <label for="climbingLead">
-                            <input type="checkbox" id="climbingLead" value="Lead">
-                            Lead
-                        </label>
-                        <label for="climbingNone">
-                            <input type="checkbox" id="climbingNone" value="No Training">
-                            No Training
-                        </label>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="input-section" style="grid-column: 1 / -1;">
-                <h3>Session Notes</h3>
-                <div class="input-group">
-                    <label for="sessionNotes">Comments (optional)</label>
-                    <textarea id="sessionNotes" rows="3" placeholder="Add any notes about your session"></textarea>
-                </div>
-            </div>
-        </div>
-        
-        <div class="personalization-section">
-            <h3>Personalization Factors (Historical)</h3>
-            <div class="personalization-grid">
-                <div class="personalization-card">
-                    <div>Sleep Adaptation</div>
-                    <div class="personalization-value" id="sleepFactor">1.0x</div>
-                    <div>Based on your average sleep patterns</div>
-                </div>
-                <div class="personalization-card">
-                    <div>Injury Risk</div>
-                    <div class="personalization-value" id="injuryRisk">Low</div>
-                    <div>Based on your tendon and muscle history</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="button-group">
-            <button class="update-btn" id="updateRecBtn">Update Recommendation</button>
-            <button class="update-btn" id="saveEntryBtn">Save Entry</button>
-            <button class="update-btn" id="clearEntryBtn" style="background: #e74c3c;">Clear Data</button>
-        </div>
-        
-        <div class="recommendation-panel" id="recommendationPanel">
-            <h2 id="recommendationTitle">Tomorrow's Training Recommendation</h2>
-            <div class="recommendation-text" id="recommendationText">Enter your metrics above to get a recommendation</div>
-            <div class="metrics-grid" id="metricsGrid"></div>
-        </div>
-    </div>
-    
-    <div id="history" class="tab-content" role="tabpanel">
-        <div class="history-nav">
-            <button class="nav-btn" id="prevWeekBtn">◀ Previous</button>
-            <div class="current-week" id="currentWeek">Current Week</div>
-            <button class="nav-btn" id="nextWeekBtn">Next ▶</button>
-        </div>
-        
-        <div class="export-section">
-            <button class="export-btn" id="exportCsvBtn">Export to CSV</button>
-            <button class="export-btn" id="clearAllDataBtn" style="background: #e74c3c;">Clear All Data</button>
-        </div>
-        
-        <div class="backup-section">
-            <h3>Data Backup & Restore</h3>
-            <div class="backup-controls">
-                <input type="text" class="backup-input" id="backupCode" placeholder="Backup code">
-                <button class="export-btn" id="exportBackupBtn">Generate Backup</button>
-                <button class="export-btn" id="importBackupBtn">Restore Backup</button>
-            </div>
-        </div>
-        
-        <div id="historyList" style="padding: 20px 0;"></div>
-    </div>
-    
-    <div id="analytics" class="tab-content" role="tabpanel">
-        <div class="chart-controls" id="chartControls"></div>
-        
-        <div class="charts-section">
-            <div class="chart-container weekly-chart">
-                <canvas id="weeklyTrendChart"></canvas>
-                <div id="noDataMessage" class="no-data-message" style="display: none;">
-                    Not enough data to display a chart.
-Please add at least one entry.
-                </div>
-            </div>
-        </div>
-        
-        <div class="swipe-indicator">Swipe left/right to navigate between tabs</div>
     </div>
 
-    <div id="sync" class="tab-content" role="tabpanel">
-        <div class="sync-container">
-            <div class="sync-tabs">
-                <div class="sync-tab active" data-tab="send">Send Data</div>
-                <div class="sync-tab" data-tab="receive">Receive Data</div>
+    <div id="welcomeModal" class="modal-overlay welcome-modal">
+        <div class="modal-content">
+            <h2>Welcome to ClimbSmart!</h2>
+            <div class="intro-text">
+                <p>Fill out the required fields and press "Update Recommendation" to receive a readiness score!</p>
+                <p>Save entries and view trends in the "Analyze" tab, all while keeping your data local, offline, and secure.</p>
             </div>
-            
-            <div class="sync-content active" id="sendContent">
-                <h2 class="sync-title">Send Your Training Data</h2>
-                <p class="sync-description">Share your training data securely with another device using QR code or code</p>
-                
-                <div class="sync-steps">
-                    <div class="sync-step active">
-                        <div class="sync-step-icon">1</div>
-                        <div class="sync-step-text">Generate Code</div>
+
+            <div class="support-section">
+                <h3>Support the Project ☕</h3>
+                <a href="https://www.paypal.me/futurefusionpcs" target="_blank" rel="noopener noreferrer" class="qr-link">
+                    <div class="paypal-qr">
+                        <img src="data:image/png;base64,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" alt="PayPal">
                     </div>
-                    <div class="sync-step">
-                        <div class="sync-step-icon">2</div>
-                        <div class="sync-step-text">Connect Device</div>
-                    </div>
-                    <div class="sync-step">
-                        <div class="sync-step-icon">3</div>
-                        <div class="sync-step-text">Transfer Data</div>
-                    </div>
-                </div>
-                
-                <div class="qr-section">
-                    <div class="qr-container" id="sendQrContainer">
-                        <div class="qr-placeholder"></div>
-                    </div>
-                    <div class="peer-id-display" id="peerIdDisplay">CLICK "GENERATE CODE"</div>
-                </div>
-                
-                <div class="sync-progress">
-                    <div class="sync-progress-bar" id="sendProgress"></div>
-                </div>
-                
-                <div class="sync-status" id="sendStatus">Ready to generate sync code</div>
-                
-                <div class="sync-actions">
-                    <button class="sync-btn secondary" id="copyPeerIdBtn">Copy Code</button>
-                    <button class="sync-btn primary" id="generateCodeBtn">Generate Code</button>
-                </div>
+                </a>
+                <p style="font-size: 0.9em; color: #7f8c8d; margin-top: 10px;"></p>
+                <p class="support-text">
+                    Press or scan the QR code to give me your 2 cents! Id love to hear about any experiences or feedback you have to offer!
+                </p>
             </div>
-            
-            <div class="sync-content" id="receiveContent">
-                <h2 class="sync-title">Receive Training Data</h2>
-                <p class="sync-description">Enter the code from the sender to receive training data</p>
-                
-                <div class="sync-steps">
-                    <div class="sync-step active">
-                        <div class="sync-step-icon">1</div>
-                        <div class="sync-step-text">Scan QR Code</div>
-                    </div>
-                    <div class="sync-step">
-                        <div class="sync-step-icon">2</div>
-                        <div class="sync-step-text">Connect</div>
-                    </div>
-                    <div class="sync-step">
-                        <div class="sync-step-icon">3</div>
-                        <div class="sync-step-text">Receive Data</div>
-                    </div>
-                </div>
-                
-                <div class="sync-input-group">
-                    <div style="display: flex; gap: 10px; align-items: center;">
-                        <input type="text" class="sync-input" id="receiverCode" placeholder="Enter 6-digit code" maxlength="6" style="flex: 1;">
-                        <button id="scanQRBtn" class="sync-btn" style="padding: 12px; min-width: auto;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 20h7a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7M4 6.001H2v14a2 2 0 0 0 2 2h14v-2H4z"></path>
-                                <path d="m15 9-6 6"></path>
-                                <path d="m9 9 6 6"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="camera-container" id="cameraContainer">
-                    <video id="qrScanner" width="100%"></video>
-                    <div class="scan-overlay">
-                        <div class="scan-box">
-                            <div class="scan-line"></div>
+
+            <button class="close-welcome-btn" id="closeWelcomeBtn">Start Tracking</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 id="appTitle">ClimbSmart Training Tracker</h1>
+
+        <div class="nav-tabs" role="tablist">
+            <button class="tab-button active" data-tab="daily" role="tab" aria-selected="true">Daily Entry</button>
+            <button class="tab-button" data-tab="history" role="tab" aria-selected="false">Training History</button>
+            <button class="tab-button" data-tab="analytics" role="tab" aria-selected="false">Analytics</button>
+            <button class="tab-button" data-tab="sync" role="tab" aria-selected="false">Sync</button>
+        </div>
+        <div id="daily" class="tab-content active" role="tabpanel">
+            <div class="date-selector">
+                <label for="currentDate">Date:</label>
+                <input type="date" id="currentDate">
+                <button class="update-btn" id="loadDateBtn">Load Date</button>
+            </div>
+
+            <div class="dashboard">
+                <div class="input-section">
+                    <h3>Recovery Metrics</h3>
+                    <div class="input-group slider-group">
+                        <label for="sleepQuality">Sleep Quality (1-10)</label>
+                        <div class="slider-container">
+                            <input type="number" id="sleepQuality" min="1" max="10" step="0.5" placeholder="1-10">
+                            <input type="range" id="sleepQualitySlider" min="1" max="10" step="0.5">
                         </div>
                     </div>
-                    <div class="camera-controls">
-                        <button id="cancelScanBtn" class="camera-btn danger">Cancel Scan</button>
+                    <div class="input-group">
+                        <label for="snoozeTime">Snooze Time</label>
+                        <input type="time" id="snoozeTime">
+                    </div>
+                    <div class="input-group">
+                        <label for="wakeTime">Wake Time</label>
+                        <input type="time" id="wakeTime">
+                    </div>
+                    <div class="input-group">
+                        <label>Calculated Sleep Duration</label>
+                        <div id="sleepDurationDisplay" class="calculated-value">--:-- hours</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="mood">Mood State</label>
+                        <select id="mood">
+                            <option value="">Select mood...</option>
+                            <option value="1">Psyched</option>
+                            <option value="2">Optimistic</option>
+                            <option value="3">Focused</option>
+                            <option value="4">Ready</option>
+                            <option value="5">Composed</option>
+                            <option value="6">Neutral</option>
+                            <option value="7">Apathetic</option>
+                            <option value="8">Frustrated</option>
+                            <option value="9">Lethargic</option>
+                            <option value="10">Exhausted</option>
+                        </select>
                     </div>
                 </div>
-                
-                <div class="sync-progress">
-                    <div class="sync-progress-bar" id="receiveProgress"></div>
+
+                <div class="input-section">
+                    <h3>Physical State</h3>
+                    <div class="input-group slider-group">
+                        <label for="stress">Stress Level (1-10)</label>
+                        <div class="slider-container">
+                            <input type="number" id="stress" min="1" max="10" step="1" placeholder="1-10">
+                            <input type="range" id="stressSlider" min="1" max="10" step="1">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="doms">Muscle Soreness (DOMS)</label>
+                        <select id="doms">
+                            <option value="">Select condition...</option>
+                            <option value="1">Absent</option>
+                            <option value="2">Noticeable</option>
+                            <option value="3">Slightly Stiff</option>
+                            <option value="4">Mild Ache</option>
+                            <option value="5">Noticeable Ache</option>
+                            <option value="6">Moderate Discomfort</option>
+                            <option value="7">Significant Pain</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="tendons">Tendon Condition</label>
+                        <select id="tendons">
+                            <option value="">Select condition...</option>
+                            <option value="1">Absent</option>
+                            <option value="2">Noticeable</option>
+                            <option value="3">Highlighted</option>
+                            <option value="4">Mild Ache</option>
+                            <option value="5">Annoying Ache</option>
+                            <option value="6">Moderate Discomfort</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="skin">Skin Condition</label>
+                        <select id="skin">
+                            <option value="">Select condition...</option>
+                            <option value="1">Perfect</option>
+                            <option value="1.5">Robust</option>
+                            <option value="3">Slightly Worn</option>
+                            <option value="4">Tender Spots</option>
+                            <option value="5">Sensitive</option>
+                            <option value="6">Raw/Burning</option>
+                            <option value="7">Edge Tears</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="mealBeforeTraining">Pre-Training Meal</label>
+                        <select id="mealBeforeTraining">
+                            <option value="">Select...</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
                 </div>
-                
-                <div class="sync-status" id="receiveStatus">Enter code or scan QR to connect</div>
-                
-                <div class="sync-actions">
-                    <button class="sync-btn secondary" id="cancelSyncBtn">Cancel</button>
-                    <button class="sync-btn primary" id="connectToPeerBtn">Connect</button>
+
+                <div class="input-section">
+                    <h3>Training History</h3>
+                    <div class="input-group slider-group">
+                        <label for="daysSince">Days Since Last Session (0-14)</label>
+                        <div class="slider-container">
+                            <input type="number" id="daysSince" min="0" max="14" step="1" placeholder="0-14">
+                            <input type="range" id="daysSinceSlider" min="0" max="14" step="1">
+                        </div>
+                    </div>
+                    <div class="input-group slider-group">
+                        <label for="lastRPE">Last Session RPE (1-10, 0=rest)</label>
+                        <div class="slider-container">
+                            <input type="number" id="lastRPE" min="0" max="10" step="0.5" placeholder="0-10">
+                            <input type="range" id="lastRPESlider" min="0" max="10" step="0.5">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Completed today (select all that apply)</label>
+                        <div class="checkbox-group" id="climbingTypeGroup" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                            <label for="climbingBouldering">
+                                <input type="checkbox" id="climbingBouldering" value="Bouldering">
+                                Bouldering
+                            </label>
+                            <label for="climbingTopRope">
+                                <input type="checkbox" id="climbingTopRope" value="Top Rope">
+                                Top Rope
+                            </label>
+                            <label for="climbingLead">
+                                <input type="checkbox" id="climbingLead" value="Lead">
+                                Lead
+                            </label>
+                            <label for="climbingNone">
+                                <input type="checkbox" id="climbingNone" value="No Training">
+                                No Training
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-section" style="grid-column: 1 / -1;">
+                    <h3>Session Notes</h3>
+                    <div class="input-group">
+                        <label for="sessionNotes">Comments (optional)</label>
+                        <textarea id="sessionNotes" rows="3" placeholder="Add any notes about your session"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="update-btn" id="updateRecBtn">Update Recommendation</button>
+                <button class="update-btn" id="saveEntryBtn">Save Entry</button>
+                <button class="update-btn" id="clearEntryBtn" style="background: #e74c3c;">Clear Data</button>
+            </div>
+
+            <div class="recommendation-panel" id="recommendationPanel">
+                <h2 id="recommendationTitle">Tomorrow's Training Recommendation</h2>
+                <div class="recommendation-text" id="recommendationText">Enter your metrics above to get a recommendation</div>
+                <div class="metrics-grid" id="metricsGrid"></div>
+            </div>
+
+            <div class="personalization-section">
+                <h3>Personalization Factors (Historical)</h3>
+                <div class="personalization-grid">
+                    <div class="personalization-card">
+                        <div>Sleep Adaptation</div>
+                        <div class="personalization-value" id="sleepFactor">1.0x</div>
+                        <div>Based on your average sleep patterns</div>
+                    </div>
+                    <div class="personalization-card">
+                        <div>Injury Risk</div>
+                        <div class="personalization-value" id="injuryRisk">Low</div>
+                        <div>Based on your tendon and muscle history</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="history" class="tab-content" role="tabpanel">
+            <div class="history-nav">
+                <button class="nav-btn" id="prevWeekBtn">◀ Previous</button>
+                <div class="current-week" id="currentWeek">Current Week</div>
+                <button class="nav-btn" id="nextWeekBtn">Next ▶</button>
+            </div>
+
+            <div class="export-section">
+                <button class="export-btn" id="exportCsvBtn">Export to CSV</button>
+                <button class="export-btn" id="clearAllDataBtn" style="background: #e74c3c;">Clear All Data</button>
+            </div>
+
+            <div class="backup-section">
+                <h3>Data Backup & Restore</h3>
+                <div class="backup-controls">
+                    <input type="text" class="backup-input" id="backupCode" placeholder="Backup code">
+                    <button class="export-btn" id="exportBackupBtn">Generate Backup</button>
+                    <button class="export-btn" id="importBackupBtn">Restore Backup</button>
+                </div>
+            </div>
+
+            <div id="historyList" style="padding: 20px 0;"></div>
+        </div>
+
+        <div id="analytics" class="tab-content" role="tabpanel">
+            <div class="chart-controls" id="chartControls"></div>
+
+            <div class="charts-section">
+                <div class="chart-container weekly-chart">
+                    <canvas id="weeklyTrendChart"></canvas>
+                    <div id="noDataMessage" class="no-data-message" style="display: none;">
+                        Not enough data to display a chart.
+                        Please add at least one entry.
+                    </div>
+                </div>
+            </div>
+
+            <div class="swipe-indicator">Swipe left/right to navigate between tabs</div>
+        </div>
+
+        <div id="sync" class="tab-content" role="tabpanel">
+            <div class="sync-container">
+                <div class="sync-tabs">
+                    <div class="sync-tab active" data-tab="send">Send Data</div>
+                    <div class="sync-tab" data-tab="receive">Receive Data</div>
+                </div>
+
+                <div class="sync-content active" id="sendContent">
+                    <h2 class="sync-title">Send Your Training Data</h2>
+                    <p class="sync-description">Share your training data securely with another device using QR code or code</p>
+
+                    <div class="sync-steps">
+                        <div class="sync-step active">
+                            <div class="sync-step-icon">1</div>
+                            <div class="sync-step-text">Generate Code</div>
+                        </div>
+                        <div class="sync-step">
+                            <div class="sync-step-icon">2</div>
+                            <div class="sync-step-text">Connect Device</div>
+                        </div>
+                        <div class="sync-step">
+                            <div class="sync-step-icon">3</div>
+                            <div class="sync-step-text">Transfer Data</div>
+                        </div>
+                    </div>
+
+                    <div class="qr-section">
+                        <div class="qr-container" id="sendQrContainer">
+                            <div class="qr-placeholder"></div>
+                        </div>
+                        <div class="peer-id-display" id="peerIdDisplay">CLICK "GENERATE CODE"</div>
+                    </div>
+
+                    <div class="sync-progress">
+                        <div class="sync-progress-bar" id="sendProgress"></div>
+                    </div>
+
+                    <div class="sync-status" id="sendStatus">Ready to generate sync code</div>
+
+                    <div class="sync-actions">
+                        <button class="sync-btn secondary" id="copyPeerIdBtn">Copy Code</button>
+                        <button class="sync-btn primary" id="generateCodeBtn">Generate Code</button>
+                    </div>
+                </div>
+
+                <div class="sync-content" id="receiveContent">
+                    <h2 class="sync-title">Receive Training Data</h2>
+                    <p class="sync-description">Enter the code from the sender to receive training data</p>
+
+                    <div class="sync-steps">
+                        <div class="sync-step active">
+                            <div class="sync-step-icon">1</div>
+                            <div class="sync-step-text">Scan QR Code</div>
+                        </div>
+                        <div class="sync-step">
+                            <div class="sync-step-icon">2</div>
+                            <div class="sync-step-text">Connect</div>
+                        </div>
+                        <div class="sync-step">
+                            <div class="sync-step-icon">3</div>
+                            <div class="sync-step-text">Receive Data</div>
+                        </div>
+                    </div>
+
+                    <div class="sync-input-group">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="text" class="sync-input" id="receiverCode" placeholder="Enter 6-digit code" maxlength="6" style="flex: 1;">
+                            <button id="scanQRBtn" class="sync-btn" style="padding: 12px; min-width: auto;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 20h7a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7M4 6.001H2v14a2 2 0 0 0 2 2h14v-2H4z"></path>
+                                    <path d="m15 9-6 6"></path>
+                                    <path d="m9 9 6 6"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="camera-container" id="cameraContainer">
+                        <video id="qrScanner" width="100%"></video>
+                        <div class="scan-overlay">
+                            <div class="scan-box">
+                                <div class="scan-line"></div>
+                            </div>
+                        </div>
+                        <div class="camera-controls">
+                            <button id="cancelScanBtn" class="camera-btn danger">Cancel Scan</button>
+                        </div>
+                    </div>
+
+                    <div class="sync-progress">
+                        <div class="sync-progress-bar" id="receiveProgress"></div>
+                    </div>
+
+                    <div class="sync-status" id="receiveStatus">Enter code or scan QR to connect</div>
+
+                    <div class="sync-actions">
+                        <button class="sync-btn secondary" id="cancelSyncBtn">Cancel</button>
+                        <button class="sync-btn primary" id="connectToPeerBtn">Connect</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div id="customModal" class="modal-overlay">
-    <div class="modal-content">
-        <h3 id="modalTitle">Confirmation</h3>
-        <p id="modalMessage">Are you sure?</p>
-        <div class="modal-buttons">
-            <button id="modalConfirmBtn" class="modal-btn modal-btn-confirm">Confirm</button>
-            <button id="modalCancelBtn" class="modal-btn modal-btn-cancel">Cancel</button>
+    <div id="customModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modalTitle">Confirmation</h3>
+            <p id="modalMessage">Are you sure?</p>
+            <div class="modal-buttons">
+                <button id="modalConfirmBtn" class="modal-btn modal-btn-confirm">Confirm</button>
+                <button id="modalCancelBtn" class="modal-btn modal-btn-cancel">Cancel</button>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="validationModal" class="modal-overlay validation-modal">
-    <div class="modal-content">
-        <h3>Missing Required Fields</h3>
-        <div class="validation-errors" id="validationErrors"></div>
-        <div class="modal-buttons">
-            <button class="modal-btn" id="validationOkBtn">OK</button>
+    <div id="validationModal" class="modal-overlay validation-modal">
+        <div class="modal-content">
+            <h3>Missing Required Fields</h3>
+            <div class="validation-errors" id="validationErrors"></div>
+            <div class="modal-buttons">
+                <button class="modal-btn" id="validationOkBtn">OK</button>
+            </div>
         </div>
     </div>
-</div>
-
+</body>
 <script>
     // --- TOAST NOTIFICATIONS ---
     function showToast(message, duration = 3000) {
@@ -6485,6 +6476,441 @@ Please add at least one entry.
             }
         }
     }
+    
+    class FluidTearEffect {
+constructor() {
+    this.canvas = null;
+    this.ctx = null;
+    this.screenshot = null;
+    this.tearPoints = [];
+    this.animationId = null;
+    this.startTime = 0;
+    this.dataCleared = false;
+    
+    // 🚀 SPEED CONTROLS
+    this.SPEED_SETTINGS = {
+        // Duration in milliseconds
+        slow: 4000,      // 4 seconds
+        normal: 2000,    // 2 seconds  
+        fast: 1000,      // 1 second
+        lightning: 500   // 0.5 seconds
+    };
+    
+    this.duration = this.SPEED_SETTINGS.fast; // ← CHANGE THIS
+    this.isActive = false;
+}
+
+    async initiateTear() {
+        if (this.isActive) return;
+        this.isActive = true;
+
+        try {
+const screenshotCanvas = await html2canvas(document.documentElement, {
+    useCORS: true,
+    allowTaint: true,
+    scale: window.devicePixelRatio || 1,
+    width: window.innerWidth,
+    height: window.innerHeight,
+    x: window.scrollX,                 // Start from current scroll position
+    y: window.scrollY,                 // Start from current scroll position
+    logging: false,
+    backgroundColor: null,             // Transparent background
+    removeContainer: true              // Don't include html2canvas container
+});
+
+            // Create full-screen canvas overlay
+            this.createTearCanvas();
+            this.screenshot = screenshotCanvas;
+            
+            // Initialize tear physics
+            this.initializeTearPoints();
+            
+            // Start fluid animation
+            this.startTime = performance.now();
+            this.animate();
+
+        } catch (error) {
+            console.error('Tear effect failed:', error);
+            this.cleanup();
+        }
+    }
+
+    createTearCanvas() {
+        // Remove existing canvas
+        const existing = document.getElementById('tearCanvas');
+        if (existing) existing.remove();
+
+        // Create new canvas
+        this.canvas = document.createElement('canvas');
+        this.canvas.id = 'tearCanvas';
+        this.canvas.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            pointer-events: none;
+        `;
+        
+        // Set canvas size
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        
+        this.ctx = this.canvas.getContext('2d');
+        document.body.appendChild(this.canvas);
+    }
+
+initializeTearPoints() {
+    this.tearPoints = [];
+    
+    // 🎯 EDGE-TO-EDGE TEAR CONTROLS
+    const TEAR_SETTINGS = {
+        // Direction: 'left-to-right' or 'right-to-left'
+        direction: 'left-to-right',  // Change this to control direction
+        
+        // Vertical position (0-1, where tear crosses screen)
+        verticalPosition: 0.2,       // 0 = top, 1 = bottom
+        
+        // Angle variation (-45 to 45 degrees from horizontal)
+        angleVariation: -10,         // Negative = upward angle, positive = downward
+        
+        // Wave effects
+        waviness: 30,               // How wavy the tear is (0-50)
+        chaos: 30                   // Random variation (0-30)
+    };
+    
+    const steps = 60; // More steps for smoother edge-to-edge
+    
+    for (let i = 0; i <= steps; i++) {
+        const progress = i / steps;
+        
+        // Calculate base line from edge to edge
+        let baseX, baseY;
+        
+        if (TEAR_SETTINGS.direction === 'left-to-right') {
+            baseX = progress * this.canvas.width;
+        } else {
+            baseX = (1 - progress) * this.canvas.width;
+        }
+        
+        // Base Y with angle variation
+        const angleRad = (TEAR_SETTINGS.angleVariation * Math.PI) / 180;
+        const angleOffset = Math.tan(angleRad) * (baseX - this.canvas.width * 0.5);
+        baseY = TEAR_SETTINGS.verticalPosition * this.canvas.height + angleOffset;
+        
+        // Add organic randomness (much smaller)
+        const waveAmplitude = TEAR_SETTINGS.waviness;
+        const randomOffset = (Math.random() - 0.5) * TEAR_SETTINGS.chaos;
+        const noiseX = Math.sin(progress * Math.PI * 6) * (waveAmplitude * 0.3) + randomOffset * 0.5;
+        const noiseY = Math.cos(progress * Math.PI * 4) * waveAmplitude + randomOffset;
+        
+        this.tearPoints.push({
+            x: baseX + noiseX,
+            y: baseY + noiseY,
+            originalX: baseX + noiseX,
+            originalY: baseY + noiseY,
+            velocity: 0,
+            acceleration: 0
+        });
+    }
+}
+
+animate() {
+    const currentTime = performance.now();
+    const elapsed = currentTime - this.startTime;
+    const progress = Math.min(elapsed / this.duration, 1);
+    
+    // Clear canvas
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    
+    // Draw screenshot as base layer
+    if (this.screenshot) {
+        this.ctx.drawImage(this.screenshot, 0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    // Calculate current tear progress with easing
+    const tearProgress = this.easeInOutCubic(progress);
+    
+    // Create clipping mask for torn area
+    this.ctx.save();
+    this.ctx.globalCompositeOperation = 'destination-out';
+    
+    // Draw the torn area (this removes the screenshot)
+    this.drawProgressiveTear(tearProgress);
+    
+    this.ctx.restore();
+
+    // Add paper debris effect
+    this.drawPaperDebris(tearProgress);
+
+    // Add torn edge shadows
+    this.drawTornEdgeShadows(tearProgress);
+
+    // Clear form data partway through
+    if (progress > 0.4 && !this.dataCleared) {
+        this.dataCleared = true;
+        // This reveals the cleared form underneath
+        setTimeout(() => {
+            if (window.app) {
+                window.app.clearCurrentEntry(true);
+                showToast('Data cleared');
+            }
+        }, 100);
+    }
+
+    // Continue animation or cleanup
+    if (progress < 1) {
+        this.animationId = requestAnimationFrame(() => this.animate());
+    } else {
+        this.cleanup();
+    }
+}
+
+drawProgressiveTear(progress) {
+    const activePoints = Math.floor(progress * this.tearPoints.length);
+    if (activePoints < 2) return;
+
+    this.ctx.beginPath();
+    
+    // Start from the screen edge
+    const firstPoint = this.tearPoints[0];
+    const lastActivePoint = this.tearPoints[Math.min(activePoints - 1, this.tearPoints.length - 1)];
+    
+    // Create a shape that removes everything above/below the tear line
+    if (firstPoint.x < this.canvas.width / 2) {
+        // Left-to-right tear: remove everything above the line
+        this.ctx.moveTo(-50, -50);
+        this.ctx.lineTo(this.canvas.width + 50, -50);
+        this.ctx.lineTo(this.canvas.width + 50, lastActivePoint.y + 100);
+    } else {
+        // Right-to-left tear: remove everything above the line  
+        this.ctx.moveTo(-50, -50);
+        this.ctx.lineTo(this.canvas.width + 50, -50);
+        this.ctx.lineTo(this.canvas.width + 50, lastActivePoint.y + 100);
+    }
+    
+    // Draw smooth curve along tear points (in reverse for proper masking)
+    for (let i = activePoints - 1; i >= 0; i--) {
+        const point = this.tearPoints[i];
+        if (i === activePoints - 1) {
+            this.ctx.lineTo(point.x, point.y);
+        } else if (i > 0) {
+            const prevPoint = this.tearPoints[i - 1];
+            const controlX = (point.x + prevPoint.x) / 2;
+            const controlY = (point.y + prevPoint.y) / 2;
+            this.ctx.quadraticCurveTo(point.x, point.y, controlX, controlY);
+        } else {
+            this.ctx.lineTo(point.x, point.y);
+        }
+    }
+    
+    // Close the shape
+    this.ctx.lineTo(-50, firstPoint.y + 100);
+    this.ctx.lineTo(-50, -50);
+    this.ctx.closePath();
+    
+    this.ctx.fill();
+}
+
+    updateTearPhysics(progress) {
+        // Add subtle movement to tear points for organic feel
+        this.tearPoints.forEach((point, index) => {
+            const timeOffset = index * 0.1;
+            const waveTime = (progress * 10) + timeOffset;
+            
+            // Micro-oscillations
+            point.x = point.originalX + Math.sin(waveTime * 2) * 2;
+            point.y = point.originalY + Math.cos(waveTime * 1.5) * 1.5;
+            
+            // Add slight randomness
+            if (Math.random() < 0.1) {
+                point.x += (Math.random() - 0.5) * 3;
+                point.y += (Math.random() - 0.5) * 3;
+            }
+        });
+    }
+
+    drawOrganicTear(currentIndex, progress) {
+        if (currentIndex < 2) return;
+
+        this.ctx.beginPath();
+        
+        // Start from screen edge
+        this.ctx.moveTo(-50, -50);
+        this.ctx.lineTo(this.tearPoints[0].x + 50, -50);
+        
+        // Draw smooth curve through tear points
+        for (let i = 0; i < currentIndex - 1; i++) {
+            const current = this.tearPoints[i];
+            const next = this.tearPoints[i + 1];
+            
+            if (i === 0) {
+                this.ctx.lineTo(current.x, current.y);
+            } else {
+                // Use quadratic curves for smoothness
+                const controlX = (current.x + next.x) / 2;
+                const controlY = (current.y + next.y) / 2;
+                this.ctx.quadraticCurveTo(current.x, current.y, controlX, controlY);
+            }
+        }
+        
+        // Add jagged edge variation
+        const lastPoint = this.tearPoints[currentIndex - 1];
+        const jaggedEdge = this.createJaggedEdge(lastPoint, progress);
+        jaggedEdge.forEach(point => {
+            this.ctx.lineTo(point.x, point.y);
+        });
+        
+        // Close the shape
+        this.ctx.lineTo(this.canvas.width + 50, this.canvas.height + 50);
+        this.ctx.lineTo(-50, this.canvas.height + 50);
+        this.ctx.closePath();
+        
+        this.ctx.fill();
+    }
+
+    createJaggedEdge(lastPoint, progress) {
+        const jaggedPoints = [];
+        const edgeLength = 60;
+        const segments = 8;
+        
+        for (let i = 0; i < segments; i++) {
+            const segmentProgress = i / segments;
+            const angle = Math.atan2(1, 1) + (Math.random() - 0.5) * 0.8; // Roughly diagonal
+            const length = (Math.random() * 0.5 + 0.5) * edgeLength;
+            
+            jaggedPoints.push({
+                x: lastPoint.x + Math.cos(angle) * length * segmentProgress,
+                y: lastPoint.y + Math.sin(angle) * length * segmentProgress
+            });
+        }
+        
+        return jaggedPoints;
+    }
+
+drawPaperDebris(progress) {
+    // 🎨 DEBRIS EFFECT CONTROLS
+    const DEBRIS_SETTINGS = {
+        enabled: false,           // Turn debris on/off
+        startAt: 0.5,           // When debris starts (0-1)
+        intensity: 20,          // Max number of debris pieces
+        sizeMin: 2,             // Minimum debris size
+        sizeMax: 10,            // Maximum debris size
+        opacity: 0.6,           // Debris transparency
+        colors: ['#f5f2e8', '#e8dcc6', '#f0ead6'], // Paper colors
+        physics: true           // Enable falling physics
+    };
+    
+    if (!DEBRIS_SETTINGS.enabled || progress < DEBRIS_SETTINGS.startAt) return;
+    
+    const debrisCount = Math.floor(progress * DEBRIS_SETTINGS.intensity);
+    this.ctx.save();
+    this.ctx.globalAlpha = DEBRIS_SETTINGS.opacity;
+    
+    for (let i = 0; i < debrisCount; i++) {
+        // Position with physics
+        let debrisX, debrisY;
+        
+        if (DEBRIS_SETTINGS.physics) {
+            // Debris falls from tear line
+            const tearIndex = Math.floor(Math.random() * this.tearPoints.length);
+            const tearPoint = this.tearPoints[tearIndex];
+            debrisX = tearPoint.x + (Math.random() - 0.5) * 100;
+            debrisY = tearPoint.y + Math.random() * 200; // Falls down
+        } else {
+            // Random placement
+            debrisX = Math.random() * this.canvas.width;
+            debrisY = Math.random() * this.canvas.height;
+        }
+        
+        const size = Math.random() * (DEBRIS_SETTINGS.sizeMax - DEBRIS_SETTINGS.sizeMin) + DEBRIS_SETTINGS.sizeMin;
+        const color = DEBRIS_SETTINGS.colors[Math.floor(Math.random() * DEBRIS_SETTINGS.colors.length)];
+        
+        this.ctx.fillStyle = color;
+        this.ctx.beginPath();
+        
+        // Irregular debris shapes
+        if (Math.random() < 0.5) {
+            // Circle debris
+            this.ctx.arc(debrisX, debrisY, size, 0, Math.PI * 2);
+        } else {
+            // Rectangle debris
+            this.ctx.rect(debrisX - size/2, debrisY - size/2, size, size * (0.5 + Math.random()));
+        }
+        
+        this.ctx.fill();
+    }
+    
+    this.ctx.restore();
+}
+
+drawTornEdgeShadows(currentIndex) {
+    // 🌟 SHADOW EFFECT CONTROLS
+    const SHADOW_SETTINGS = {
+        enabled: true,
+        thickness: 3,           // Line thickness
+        opacity: 0.3,           // Shadow opacity
+        blur: 8,                // Shadow blur amount
+        offsetX: 2,             // Shadow X offset
+        offsetY: 2,             // Shadow Y offset
+        glowEffect: true,       // Add glow effect
+        glowColor: '#ff6b9d'    // Glow color
+    };
+    
+    if (!SHADOW_SETTINGS.enabled || currentIndex < 5) return;
+    
+    this.ctx.save();
+    
+    // Main shadow
+    this.ctx.strokeStyle = `rgba(0, 0, 0, ${SHADOW_SETTINGS.opacity})`;
+    this.ctx.lineWidth = SHADOW_SETTINGS.thickness;
+    this.ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+    this.ctx.shadowBlur = SHADOW_SETTINGS.blur;
+    this.ctx.shadowOffsetX = SHADOW_SETTINGS.offsetX;
+    this.ctx.shadowOffsetY = SHADOW_SETTINGS.offsetY;
+    
+    // Draw main tear line
+    this.ctx.beginPath();
+    for (let i = 0; i < currentIndex - 1; i++) {
+        const point = this.tearPoints[i];
+        if (i === 0) {
+            this.ctx.moveTo(point.x, point.y);
+        } else {
+            this.ctx.lineTo(point.x, point.y);
+        }
+    }
+    this.ctx.stroke();
+    
+    // Add glow effect
+    if (SHADOW_SETTINGS.glowEffect) {
+        this.ctx.shadowColor = SHADOW_SETTINGS.glowColor;
+        this.ctx.shadowBlur = SHADOW_SETTINGS.blur * 2;
+        this.ctx.globalAlpha = 0.3;
+        this.ctx.stroke();
+    }
+    
+    this.ctx.restore();
+}
+
+    easeInOutCubic(t) {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    cleanup() {
+        this.isActive = false;
+        if (this.animationId) {
+            cancelAnimationFrame(this.animationId);
+        }
+        if (this.canvas && this.canvas.parentNode) {
+            this.canvas.parentNode.removeChild(this.canvas);
+        }
+        this.canvas = null;
+        this.ctx = null;
+        this.screenshot = null;
+        this.tearPoints = [];
+    }
+}
     
     class MultiDayTracker {
         constructor() {
@@ -7353,37 +7779,23 @@ clearCurrentEntry(clearDate = true) {
     this.handleTrainingChange(); // Update disabled state
     this.calculateRecommendation();
 }
-clearDataWithTearEffect() {
-    // Add the tear effect overlay if it doesn't exist
-    if (!document.querySelector('.tear-overlay')) {
-        const tearOverlay = document.createElement('div');
-        tearOverlay.className = 'tear-overlay';
-        document.body.appendChild(tearOverlay);
-    }
+async clearDataWithTearEffect() {
+    // Create tear effect instance
+    const tearEffect = new FluidTearEffect();
     
-    // Get the tear overlay and clear button
-    const tearOverlay = document.querySelector('.tear-overlay');
+    // Button press effect
     const clearBtn = document.getElementById('clearEntryBtn');
-    
-    // Add button press effect
     clearBtn.classList.add('clear-data-pressed');
     setTimeout(() => clearBtn.classList.remove('clear-data-pressed'), 100);
     
-    // Start the tear animation
-    tearOverlay.classList.add('tearing');
+    // Start fluid tear
+    await tearEffect.initiateTear();
     
-    // After a brief delay, start clearing the form during the tear
+    // Clear data during tear
     setTimeout(() => {
-        this.clearCurrentEntry(true); // Call the regular clear function
-        
-        // Show success message
+        this.clearCurrentEntry(true);
         showToast('Data cleared');
-    }, 400); // Clear data partway through the tear
-    
-    // Clean up the overlay after animation completes
-    setTimeout(() => {
-        tearOverlay.classList.remove('tearing');
-    }, 1200);
+    }, 800);
 }
         switchTab(tabName) {
             const currentTab = document.querySelector('.tab-content.active');
