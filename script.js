@@ -815,7 +815,7 @@ constructor() {
     this.modalCallback = null;
     this.chartDebounce = null;
     this.currentWeekIndex = 0;
-    this.settings = {};
+
     // 🔥 NEW: Track form state changes for optimized auto-save
     this.lastAutoSaveHash = null;
     this.hasUnsavedChanges = false;
@@ -837,22 +837,17 @@ constructor() {
         climbingType: { name: 'Climbing Type', section: 'Training History', type: 'checkbox' }
     };
 
-    this.setupEventListeners(); // ← DOM elements are set up here
+    this.setInitialDate();
+    this.setupEventListeners();
     this.loadDataForDate();
     this.restoreAutoSave();
     this.setupSwipeGestures();
+    
     this.checkFirstVisit();
     
-    this.settings = {
-        swipeThreshold: 150,
-        autoSaveInterval: 60000
-    };
-    this.loadSettings();
-    
-    // 🔥 MOVE setupAnimatedTitle() TO AFTER setupEventListeners()
-    this.setupAnimatedTitle(); // ← NOW it can find the title element
-    
+    // 🔥 UPDATED: Start optimized auto-save
     this.startOptimizedAutoSave();
+    
     this.sync = new PeerSync(this);
 }
         
@@ -916,12 +911,11 @@ setupSwipeGestures() {
         const touchEndX = e.changedTouches[0].screenX;
         const diff = touchEndX - touchStartX;
         
-                
-                if (Math.abs(diff) > this.settings.swipeThreshold) { // Use the setting here
-                    if (diff > 0) {
-                        this.swipeTab(-1);
-                    } else {
-                        this.swipeTab(1);
+        if (Math.abs(diff) > 150) { // INCREASED from 100 to 150 (less sensitive)
+            if (diff > 0) {
+                this.swipeTab(-1);
+            } else {
+                this.swipeTab(1);
             }
         }
     });
@@ -1202,41 +1196,23 @@ validateFields() {
         }
 
         // --- DATA & UI ---
-setupEventListeners() {
-    // Tab switching
-    document.querySelectorAll('.tab-button').forEach(button => {
-        button.addEventListener('click', () => {
-            const tabName = button.getAttribute('data-tab');
-            this.switchTab(tabName);
-        });
-    });
-    
-    // Title click
-    document.getElementById('appTitle').addEventListener('click', () => this.showWelcomeModal());
-    
-    // Modal buttons
-    document.getElementById('modalConfirmBtn').addEventListener('click', () => this.confirmModal());
-    document.getElementById('modalCancelBtn').addEventListener('click', () => this.hideModal('customModal'));
-    document.getElementById('validationOkBtn').addEventListener('click', () => this.hideModal('validationModal'));
-    
-    // 🔥 REPLACE THIS SINGLE LINE:
-    // document.getElementById('closeWelcomeBtn').addEventListener('click', () => this.closeWelcomeModal());
-    
-    // 🔥 WITH THIS BLOCK:
-    document.getElementById('closeWelcomeBtn').addEventListener('click', () => {
-        this.closeWelcomeModal();
-        setTimeout(() => {
-            this.triggerLetterDance();
-        }, 500);
-    });
-    
-    // Help modal events
-    document.getElementById('helpBtn').addEventListener('click', () => showModal('helpModal'));
-    document.getElementById('helpCloseBtn').addEventListener('click', () => hideModal('helpModal'));
-            // Settings tab event listeners
-            document.getElementById('saveSettingsBtn').addEventListener('click', () => this.saveSettings());
-            document.getElementById('resetSettingsBtn').addEventListener('click', () => this.resetSettings());
-            this.setupSlider('swipeThreshold', 'swipeThresholdSlider');
+        setupEventListeners() {
+            // Tab switching
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabName = button.getAttribute('data-tab');
+                    this.switchTab(tabName);
+                });
+            });
+            
+            // Title click
+            document.getElementById('appTitle').addEventListener('click', () => this.showWelcomeModal());
+            
+            // Modal buttons
+            document.getElementById('modalConfirmBtn').addEventListener('click', () => this.confirmModal());
+            document.getElementById('modalCancelBtn').addEventListener('click', () => this.hideModal('customModal'));
+            document.getElementById('validationOkBtn').addEventListener('click', () => this.hideModal('validationModal'));
+            document.getElementById('closeWelcomeBtn').addEventListener('click', () => this.closeWelcomeModal());
             
             // Help modal events
             document.getElementById('helpBtn').addEventListener('click', () => showModal('helpModal'));
@@ -1250,8 +1226,6 @@ setupEventListeners() {
             // Time input listeners
             document.getElementById('snoozeTime').addEventListener('input', () => this.calculateAndDisplaySleepDuration());
             document.getElementById('wakeTime').addEventListener('input', () => this.calculateAndDisplaySleepDuration());
-
-
 
 // Climbing type checkboxes
 const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingWeights', 'climbingCardio'];
@@ -1562,21 +1536,12 @@ markAsSaved() {
     this.lastAutoSaveHash = this.generateFormHash();
 }
 
-        startOptimizedAutoSave() {
-            // Clear any existing interval to prevent duplicates
-            if (this.autoSaveInterval) {
-                clearInterval(this.autoSaveInterval);
-            }
-            
-            this.setupChangeDetection();
-            
-            // Only set a new interval if it's not disabled
-            if (this.settings.autoSaveInterval > 0) {
-                this.autoSaveInterval = setInterval(() => {
-                    this.performAutoSaveIfNeeded();
-                }, this.settings.autoSaveInterval);
-            }
-        }
+startOptimizedAutoSave() {
+    this.setupChangeDetection();
+    this.autoSaveInterval = setInterval(() => {
+        this.performAutoSaveIfNeeded();
+    }, 10000); // Check every 10 seconds
+}
 
 // ✨ REPLACEMENT for the setupChangeDetection function
 
@@ -2603,125 +2568,6 @@ addChartControls() {
             }
             hideModal('customModal');
         }
-        
-                confirmModal() {
-            if (this.modalCallback) {
-                this.modalCallback();
-            }
-            hideModal('customModal');
-        }
-
-        // --- PASTE THE ENTIRE BLOCK OF NEW METHODS BELOW ---
-
-        // --- SETTINGS MANAGEMENT ---
-        loadSettings() {
-            const savedSettings = localStorage.getItem('climbSmartSettings');
-            const defaultSettings = {
-                swipeThreshold: 150,
-                autoSaveInterval: 60000
-            };
-
-            if (savedSettings) {
-                // Merge saved settings with defaults to ensure all keys exist
-                this.settings = { ...defaultSettings, ...JSON.parse(savedSettings) };
-            } else {
-                this.settings = defaultSettings;
-            }
-            // Update UI and app behavior with loaded/default settings
-            this.applySettings();
-        }
-
-        saveSettings() {
-            this.settings.swipeThreshold = parseInt(document.getElementById('swipeThreshold').value, 10);
-            this.settings.autoSaveInterval = parseInt(document.getElementById('autoSaveInterval').value, 10);
-
-            localStorage.setItem('climbSmartSettings', JSON.stringify(this.settings));
-            this.applySettings(); // Re-apply to restart intervals, etc.
-            showToast('Settings saved!');
-        }
-
-resetSettings() {
-    this.settings = {
-        swipeThreshold: 150,
-        autoSaveInterval: 60000  // 🔥 CHANGED from 10000 to 60000
-    };
-    
-    localStorage.removeItem('climbSmartSettings');
-    this.applySettings();
-    this.updateSettingsUI();
-    showToast('Settings reset to defaults!', 2000);
-}
-
-        applySettings() {
-            // Update UI elements in the settings tab
-            const thresholdInput = document.getElementById('swipeThreshold');
-            const thresholdSlider = document.getElementById('swipeThresholdSlider');
-            const intervalSelect = document.getElementById('autoSaveInterval');
-            
-            if (thresholdInput) thresholdInput.value = this.settings.swipeThreshold;
-            if (thresholdSlider) thresholdSlider.value = this.settings.swipeThreshold;
-            if (intervalSelect) intervalSelect.value = this.settings.autoSaveInterval;
-            
-            // Update slider fill
-            if (thresholdSlider) this.updateSliderFill(thresholdSlider);
-
-            // Restart auto-save with the new interval
-            this.startOptimizedAutoSave();
-        }
-        
-// --- ANIMATED TITLE SETUP ---
-setupAnimatedTitle() {
-    const titleElement = document.getElementById('appTitle');
-    if (!titleElement) return;
-    
-    const text = titleElement.textContent.trim(); // Remove extra whitespace
-    titleElement.innerHTML = '';
-    titleElement.classList.add('animated-title');
-    
-    text.split('').forEach((char, index) => {
-        const letterSpan = document.createElement('span');
-        letterSpan.className = 'letter';
-        letterSpan.textContent = char;
-        letterSpan.style.setProperty('--i', index);
-        
-        if (char === ' ') {
-            letterSpan.classList.add('space');
-        }
-        
-        titleElement.appendChild(letterSpan);
-    });
-}
-
-// Trigger the letter dance animation
-triggerLetterDance() {
-    const letters = document.querySelectorAll('.letter:not(.space)');
-    letters.forEach((letter, index) => {
-        setTimeout(() => {
-            // Add a temporary dance class
-            letter.style.animation = 'wave-up 0.6s ease-out';
-            letter.style.animationDelay = `${index * 50}ms`;
-            
-            // Apply the electric gradient temporarily
-            letter.style.background = 'linear-gradient(45deg, #ff6b35, #f7931e, #ff9900, #00d4ff, #8e44ad)';
-            letter.style.backgroundSize = '300% 300%';
-            letter.style.webkitBackgroundClip = 'text';
-            letter.style.webkitTextFillColor = 'transparent';
-            letter.style.backgroundClip = 'text';
-            letter.style.filter = 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.4))';
-            
-            // Reset after animation
-            setTimeout(() => {
-                letter.style.animation = '';
-                letter.style.background = '';
-                letter.style.webkitBackgroundClip = '';
-                letter.style.webkitTextFillColor = '';
-                letter.style.backgroundClip = '';
-                letter.style.filter = '';
-            }, 600 + (index * 50));
-        }, index * 50);
-    });
-}
-        
     }
 
     // --- INITIALIZE APP ---
