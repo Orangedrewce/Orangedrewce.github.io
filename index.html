@@ -51,28 +51,15 @@
 
     <div class="container">
         <div style="position: relative; text-align: center;">
-<h1 id="appTitle" class="animated-title">
-    <span class="letter" data-letter="C">C</span>
-    <span class="letter" data-letter="L">L</span>
-    <span class="letter" data-letter="I">I</span>
-    <span class="letter" data-letter="M">M</span>
-    <span class="letter" data-letter="B">B</span>
-    <span class="letter space" data-letter=" "> </span>
-    <span class="letter" data-letter="S">S</span>
-    <span class="letter" data-letter="M">M</span>
-    <span class="letter" data-letter="A">A</span>
-    <span class="letter" data-letter="R">R</span>
-    <span class="letter" data-letter="T">T</span>
-</h1>
+    <h1 id="appTitle">ClimbSmart Training Tracker</h1>
     <button id="helpBtn" class="help-button">?</button>
 </div>
 
         <div class="nav-tabs" role="tablist">
             <button class="tab-button active" data-tab="daily" role="tab" aria-selected="true">Daily Entry</button>
-            <button class="tab-button" data-tab="history" role="tab" aria-selected="false">History</button>
+            <button class="tab-button" data-tab="history" role="tab" aria-selected="false">Training History</button>
             <button class="tab-button" data-tab="analytics" role="tab" aria-selected="false">Analytics</button>
             <button class="tab-button" data-tab="sync" role="tab" aria-selected="false">Sync</button>
-            <button class="tab-button" data-tab="settings" role="tab" aria-selected="false">Settings</button>
         </div>
         <div id="daily" class="tab-content active" role="tabpanel">
             <div class="date-selector">
@@ -413,38 +400,7 @@
                 </div>
             </div>
         </div>
-                <div id="settings" class="tab-content" role="tabpanel">
-            <div class="settings-container">
-                
-
-<div class="input-section settings-section">
-    <div class="input-group slider-group">
-        <label for="swipeThreshold">Swipe Gesture Sensitivity</label>
-        <div class="slider-container">
-            <span class="slider-label-left">Less</span>
-            <input type="number" id="swipeThreshold" min="50" max="300" step="10">
-            <input type="range" id="swipeThresholdSlider" min="50" max="300" step="10">
-            <span class="slider-label-right">More</span>
-        </div>
     </div>
-    
-    <div class="input-group">
-        <label for="autoSaveInterval">Auto-Save Interval</label>
-        <select id="autoSaveInterval">
-            <option value="0">Disabled</option>
-            <option value="5000">5 seconds</option>
-            <option value="10000">10 seconds</option>
-            <option value="30000">30 seconds</option>
-            <option value="60000" selected>60 seconds</option>
-        </select>
-    </div>
-    
-    <!-- 🔥 BUTTONS MOVED INSIDE THE SKETCH BOX 🔥 -->
-    <div class="settings-buttons-inline">
-        <button class="update-btn settings-btn-inline" id="saveSettingsBtn">Save Settings</button>
-        <button class="update-btn settings-btn-inline" id="resetSettingsBtn">Reset to Defaults</button>
-    </div>
-</div>
 
     <div id="customModal" class="modal-overlay">
         <div class="modal-content">
