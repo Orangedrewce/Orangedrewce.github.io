@@ -31,63 +31,8 @@ body {
     color: #2c3e50;
     overflow-x: hidden;
     
-    /* Cork board with realistic frame */
-    background: 
-        /* Dark outer frame shadow */
-        linear-gradient(to right, 
-            #2c1810 0%, #2c1810 15px,
-            transparent 15px, transparent calc(100% - 15px),
-            #2c1810 calc(100% - 15px), #2c1810 100%
-        ),
-        linear-gradient(to bottom,
-            #2c1810 0%, #2c1810 15px,
-            transparent 15px, transparent calc(100% - 15px),
-            #2c1810 calc(100% - 15px), #2c1810 100%
-        ),
-        /* Medium wood frame */
-        linear-gradient(to right,
-            #8b4513 15px, #8b4513 35px,
-            transparent 35px, transparent calc(100% - 35px),
-            #8b4513 calc(100% - 35px), #8b4513 calc(100% - 15px)
-        ),
-        linear-gradient(to bottom,
-            #8b4513 15px, #8b4513 35px,
-            transparent 35px, transparent calc(100% - 35px),
-            #8b4513 calc(100% - 35px), #8b4513 calc(100% - 15px)
-        ),
-        /* Light wood frame highlight */
-        linear-gradient(to right,
-            #d2b48c 35px, #d2b48c 40px,
-            transparent 40px, transparent calc(100% - 40px),
-            #d2b48c calc(100% - 40px), #d2b48c calc(100% - 35px)
-        ),
-        linear-gradient(to bottom,
-            #d2b48c 35px, #d2b48c 40px,
-            transparent 40px, transparent calc(100% - 40px),
-            #d2b48c calc(100% - 40px), #d2b48c calc(100% - 35px)
-        ),
-        /* Cork texture background */
-        radial-gradient(circle at 25% 25%, rgba(101, 67, 33, 0.15) 2px, transparent 2px),
-        radial-gradient(circle at 75% 25%, rgba(139, 69, 19, 0.12) 1.5px, transparent 1.5px),
-        radial-gradient(circle at 25% 75%, rgba(160, 82, 45, 0.1) 2.5px, transparent 2.5px),
-        radial-gradient(circle at 75% 75%, rgba(101, 67, 33, 0.08) 1px, transparent 1px),
-        radial-gradient(circle at 50% 50%, rgba(139, 69, 19, 0.05) 3px, transparent 3px),
-        /* Cork base color */
-        linear-gradient(135deg, #d4c5a9 0%, #c8b899 50%, #bfa888 100%);
-    
-    background-size: 
-        100% 100%,  /* Frame shadows */
-        100% 100%,
-        100% 100%,  /* Frame colors */
-        100% 100%,
-        100% 100%,  /* Frame highlights */
-        100% 100%,
-        40px 40px,  /* Cork texture patterns */
-        60px 60px,
-        35px 35px,
-        55px 55px,
-        80px 80px,
-        100% 100%;  /* Base color */
+    /* Black background */
+    background: #5c5c5c;
 }
         
         @media (max-width: 768px) {
@@ -248,32 +193,6 @@ body {
     background: #fffacd;
     z-index: -1;
     
-    /* 🔥 ADD THE SAME LINES TO THE TORN PIECE */
-    background-image: 
-        /* Red margin line - SAME AS MAIN CONTAINER */
-        linear-gradient(
-            to right, 
-            transparent 65px, 
-            #ff6b6b 65px, 
-            #ff6b6b 67px, 
-            transparent 67px
-        ),
-        /* Blue horizontal lines - SAME AS MAIN CONTAINER */
-        repeating-linear-gradient(
-            transparent,
-            transparent 31px,
-            rgba(70, 130, 180, 0.4) 31px,
-            rgba(70, 130, 180, 0.4) 32px
-        ),
-        /* Paper texture - SAME AS MAIN CONTAINER */
-        repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 1px,
-            rgba(0, 0, 0, 0.01) 1px,
-            rgba(0, 0, 0, 0.01) 2px
-        );
-    
     /* Create torn edge effect */
     clip-path: polygon(
         0% 50%,
@@ -330,127 +249,62 @@ body {
         100% 100%,
         0% 100%
     );
+    
 }
 
-/* ============================================
-   SMOOTH ANIMATED TITLE WITH INDIVIDUAL LETTER EFFECTS
-   ============================================ */
-
-/* Base title container */
-h1.animated-title {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 2.2em;
-    cursor: pointer;
-    user-select: none;
-    font-family: 'Impact', 'Arial Black', sans-serif;
-    font-weight: 900;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    /* Use will-change as a performance hint to the browser */
-    will-change: transform;
-}
-
-/* Base styling for each individual letter */
-.letter {
-    display: inline-block;
-    color: #2c3e50;
-    position: relative;
-    transition: transform 0.2s cubic-bezier(0.47, 0, 0.745, 0.715),
-                filter 0.2s ease-out;
-    will-change: transform, filter;
-    /* DON'T add letter-spacing here */
-}
-
-/* Special handling for space characters */
-.letter.space {
-    width: 0.1em;
-}
-
-/* ============================================
-   TITLE HOVER EFFECT - SMOOTH WAVE
-   ============================================ */
-
-/* On parent hover, all letters get the rainbow gradient and glow */
-.animated-title:hover .letter:not(.space) {
-    background: linear-gradient(45deg, #ff6b35, #f7931e, #ff9900, #00d4ff, #8e44ad);
-    background-size: 300% 300%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: electric-flow 2s ease-in-out infinite;
-    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4));
-}
-
-/* 
-  On parent hover, each letter gets a gentle lift.
-  The animation delay is calculated from the '--i' variable set by JavaScript.
-  This creates a smooth, cascading wave effect that is highly performant.
-*/
-.animated-title:hover .letter {
-    animation: wave-up 0.5s ease-out forwards;
-    animation-delay: calc(var(--i) * 40ms); /* Stagger the start of each animation */
-}
-
-/* ============================================
-   INDIVIDUAL LETTER HOVER - THE "POP"
-   ============================================ */
-
-/* 
-  When a single letter is hovered, it gets a much stronger transform.
-  This overrides the gentle wave effect for just that letter, making it pop.
-  The !important ensures this style wins over the parent-hover effect.
-*/
-.letter:hover {
-    transform: translateY(-20px) scale(1.3) !important;
-    filter: drop-shadow(0 10px 15px rgba(255, 215, 0, 0.6)) !important;
-    z-index: 10;
-    /* Disable the wave animation so it doesn't fight the pop transform */
-    animation: none !important; 
-}
-
-
-/* ============================================
-   KEYFRAME ANIMATIONS
-   ============================================ */
-
-/* Gradient flow animation */
-@keyframes electric-flow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* The gentle wave-up animation for the entire title */
-@keyframes wave-up {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-    100% { transform: translateY(0); }
-}
-
-/* ============================================
-   MOBILE & NON-HOVER DEVICE OPTIMIZATIONS
-   ============================================ */
-
+/* Mobile adjustments */
 @media (max-width: 768px) {
-    h1.animated-title {
-        font-size: 1.8em;
-        letter-spacing: 1px;
+    .container {
+        padding: 50px 15px 15px 60px;
+    }
+    
+    .container::before {
+        background-size: 60px 20px;
+        background-position: 15px 10px;
     }
 }
-
-/* Disable all hover-based effects on devices that can't truly hover (like phones) */
-@media (hover: none) {
-    .animated-title:hover .letter {
-        animation: none;
-    }
-    .letter:hover {
-        transform: none !important;
-        filter: none !important;
-    }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                border-radius: 10px;
+            }
+        }
+        
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;  /* Increased from 20px to 30px */
+    font-size: 2.2em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+    position: relative;
+    z-index: 0;  /* Lower than tabs */
 }
 
-
+h1:hover {
+    color: #667eea;
+    transform: scale(1.01);  /* Reduced from 1.02 to 1.01 */
+}
+        
+        h1:hover {
+            color: #667eea;
+            transform: scale(1.02);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+                margin-bottom: 15px;
+            }
+            
+            h1:hover {
+                transform: none;
+            }
+        }
+        
 .nav-tabs {
     display: flex;
     gap: 10px;
@@ -574,200 +428,6 @@ h1.animated-title {
     box-shadow: 0 10px 20px rgba(33, 150, 243, 0.5);
     filter: brightness(1.1);
 }
-
-
-/* Settings Tab Button Color */
-.tab-button[data-tab="settings"] {
-    background: linear-gradient(135deg, #F5EEF8 0%, #E8DAEF 100%);
-    color: #6C3483;
-    border: 1px solid #D7BDE2;
-}
-.tab-button[data-tab="settings"].active {
-    background: linear-gradient(135deg, #A569BD 0%, #8E44AD 100%);
-    box-shadow: 0 6px 12px rgba(165, 105, 189, 0.3);
-}
-.tab-button[data-tab="settings"].active:hover {
-    transform: translateY(-1px) scale(1.02);
-    box-shadow: 0 10px 20px rgba(165, 105, 189, 0.4);
-    filter: brightness(1.1);
-}
-
-/* ============================================
-   ⚙️ SETTINGS TAB STYLES - UPDATED
-   ============================================ */
-
-.settings-section {
-    margin-bottom: 25px;
-    border-left: 4px solid #9b59b6;
-    padding-bottom: 25px; /* Extra space for internal buttons */
-}
-
-/* Slider labels (Less/More) */
-.slider-label-left,
-.slider-label-right {
-    font-size: 12px;
-    color: #7f8c8d;
-    font-style: italic;
-    user-select: none;
-    white-space: nowrap;
-}
-
-.slider-label-left {
-    margin-right: 10px;
-}
-
-.slider-label-right {
-    margin-left: 10px;
-}
-
-/* Updated slider container to accommodate labels */
-.slider-container {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Reduced gap to make room for labels */
-    margin: 10px 0;
-}
-
-.slider-container input[type="number"] {
-    width: 60px; /* Slightly smaller to make room */
-    text-align: center;
-    flex-shrink: 0;
-    border: 2px solid var(--slider-track-bg);
-    border-radius: 6px;
-    padding: 8px;
-}
-
-/* Buttons inside the sketch box */
-/* Buttons inside the sketch box - LEFT/RIGHT EDGES */
-.settings-buttons-inline {
-    display: flex;
-    justify-content: space-between; /* 🔥 Space between = left/right edges */
-    align-items: center;
-    gap: 15px;
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px dashed #bdc3c7;
-    position: relative;
-    z-index: 2;
-}
-
-.settings-btn-inline {
-    flex: 0 0 auto; /* 🔥 Don't grow, stay at natural size */
-    min-width: 140px;
-    padding: 10px 20px;
-    font-size: 14px;
-    margin: 0; /* 🔥 Remove any default margins */
-}
-
-/* Left button positioning */
-#saveSettingsBtn {
-    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%) !important;
-    color: white;
-    /* No additional positioning needed - flexbox handles it */
-}
-
-/* Right button positioning */
-#resetSettingsBtn {
-    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%) !important;
-    color: white;
-    /* No additional positioning needed - flexbox handles it */
-}
-
-/* Sketch effect compatibility - buttons should stay visible during hover */
-.settings-section:hover .settings-buttons-inline,
-.settings-section:focus-within .settings-buttons-inline {
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 8px;
-    padding: 15px 15px 10px 15px; /* 🔥 More horizontal padding for edge spacing */
-    margin-top: 20px;
-}
-
-.settings-section:hover .settings-btn-inline,
-.settings-section:focus-within .settings-btn-inline {
-    border: none !important;
-    backdrop-filter: none !important;
-}
-
-/* Mobile adjustments */
-@media (max-width: 768px) {
-    .settings-buttons-inline {
-        justify-content: space-between; /* 🔥 Keep left/right even on mobile */
-        flex-direction: row; /* 🔥 Keep horizontal layout */
-        gap: 10px;
-    }
-    
-    .settings-btn-inline {
-        flex: 1; /* 🔥 Equal width on mobile, but still at edges */
-        min-width: unset;
-        max-width: 45%; /* 🔥 Ensure they don't touch in the middle */
-    }
-}
-
-/* Specific button colors */
-#saveSettingsBtn {
-    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%) !important;
-    color: white;
-}
-
-#resetSettingsBtn {
-    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%) !important;
-    color: white;
-}
-
-/* Sketch effect compatibility - buttons should stay visible during hover */
-.settings-section:hover .settings-buttons-inline,
-.settings-section:focus-within .settings-buttons-inline {
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 8px;
-    padding: 15px 10px 10px 10px;
-    margin-top: 20px;
-}
-
-.settings-section:hover .settings-btn-inline,
-.settings-section:focus-within .settings-btn-inline {
-    border: none !important;
-    backdrop-filter: none !important;
-}
-
-/* Mobile adjustments */
-@media (max-width: 768px) {
-    .settings-buttons-inline {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .settings-btn-inline {
-        width: 100%;
-        min-width: unset;
-    }
-    
-    .slider-container {
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-    
-    .slider-label-left,
-    .slider-label-right {
-        font-size: 11px;
-        margin: 0 5px;
-    }
-    
-    .slider-container input[type="number"] {
-        width: 50px;
-    }
-}
-
-/* Remove the old external button group if it exists */
-.settings-buttons {
-    display: none;
-}
-
-/* Hover effect for the reset button */
-#resetSettingsBtn:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 8px 20px rgba(243, 156, 18, 0.3);
-}
-
 /* Fallback hover for unspecified tabs */
 .tab-button:hover:not(.active):not([data-tab]) {
     background: linear-gradient(135deg, #d5d8dc 0%, #bdc3c7 100%);
@@ -3548,60 +3208,6 @@ input[type="range"].disabled-input::-moz-range-thumb {
     background: #95a5a6;
 }
 
-/* -- PERFECTLY ROUND Metallic Gear Slider Thumb -- */
-
-@keyframes spin-gear {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-/* Base reset for the swipe threshold slider thumb */
-#swipeThresholdSlider::-webkit-slider-thumb,
-#swipeThresholdSlider::-moz-range-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    background-color: transparent;
-    border: none;
-    /* Make the thumb slightly larger and easier to interact with */
-    width: 30px; 
-    height: 30px;
-    cursor: grab;
-    transition: transform 0.2s ease, filter 0.2s ease;
-}
-
-/* --- WebKit (Chrome, Safari, Edge) Version --- */
-#swipeThresholdSlider::-webkit-slider-thumb {
-    /*
-      THE KEY FIX IS HERE: preserveAspectRatio='xMidYMid meet' is added to the SVG.
-      This guarantees the gear will always be perfectly round.
-    */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' preserveAspectRatio='xMidYMid meet'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23E0E0E0'/%3E%3Cstop offset='50%25' style='stop-color:%239E9E9E'/%3E%3Cstop offset='100%25' style='stop-color:%23BDBDBD'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath transform='translate(0.5, 0.5)' fill='rgba(0,0,0,0.25)' d='M19.46 12.54a2 2 0 000-2.82l-1.17-1.17a2 2 0 01-.59-1.42V5.5a2 2 0 00-2-2h-1.62a2 2 0 01-1.42-.59L11.53 1.74a2 2 0 00-2.82 0L7.54 2.91a2 2 0 01-1.42.59H4.5a2 2 0 00-2 2v1.62a2 2 0 01-.59 1.42L1.74 11.3a2 2 0 000 2.82l1.17 1.17a2 2 0 01.59 1.42V18.5a2 2 0 002 2h1.62a2 2 0 011.42.59l1.17 1.17a2 2 0 002.82 0l1.17-1.17a2 2 0 011.42-.59H17.5a2 2 0 002-2v-1.62a2 2 0 01.59-1.42l1.17-1.17zM12 16a4 4 0 110-8 4 4 0 010 8z'/%3E%3Cpath fill='url(%23g)' stroke='%23616161' stroke-width='0.5' d='M19.46 12.54a2 2 0 000-2.82l-1.17-1.17a2 2 0 01-.59-1.42V5.5a2 2 0 00-2-2h-1.62a2 2 0 01-1.42-.59L11.53 1.74a2 2 0 00-2.82 0L7.54 2.91a2 2 0 01-1.42.59H4.5a2 2 0 00-2 2v1.62a2 2 0 01-.59 1.42L1.74 11.3a2 2 0 000 2.82l1.17 1.17a2 2 0 01.59 1.42V18.5a2 2 0 002 2h1.62a2 2 0 011.42.59l1.17 1.17a2 2 0 002.82 0l1.17-1.17a2 2 0 011.42-.59H17.5a2 2 0 002-2v-1.62a2 2 0 01.59-1.42l1.17-1.17zM12 16a4 4 0 110-8 4 4 0 010 8z'/%3E%3C/svg%3E");
-    background-size: 100% 100%;
-    /* Recalculate margin-top for the new 30px thumb size on a 6px track */
-    margin-top: -12px;
-}
-
-/* --- Firefox Version --- */
-#swipeThresholdSlider::-moz-range-thumb {
-    /* Same fixed SVG for Firefox */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' preserveAspectRatio='xMidYMid meet'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23E0E0E0'/%3E%3Cstop offset='50%25' style='stop-color:%239E9E9E'/%3E%3Cstop offset='100%25' style='stop-color:%23BDBDBD'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath transform='translate(0.5, 0.5)' fill='rgba(0,0,0,0.25)' d='M19.46 12.54a2 2 0 000-2.82l-1.17-1.17a2 2 0 01-.59-1.42V5.5a2 2 0 00-2-2h-1.62a2 2 0 01-1.42-.59L11.53 1.74a2 2 0 00-2.82 0L7.54 2.91a2 2 0 01-1.42.59H4.5a2 2 0 00-2 2v1.62a2 2 0 01-.59 1.42L1.74 11.3a2 2 0 000 2.82l1.17 1.17a2 2 0 01.59 1.42V18.5a2 2 0 002 2h1.62a2 2 0 011.42.59l1.17 1.17a2 2 0 002.82 0l1.17-1.17a2 2 0 011.42-.59H17.5a2 2 0 002-2v-1.62a2 2 0 01.59-1.42l1.17-1.17zM12 16a4 4 0 110-8 4 4 0 010 8z'/%3E%3Cpath fill='url(%23g)' stroke='%23616161' stroke-width='0.5' d='M19.46 12.54a2 2 0 000-2.82l-1.17-1.17a2 2 0 01-.59-1.42V5.5a2 2 0 00-2-2h-1.62a2 2 0 01-1.42-.59L11.53 1.74a2 2 0 00-2.82 0L7.54 2.91a2 2 0 01-1.42.59H4.5a2 2 0 00-2 2v1.62a2 2 0 01-.59 1.42L1.74 11.3a2 2 0 000 2.82l1.17 1.17a2 2 0 01.59 1.42V18.5a2 2 0 002 2h1.62a2 2 0 011.42.59l1.17 1.17a2 2 0 002.82 0l1.17-1.17a2 2 0 011.42-.59H17.5a2 2 0 002-2v-1.62a2 2 0 01.59-1.42l1.17-1.17zM12 16a4 4 0 110-8 4 4 0 010 8z'/%3E%3C/svg%3E");
-    background-size: 100% 100%;
-}
-
-/* --- Hover & Active States --- */
-#swipeThresholdSlider:hover::-webkit-slider-thumb,
-#swipeThresholdSlider:hover::-moz-range-thumb {
-    transform: scale(1.15);
-    filter: brightness(1.1);
-}
-
-#swipeThresholdSlider:active::-webkit-slider-thumb,
-#swipeThresholdSlider:active::-moz-range-thumb {
-    cursor: grabbing;
-    transform: scale(1.1);
-    animation: spin-gear 1.5s linear infinite;
-}
-
 
         .calculated-value {
             background-color: #f8f9fa;
@@ -4660,26 +4266,17 @@ input[type="range"].disabled-input::-moz-range-thumb {
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.6s ease; /* Slower, more thoughtful transition */
+    transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-    transform-origin: center; /* Important for clean rotation */
 }
 
 .help-button:hover {
-    transform: translateY(-2px) scale(1.1) rotate(-15deg); /* Tilt to 11 o'clock */
+    transform: translateY(-2px) scale(1.1);
     box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
     background: linear-gradient(135deg, #2980b9 0%, #21618c 100%);
-    animation: curious-tilt 2s ease-in-out infinite; /* Gentle back-and-forth */
-}
-
-/* head-tilt animation */
-@keyframes curious-tilt {
-    0% { transform: translateY(-2px) scale(1.1) rotate(-15deg); } /* 11 o'clock */
-    50% { transform: translateY(-2px) scale(1.1) rotate(15deg); }  /* 1 o'clock */
-    100% { transform: translateY(-2px) scale(1.1) rotate(-15deg); } /* Back to 11 o'clock */
 }
 
 /* Help Modal Content */
