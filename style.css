@@ -42,9 +42,105 @@ body {
         }
         
 
+
+
 .no-tear-shadow {
     box-shadow: none !important;
 }
+
+
+/* Enhanced color-coded dropdown options with better contrast */
+
+/* GREEN ZONE - Perfect/Good */
+#doms option[value="1"], 
+#tendons option[value="1"], 
+#skin option[value="1"] { 
+    background-color: #d4edda !important; 
+    color: #155724 !important;
+    font-weight: 600;
+}
+
+/* LIGHT BLUE - Noticeable but OK */
+#doms option[value="2"], 
+#tendons option[value="2"], 
+#skin option[value="1.5"] { 
+    background-color: #cce7ff !important; 
+    color: #004085 !important;
+    font-weight: 500;
+}
+
+/* YELLOW - Caution Zone */
+#doms option[value="3"], 
+#tendons option[value="3"], 
+#skin option[value="3"] { 
+    background-color: #fff3cd !important; 
+    color: #856404 !important;
+    font-weight: 500;
+}
+
+/* ORANGE - Warning Zone */
+#doms option[value="4"], 
+#tendons option[value="4"], 
+#skin option[value="4"] { 
+    background-color: #ffeaa7 !important; 
+    color: #8b4513 !important;
+    font-weight: 600;
+}
+
+/* LIGHT RED - High Risk */
+#doms option[value="5"], 
+#tendons option[value="5"], 
+#skin option[value="5"] { 
+    background-color: #ffcccb !important; 
+    color: #721c24 !important;
+    font-weight: 600;
+}
+
+/* MEDIUM RED - Very High Risk */
+#doms option[value="6"], 
+#tendons option[value="6"], 
+#skin option[value="6"] { 
+    background-color: #ff9999 !important; 
+    color: #5a1a1a !important;
+    font-weight: bold;
+}
+
+/* DARK RED - Danger Zone */
+#doms option[value="7"], 
+#skin option[value="7"] { 
+    background-color: #ff6b6b !important; 
+    color: #2d0a0a !important;
+    font-weight: bold;
+}
+
+/* Default option styling */
+#doms option[value=""], 
+#tendons option[value=""], 
+#skin option[value=""] { 
+    background-color: #f8f9fa !important; 
+    color: #6c757d !important;
+    font-style: italic;
+}
+
+/* Enhance the select elements themselves */
+#doms, #tendons, #skin {
+    transition: all 0.3s ease;
+}
+
+/* Add visual feedback when selecting risky options */
+#doms:focus, #tendons:focus, #skin:focus {
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+    #doms option, #tendons option, #skin option {
+        padding: 12px 8px;
+        font-size: 16px; /* Prevent zoom on iOS */
+        min-height: 44px; /* Touch target size */
+    }
+}
+
 
 .container {
     max-width: 1400px;
@@ -4206,13 +4302,23 @@ input[type="range"].disabled-input::-moz-range-thumb {
     font-weight: 600;
 }
 
+/* Fix help button overlap on mobile */
 @media (max-width: 768px) {
     .help-button {
-        right: 10px;
-        width: 28px;
-        height: 28px;
-        font-size: 16px;
+        top: 5px;
+        right: 5px;
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
+        z-index: 20; /* Higher than tabs */
     }
+    
+    /* Add extra top padding to title to prevent overlap */
+    h1 {
+        padding-top: 35px;
+        margin-bottom: 20px;
+    }
+}
     
     .help-modal-content {
         max-width: 95%;
