@@ -82,6 +82,11 @@ body {
             }
         }
         
+
+.no-tear-shadow {
+    box-shadow: none !important;
+}
+
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -405,6 +410,53 @@ h1:hover {
                 margin-bottom: 20px;
             }
         }
+
+/* ============================================
+   ✒️ HANDWRITTEN FONT CONSISTENCY - HISTORY TAB
+   ============================================ */
+
+/* 1. Apply the handwritten font to the entire log entry and the week display */
+.log-entry,
+.current-week {
+    font-family: 'Kalam', cursive;
+    font-weight: 400;
+}
+
+/* 2. Adjust font size within the log for better readability with the new font */
+.log-metric,
+.log-recommendation,
+.log-notes {
+    font-size: 15px; /* A little bigger to suit the Kalam font */
+    line-height: 1.5;
+}
+
+/* 3. Make the date and recommendation type bold for emphasis */
+.log-date,
+.log-recommendation strong {
+    font-weight: 700; /* Use the bold version of Kalam */
+}
+
+/* 4. Remove unwanted italics from the Backup & Restore header */
+/* We target both the default and the hover state to be safe */
+.backup-section h3,
+.backup-section:hover h3,
+.backup-section:focus-within h3 {
+    font-style: normal !important; /* Use !important to ensure it overrides the sketch effect */
+    transform: rotate(0deg) !important; /* Also reset the rotation */
+}
+
+/* 5. Remove italics from the History Nav buttons and week display */
+.history-nav .nav-btn,
+.history-nav .current-week {
+    font-style: normal;
+}
+/* Ensure hover state is also not italic */
+.history-nav:hover .nav-btn,
+.history-nav:focus-within .nav-btn,
+.history-nav:hover .current-week,
+.history-nav:focus-within .current-week {
+    font-style: normal;
+}
 
 /* ============================================
    📜 DA VINCI SKETCH EFFECT - HISTORY TAB ELEMENTS
@@ -900,15 +952,16 @@ h1:hover {
     transition: all 0.2s ease;
 }
 
-/* INSTANT HOVER 
+/* In your CSS */
 .log-entry:hover,
 .log-entry:focus-within {
-    filter: none;
-    background: white;
-    background-image: none;
-    border: 2px solid #ecf0f1; /* Same size border */
+    filter: none; /* Keep this to reveal color */
+    background: white; /* Keep this */
+    background-image: none; /* Keep this */
+    border-color: #ecf0f1;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
-    /* NO TRANSFORM PROPERTY - prevents movement */
+    /* REMOVE the transform property to prevent movement and resizing */
+    /* transform: none !important; */
 }
 
 .log-entry:hover::before,
@@ -1810,7 +1863,7 @@ h1:hover {
    ============================================ */
 
 /* Training History - Default sketchy graphite state */
-.input-section:nth-child(3) {
+.training-history-section {
     background: #faf9f7; /* Aged paper color */
     border: none;
     border-radius: 15px;
@@ -1866,7 +1919,7 @@ h1:hover {
 }
 
 /* Clean sketch border */
-.input-section:nth-child(3)::before {
+.training-history-section::before{
     content: '';
     position: absolute;
     top: 8px;
@@ -1891,7 +1944,7 @@ h1:hover {
 }
 
 /* Construction lines overlay */
-.input-section:nth-child(3)::after {
+.training-history-section::after {
     content: '';
     position: absolute;
     top: 0;
@@ -1927,9 +1980,9 @@ h1:hover {
 }
 
 /* Sketch-style inputs */
-.input-section:nth-child(3) input,
-.input-section:nth-child(3) select,
-.input-section:nth-child(3) textarea {
+.training-history-section input,
+.training-history-section select,
+.training-history-section textarea {
     background: rgba(255, 255, 255, 0.3);
     border: 2px dashed #7f8c8d;  /* Changed from 1px to 2px */
     border-radius: 4px;
@@ -1942,7 +1995,7 @@ h1:hover {
 }
 
 /* Sketch-style labels */
-.input-section:nth-child(3) label {
+.training-history-section label {
     color: #34495e;
     font-weight: 500;
     position: relative;
@@ -1954,7 +2007,7 @@ h1:hover {
 }
 
 /* Sketch h3 title */
-.input-section:nth-child(3) h3 {
+.training-history-section h3 {
     color: #2c3e50;
     position: relative;
     z-index: 2;
@@ -1967,7 +2020,7 @@ h1:hover {
 }
 
 /* Sketch checkboxes special styling */
-.input-section:nth-child(3) .checkbox-group {
+.training-history-section .checkbox-group {
     background: rgba(255, 255, 255, 0.2);
     border: 1px dashed #95a5a6;
     border-radius: 4px;
@@ -1975,20 +2028,20 @@ h1:hover {
     backdrop-filter: blur(1px);
 }
 
-.input-section:nth-child(3) .checkbox-group label {
+.training-history-section .checkbox-group label {
     transform: rotate(-0.1deg);
     margin-bottom: 4px;
 }
 
 /* Sketch sliders */
-.input-section:nth-child(3) input[type="range"] {
+.training-history-section input[type="range"] {
     background: rgba(189, 195, 199, 0.6);
     border: 1px dashed #7f8c8d;
     opacity: 0.9;
     border-radius: 2px;
 }
 
-.input-section:nth-child(3) input[type="range"]::-webkit-slider-thumb {
+.training-history-section input[type="range"]::-webkit-slider-thumb {
     background: #34495e;
     border: 2px solid #2c3e50;
     border-radius: 50%;
@@ -1996,7 +2049,7 @@ h1:hover {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-.input-section:nth-child(3) input[type="range"]::-moz-range-thumb {
+.training-history-section input[type="range"]::-moz-range-thumb {
     background: #34495e;
     border: 2px solid #2c3e50;
     border-radius: 50%;
@@ -2373,8 +2426,8 @@ h1:hover {
    ============================================ */
 
 /* When hovering - bring the sketch to life! */
-.input-section:nth-child(3):hover,
-.input-section:nth-child(3):focus-within {
+.training-history-section:hover,
+.training-history-section:focus-within {
     /* Remove grayscale filter - reveal full color */
     filter: none;
     
@@ -2391,24 +2444,24 @@ h1:hover {
 }
 
 /* Hide sketch overlays on hover */
-.input-section:nth-child(3):hover::before,
-.input-section:nth-child(3):focus-within::before {
+.training-history-section:hover::before,
+.training-history-section:focus-within::before {
     opacity: 0;
     transform: scale(0.98);
 }
 
-.input-section:nth-child(3):hover::after,
-.input-section:nth-child(3):focus-within::after {
+.training-history-section:hover::after,
+.training-history-section:focus-within::after {
     opacity: 0;
 }
 
 /* Transform inputs to modern style */
-.input-section:nth-child(3):hover input,
-.input-section:nth-child(3):hover select,
-.input-section:nth-child(3):hover textarea,
-.input-section:nth-child(3):focus-within input,
-.input-section:nth-child(3):focus-within select,
-.input-section:nth-child(3):focus-within textarea {
+.training-history-section:hover input,
+.training-history-section:hover select,
+.training-history-section:hover textarea,
+.training-history-section:focus-within input,
+.training-history-section:focus-within select,
+.training-history-section:focus-within textarea {
     background: white;
     border: 2px solid #ecf0f1;  /* Same 2px size */
     border-style: solid;
@@ -2419,8 +2472,8 @@ h1:hover {
 }
 
 /* Transform labels */
-.input-section:nth-child(3):hover label,
-.input-section:nth-child(3):focus-within label {
+.training-history-section:hover label,
+.training-history-section:focus-within label {
     color: #34495e;
     transform: rotate(0deg);
     font-style: italic;
@@ -2430,8 +2483,8 @@ h1:hover {
 }
 
 /* Transform title */
-.input-section:nth-child(3):hover h3,
-.input-section:nth-child(3):focus-within h3 {
+.training-history-section:hover h3,
+.training-history-section:focus-within h3 {
     color: #2c3e50;
     transform: rotate(0deg);
     font-style: italic;
@@ -2447,8 +2500,8 @@ h1:hover {
 }
 
 /* Transform checkbox group */
-.input-section:nth-child(3):hover .checkbox-group,
-.input-section:nth-child(3):focus-within .checkbox-group {
+.training-history-section:hover .checkbox-group,
+.training-history-section:focus-within .checkbox-group {
     background: #f8f9fa;
     border: 2px solid #ecf0f1;
     border-style: solid;
@@ -2456,15 +2509,15 @@ h1:hover {
     backdrop-filter: none;
 }
 
-.input-section:nth-child(3):hover .checkbox-group label,
-.input-section:nth-child(3):focus-within .checkbox-group label {
+.training-history-section:hover .checkbox-group label,
+.training-history-section:focus-within .checkbox-group label {
     transform: rotate(0deg);
     margin-bottom: 0;
 }
 
 /* Transform sliders */
-.input-section:nth-child(3):hover input[type="range"],
-.input-section:nth-child(3):focus-within input[type="range"] {
+.training-history-section:hover input[type="range"],
+.training-history-section:focus-within input[type="range"] {
     background: var(--slider-track-bg, #d5d8dc);
     border: 1px solid #bdc3c7;
     border-style: solid;
@@ -2472,16 +2525,16 @@ h1:hover {
     opacity: 1;
 }
 
-.input-section:nth-child(3):hover input[type="range"]::-webkit-slider-thumb,
-.input-section:nth-child(3):focus-within input[type="range"]::-webkit-slider-thumb {
+.training-history-section:hover input[type="range"]::-webkit-slider-thumb,
+.training-history-section:focus-within input[type="range"]::-webkit-slider-thumb {
     background: var(--slider-thumb-bg, #fa3f08);
     border-style: solid;
     opacity: 1;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-.input-section:nth-child(3):hover input[type="range"]::-moz-range-thumb,
-.input-section:nth-child(3):focus-within input[type="range"]::-moz-range-thumb {
+.training-history-section:hover input[type="range"]::-moz-range-thumb,
+.training-history-section:focus-within input[type="range"]::-moz-range-thumb {
     background: var(--slider-thumb-bg, #ff4a18);
     border-style: solid;
     opacity: 1;
@@ -2493,7 +2546,7 @@ h1:hover {
    ============================================ */
 
 /* Very subtle "pencil drawing" animation - different timing from others */
-.input-section:nth-child(3)::before {
+.training-history-section::before{
     animation: gentle-sketch-3 22s ease-in-out infinite;
 }
 
@@ -2513,7 +2566,7 @@ h1:hover {
 }
 
 /* Pause animation on hover */
-.input-section:nth-child(3):hover::before {
+.training-history-section:hover::before {
     animation-play-state: paused;
 }
 
@@ -2522,7 +2575,7 @@ h1:hover {
    ============================================ */
 
 @media (max-width: 768px) {
-    .input-section:nth-child(3) {
+    .training-history-section {
         /* Lighter crosshatch on mobile */
         background-image: 
             repeating-linear-gradient(
@@ -2545,7 +2598,7 @@ h1:hover {
             );
     }
     
-    .input-section:nth-child(3)::after {
+    .training-history-section::after {
         /* Simpler construction lines on mobile */
         background-image:
             repeating-linear-gradient(
@@ -2850,43 +2903,95 @@ input[type="range"] {
     border: 1px solid #bdc3c7;
 }
 
-/* 🧗 Individual Climbing Hold Colors */
+/* ============================================
+   ✨ THE DEFINITIVE MODERN SLIDER
+   ============================================ */
 
+/* 1. Base Slider Styles */
 input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
     width: 100%;
-    height: 12px;
-    background: #d5d8dc;
-    border-radius: 6px;
-    outline: none;
+    height: 24px;
+    background: transparent; /* VERY IMPORTANT: The JS will handle the track background */
     cursor: pointer;
-    border: 1px solid #bdc3c7;
+    outline: none;
+    /* Static custom properties for the track's look */
+    --track-height: 6px;
+    --track-radius: 3px;
+    --track-empty-bg: #d5d8dc;   /* Light gray for the empty part */
+    --track-fill-bg: #babec2;    /* Muted gray for the filled part */
+    /* Dynamic property for the thumb color */
+    --thumb-bg: #3498db;
 }
 
-/* Webkit Thumb */
+/* --- WebKit (Chrome, Edge, Safari) --- */
+
+input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: var(--track-height);
+    /* The JS will set the background to a linear-gradient */
+    border-radius: var(--track-radius);
+}
+
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 24px;
-    height: 24px;
-    background: #ffffff;
-    border: 3px solid #333;
+    margin-top: -7px; /* (track_height - thumb_height) / 2 */
+    height: 20px;
+    width: 20px;
+    background: var(--thumb-bg); /* Uses the dynamic color */
     border-radius: 50%;
-    cursor: grab;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s ease;
+    border: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+    transition: transform 0.1s ease-out;
 }
 
-/* Firefox Thumb */
+input[type="range"]:active::-webkit-slider-thumb {
+    transform: scale(1.1);
+}
+
+
+/* --- Firefox --- */
+
+input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: var(--track-height);
+    background: var(--track-empty-bg); /* The static empty color */
+    border-radius: var(--track-radius);
+    border: none;
+}
+
+input[type="range"]::-moz-range-progress {
+    height: var(--track-height);
+    background: var(--track-fill-bg); /* The static muted fill color */
+    border-radius: var(--track-radius);
+}
+
 input[type="range"]::-moz-range-thumb {
-    width: 24px;
-    height: 24px;
-    background: #ffffff;
-    border: 3px solid #333;
+    height: 20px;
+    width: 20px;
+    background: var(--thumb-bg); /* Uses the dynamic color */
     border-radius: 50%;
-    cursor: grab;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    border: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+    transition: transform 0.1s ease-out;
+}
+
+input[type="range"]:active::-moz-range-thumb {
+    transform: scale(1.1);
+}
+
+/* Prevent parent hover effects from breaking the slider */
+.input-section:hover input[type="range"] {
+    background: transparent !important;
+    border: none !important;
+}
+
+/* Override Da Vinci hover effects for sliders inside those sections */
+.input-section:hover input[type="range"] {
+    background: transparent; /* Ensure no background is applied on parent hover */
+    border: none;
 }
 
 /* Individual Hold Colors for Thumbs */
@@ -3481,12 +3586,45 @@ input[type="range"].disabled-input::-moz-range-thumb {
             }
         }
         
-        .export-section {
-            text-align: center;
-            margin-top: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #ecf0f1;
-        }
+.export-section {
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.export-buttons-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.export-btn-left {
+    margin-left: 0;  /* Align to far left */
+}
+
+.export-btn-right {
+    margin-right: 0;  /* Align to far right */
+}
+
+/* Ensure buttons are same size */
+.export-buttons-row .export-btn {
+    flex: 0 0 auto;
+    min-width: 140px;
+    margin: 0;  /* Remove default margins */
+}
+
+@media (max-width: 768px) {
+    .export-buttons-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .export-buttons-row .export-btn {
+        width: 100%;
+        min-width: unset;
+    }
+}
         
         @media (max-width: 768px) {
             .export-section {
@@ -3674,8 +3812,27 @@ input[type="range"].disabled-input::-moz-range-thumb {
     font-size: 1.2em;
 }
 
+/* 🔥 ADD THIS NEW LAYOUT CODE: */
+.backup-input-row {
+    margin-bottom: 15px;
+}
+
+.backup-buttons-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.backup-buttons-row .export-btn {
+    flex: 0 0 auto;
+    min-width: 140px;
+    margin: 0;
+}
+
 /* Backup input field enhancements */
 .backup-input {
+    width: 100%;  /* Add this line */
     flex-grow: 1;
     min-width: 200px;
     padding: 12px 15px;
@@ -3685,6 +3842,18 @@ input[type="range"].disabled-input::-moz-range-thumb {
     font-size: 12px;
     background-color: #ffffff;
     transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .backup-buttons-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .backup-buttons-row .export-btn {
+        width: 100%;
+        min-width: unset;
+    }
 }
 
 .backup-input:hover {
@@ -5395,7 +5564,7 @@ div.modal-overlay.welcome-modal div.modal-content::after {
     justify-content: center;
     height: 100%;
     width: 100%;
-    color: #000000;  /* Lighter text */
+    color: #ffffff;  /* Lighter text */
     font-style: italic;
     text-align: center;
     padding: 10px;
@@ -5847,7 +6016,7 @@ div.modal-overlay.welcome-modal div.modal-content::after {
                     </div>
                 </div>
 
-                <div class="input-section">
+                <div class="input-section training-history-section">
                     <h3>Training History</h3>
                     <div class="input-group slider-group">
                         <label for="daysSince">Days Since Last Session (0-14)</label>
@@ -5915,21 +6084,7 @@ div.modal-overlay.welcome-modal div.modal-content::after {
                 <div class="metrics-grid" id="metricsGrid"></div>
             </div>
 
-            <div class="personalization-section">
-                <h3>Personalization Factors (Historical)</h3>
-                <div class="personalization-grid">
-                    <div class="personalization-card">
-                        <div>Sleep Adaptation</div>
-                        <div class="personalization-value" id="sleepFactor">1.0x</div>
-                        <div>Based on your average sleep patterns</div>
-                    </div>
-                    <div class="personalization-card">
-                        <div>Injury Risk</div>
-                        <div class="personalization-value" id="injuryRisk">Low</div>
-                        <div>Based on your tendon and muscle history</div>
-                    </div>
-                </div>
-            </div>
+
         </div>
 
         <div id="history" class="tab-content" role="tabpanel">
@@ -5939,19 +6094,27 @@ div.modal-overlay.welcome-modal div.modal-content::after {
                 <button class="nav-btn" id="nextWeekBtn">Next ▶</button>
             </div>
 
-            <div class="export-section">
-                <button class="export-btn" id="exportCsvBtn">Export to CSV</button>
-                <button class="export-btn" id="clearAllDataBtn" style="background: #e74c3c;">Clear All Data</button>
-            </div>
 
-            <div class="backup-section">
-                <h3>Data Backup & Restore</h3>
-                <div class="backup-controls">
-                    <input type="text" class="backup-input" id="backupCode" placeholder="Backup code">
-                    <button class="export-btn" id="exportBackupBtn">Generate Backup</button>
-                    <button class="export-btn" id="importBackupBtn">Restore Backup</button>
-                </div>
-            </div>
+
+<div id="historyList" style="padding: 20px 0;"></div>
+
+<div class="export-section">
+    <div class="export-buttons-row">
+        <button class="export-btn export-btn-left" id="exportCsvBtn">Export to CSV</button>
+        <button class="export-btn export-btn-right" id="clearAllDataBtn" style="background: #e74c3c;">Clear All Data</button>
+    </div>
+</div>
+
+<div class="backup-section">
+    <h3>Data Backup & Restore</h3>
+    <div class="backup-input-row">
+        <input type="text" class="backup-input" id="backupCode" placeholder="Backup code">
+    </div>
+    <div class="backup-buttons-row">
+        <button class="export-btn export-btn-left" id="exportBackupBtn">Generate Backup</button>
+        <button class="export-btn export-btn-right" id="importBackupBtn">Restore Backup</button>
+    </div>
+</div>
 
             <div id="historyList" style="padding: 20px 0;"></div>
         </div>
@@ -5968,7 +6131,21 @@ div.modal-overlay.welcome-modal div.modal-content::after {
                     </div>
                 </div>
             </div>
-
+            <div class="personalization-section">
+                <h3>Personalization Factors (Historical)</h3>
+                <div class="personalization-grid">
+                    <div class="personalization-card">
+                        <div>Sleep Adaptation</div>
+                        <div class="personalization-value" id="sleepFactor">1.0x</div>
+                        <div>Based on your average sleep patterns</div>
+                    </div>
+                    <div class="personalization-card">
+                        <div>Injury Risk</div>
+                        <div class="personalization-value" id="injuryRisk">Low</div>
+                        <div>Based on your tendon and muscle history</div>
+                    </div>
+                </div>
+            </div>
             <div class="swipe-indicator">Swipe left/right to navigate between tabs</div>
         </div>
 
@@ -6621,83 +6798,114 @@ div.modal-overlay.welcome-modal div.modal-content::after {
         }
     }
     
-    class FluidTearEffect {
-constructor() {
-    this.canvas = null;
-    this.ctx = null;
-    this.screenshot = null;
-    this.tearPoints = [];
-    this.animationId = null;
-    this.startTime = 0;
-    this.dataCleared = false;
-    
-    // 🚀 SPEED CONTROLS
-    this.SPEED_SETTINGS = {
-        // Duration in milliseconds
-        slow: 4000,      // 4 seconds
-        normal: 2000,    // 2 seconds  
-        fast: 1000,      // 1 second
-        lightning: 500   // 0.5 seconds
-    };
-    
-    this.duration = this.SPEED_SETTINGS.fast; // ← CHANGE THIS
-    this.isActive = false;
-}
-
-    async initiateTear() {
-        if (this.isActive) return;
-        this.isActive = true;
-
-        try {
-const screenshotCanvas = await html2canvas(document.documentElement, {
-    useCORS: true,
-    allowTaint: true,
-    scale: window.devicePixelRatio || 1,
-    width: window.innerWidth,
-    height: window.innerHeight,
-    x: window.scrollX,                 // Start from current scroll position
-    y: window.scrollY,                 // Start from current scroll position
-    logging: false,
-    backgroundColor: null,             // Transparent background
-    removeContainer: true              // Don't include html2canvas container
-});
-
-            // Create full-screen canvas overlay
-            this.createTearCanvas();
-            this.screenshot = screenshotCanvas;
+    /* ============================================
+   ✨ UPGRADED FLUID TEAR EFFECT
+   ============================================ */
+/* ============================================
+   ✨ REVEAL TEAR EFFECT - FULLY CUSTOMIZABLE
+   ============================================ */
+class FluidTearEffect {
+    constructor() {
+        // --- 🖌️ YOUR CUSTOMIZATION CONTROLS ---
+        this.TEAR_CONTROLS = {
+            // How long the animation takes in milliseconds (e.g., 1200 = 1.2s)
+            duration: 1200,
             
-            // Initialize tear physics
-            this.initializeTearPoints();
+            // 'left-to-right' or 'right-to-left'
+            direction: 'left-to-right',
             
-            // Start fluid animation
-            this.startTime = performance.now();
-            this.animate();
+            // Where the tear happens vertically (0.1 = top, 0.5 = middle, 0.9 = bottom)
+            verticalPosition: 0.5,
+            
+            // How wavy and chaotic the tear line is (0 = straight, 50 = very wavy)
+            waviness: 40,
+            
+            // How far the two halves fly apart
+            separation: 250
+        };
+        // ------------------------------------
 
-        } catch (error) {
-            console.error('Tear effect failed:', error);
-            this.cleanup();
-        }
+        this.canvas = null;
+        this.ctx = null;
+        this.screenshot = null;
+        this.tearPoints = [];
+        this.animationId = null;
+        this.startTime = 0;
+        this.dataCleared = false;
+        this.isActive = false;
+
+        // Apply settings from controls
+        this.duration = this.TEAR_CONTROLS.duration;
     }
 
+// ✨ ADD THIS ENTIRE NEW FUNCTION INSIDE THE CLASS
+togglePageShadows(enable) {
+    const shadowSelectors = [
+        '.container', '.input-section', '.recommendation-panel', '.button-group',
+        '.personalization-section', '.log-entry', '.modal-content', '.chart-container'
+    ];
+    
+    const elements = document.querySelectorAll(shadowSelectors.join(', '));
+    
+    elements.forEach(el => {
+        if (enable) {
+            el.classList.remove('no-tear-shadow');
+        } else {
+            el.classList.add('no-tear-shadow');
+        }
+    });
+}
+
+// ✨ REPLACE your existing initiateTear function with this one
+async initiateTear() {
+    if (this.isActive) return;
+    this.isActive = true;
+    this.dataCleared = false;
+
+    // Use a try...finally block to ENSURE shadows are always restored
+    try {
+        // 1. Turn OFF all shadows on the live page
+        this.togglePageShadows(false);
+
+        // 2. Take the "flat" screenshot
+        const screenshotCanvas = await html2canvas(document.documentElement, {
+            useCORS: true, allowTaint: true, scale: window.devicePixelRatio || 1,
+            width: window.innerWidth, height: window.innerHeight,
+            x: window.scrollX, y: window.scrollY,
+            logging: false, 
+            backgroundColor: '#fffacd', // Keep our solid background
+            removeContainer: true
+        });
+
+        // 3. Prepare the animation canvas and points
+        this.createTearCanvas();
+        this.screenshot = screenshotCanvas;
+        this.initializeTearPoints();
+        
+        // 4. Start the animation
+        this.startTime = performance.now();
+        this.animate();
+
+    } catch (error) {
+        console.error('Tear effect failed:', error);
+        this.cleanup(); // Clean up on error
+    } finally {
+        // 5. ALWAYS turn the shadows back ON for the live page
+        this.togglePageShadows(true);
+    }
+}
+
     createTearCanvas() {
-        // Remove existing canvas
         const existing = document.getElementById('tearCanvas');
         if (existing) existing.remove();
 
-        // Create new canvas
         this.canvas = document.createElement('canvas');
         this.canvas.id = 'tearCanvas';
         this.canvas.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            pointer-events: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 9999; pointer-events: none;
         `;
         
-        // Set canvas size
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
         
@@ -6705,353 +6913,150 @@ const screenshotCanvas = await html2canvas(document.documentElement, {
         document.body.appendChild(this.canvas);
     }
 
-initializeTearPoints() {
-    this.tearPoints = [];
-    
-    // 🎯 EDGE-TO-EDGE TEAR CONTROLS
-    const TEAR_SETTINGS = {
-        // Direction: 'left-to-right' or 'right-to-left'
-        direction: 'left-to-right',  // Change this to control direction
+    initializeTearPoints() {
+        this.tearPoints = [];
+        const { direction, verticalPosition, waviness } = this.TEAR_CONTROLS;
+        const steps = 150;
         
-        // Vertical position (0-1, where tear crosses screen)
-        verticalPosition: 0.4,       // 0 = top, 1 = bottom
-        
-        // Angle variation (-45 to 45 degrees from horizontal)
-        angleVariation: -5,         // Negative = upward angle, positive = downward
-        
-        // Wave effects
-        waviness: 50,               // How wavy the tear is (0-50)
-        chaos: 25                  // Random variation (0-30)
-    };
-    
-    const steps = 300; // More steps for smoother edge-to-edge
-    
-    for (let i = 0; i <= steps; i++) {
-        const progress = i / steps;
-        
-        // Calculate base line from edge to edge
-        let baseX, baseY;
-        
-        if (TEAR_SETTINGS.direction === 'left-to-right') {
-            baseX = progress * this.canvas.width;
-        } else {
-            baseX = (1 - progress) * this.canvas.width;
-        }
-        
-        // Base Y with angle variation
-        const angleRad = (TEAR_SETTINGS.angleVariation * Math.PI) / 180;
-        const angleOffset = Math.tan(angleRad) * (baseX - this.canvas.width * 0.5);
-        baseY = TEAR_SETTINGS.verticalPosition * this.canvas.height + angleOffset;
-        
-        // Add organic randomness (much smaller)
-        const waveAmplitude = TEAR_SETTINGS.waviness;
-        const randomOffset = (Math.random() - 0.5) * TEAR_SETTINGS.chaos;
-        const noiseX = Math.sin(progress * Math.PI * 6) * (waveAmplitude * 0.3) + randomOffset * 0.5;
-        const noiseY = Math.cos(progress * Math.PI * 4) * waveAmplitude + randomOffset;
-        
-        this.tearPoints.push({
-            x: baseX + noiseX,
-            y: baseY + noiseY,
-            originalX: baseX + noiseX,
-            originalY: baseY + noiseY,
-            velocity: 0,
-            acceleration: 0
-        });
-    }
-}
+        for (let i = 0; i <= steps; i++) {
+            let progress = i / steps;
+            let x;
 
-animate() {
-    const currentTime = performance.now();
-    const elapsed = currentTime - this.startTime;
-    const progress = Math.min(elapsed / this.duration, 1);
-    
-    // Clear canvas
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    
-    // Draw screenshot as base layer
-    if (this.screenshot) {
-        this.ctx.drawImage(this.screenshot, 0, 0, this.canvas.width, this.canvas.height);
-    }
-
-    // Calculate current tear progress with easing
-    const tearProgress = this.easeInOutCubic(progress);
-    
-    // Create clipping mask for torn area
-    this.ctx.save();
-    this.ctx.globalCompositeOperation = 'destination-out';
-    
-    // Draw the torn area (this removes the screenshot)
-    this.drawProgressiveTear(tearProgress);
-    
-    this.ctx.restore();
-
-    // Add paper debris effect
-    this.drawPaperDebris(tearProgress);
-
-    // Add torn edge shadows
-    this.drawTornEdgeShadows(tearProgress);
-
-    // Clear form data partway through
-    if (progress > 0.4 && !this.dataCleared) {
-        this.dataCleared = true;
-        // This reveals the cleared form underneath
-        setTimeout(() => {
-            if (window.app) {
-                window.app.clearCurrentEntry(true);
-                showToast('Data cleared');
-            }
-        }, 100);
-    }
-
-    // Continue animation or cleanup
-    if (progress < 1) {
-        this.animationId = requestAnimationFrame(() => this.animate());
-    } else {
-        this.cleanup();
-    }
-}
-
-drawProgressiveTear(progress) {
-    const activePoints = Math.floor(progress * this.tearPoints.length);
-    if (activePoints < 2) return;
-
-    this.ctx.beginPath();
-    
-    // Start from the screen edge
-    const firstPoint = this.tearPoints[0];
-    const lastActivePoint = this.tearPoints[Math.min(activePoints - 1, this.tearPoints.length - 1)];
-    
-    // Create a shape that removes everything above/below the tear line
-    if (firstPoint.x < this.canvas.width / 2) {
-        // Left-to-right tear: remove everything above the line
-        this.ctx.moveTo(-50, -50);
-        this.ctx.lineTo(this.canvas.width + 50, -50);
-        this.ctx.lineTo(this.canvas.width + 50, lastActivePoint.y + 100);
-    } else {
-        // Right-to-left tear: remove everything above the line  
-        this.ctx.moveTo(-50, -50);
-        this.ctx.lineTo(this.canvas.width + 50, -50);
-        this.ctx.lineTo(this.canvas.width + 50, lastActivePoint.y + 100);
-    }
-    
-    // Draw smooth curve along tear points (in reverse for proper masking)
-    for (let i = activePoints - 1; i >= 0; i--) {
-        const point = this.tearPoints[i];
-        if (i === activePoints - 1) {
-            this.ctx.lineTo(point.x, point.y);
-        } else if (i > 0) {
-            const prevPoint = this.tearPoints[i - 1];
-            const controlX = (point.x + prevPoint.x) / 2;
-            const controlY = (point.y + prevPoint.y) / 2;
-            this.ctx.quadraticCurveTo(point.x, point.y, controlX, controlY);
-        } else {
-            this.ctx.lineTo(point.x, point.y);
-        }
-    }
-    
-    // Close the shape
-    this.ctx.lineTo(-50, firstPoint.y + 100);
-    this.ctx.lineTo(-50, -50);
-    this.ctx.closePath();
-    
-    this.ctx.fill();
-}
-
-    updateTearPhysics(progress) {
-        // Add subtle movement to tear points for organic feel
-        this.tearPoints.forEach((point, index) => {
-            const timeOffset = index * 0.1;
-            const waveTime = (progress * 10) + timeOffset;
-            
-            // Micro-oscillations
-            point.x = point.originalX + Math.sin(waveTime * 2) * 2;
-            point.y = point.originalY + Math.cos(waveTime * 1.5) * 1.5;
-            
-            // Add slight randomness
-            if (Math.random() < 0.1) {
-                point.x += (Math.random() - 0.5) * 3;
-                point.y += (Math.random() - 0.5) * 3;
-            }
-        });
-    }
-
-    drawOrganicTear(currentIndex, progress) {
-        if (currentIndex < 2) return;
-
-        this.ctx.beginPath();
-        
-        // Start from screen edge
-        this.ctx.moveTo(-50, -50);
-        this.ctx.lineTo(this.tearPoints[0].x + 50, -50);
-        
-        // Draw smooth curve through tear points
-        for (let i = 0; i < currentIndex - 1; i++) {
-            const current = this.tearPoints[i];
-            const next = this.tearPoints[i + 1];
-            
-            if (i === 0) {
-                this.ctx.lineTo(current.x, current.y);
+            // Use direction control to set X coordinate
+            if (direction === 'right-to-left') {
+                x = (1 - progress) * this.canvas.width;
             } else {
-                // Use quadratic curves for smoothness
-                const controlX = (current.x + next.x) / 2;
-                const controlY = (current.y + next.y) / 2;
-                this.ctx.quadraticCurveTo(current.x, current.y, controlX, controlY);
+                x = progress * this.canvas.width;
             }
-        }
-        
-        // Add jagged edge variation
-        const lastPoint = this.tearPoints[currentIndex - 1];
-        const jaggedEdge = this.createJaggedEdge(lastPoint, progress);
-        jaggedEdge.forEach(point => {
-            this.ctx.lineTo(point.x, point.y);
-        });
-        
-        // Close the shape
-        this.ctx.lineTo(this.canvas.width + 50, this.canvas.height + 50);
-        this.ctx.lineTo(-50, this.canvas.height + 50);
-        this.ctx.closePath();
-        
-        this.ctx.fill();
-    }
-
-    createJaggedEdge(lastPoint, progress) {
-        const jaggedPoints = [];
-        const edgeLength = 60;
-        const segments = 8;
-        
-        for (let i = 0; i < segments; i++) {
-            const segmentProgress = i / segments;
-            const angle = Math.atan2(1, 1) + (Math.random() - 0.5) * 0.8; // Roughly diagonal
-            const length = (Math.random() * 0.5 + 0.5) * edgeLength;
             
-            jaggedPoints.push({
-                x: lastPoint.x + Math.cos(angle) * length * segmentProgress,
-                y: lastPoint.y + Math.sin(angle) * length * segmentProgress
-            });
+            const mainWave = Math.sin(progress * Math.PI * 3) * waviness;
+            const microWave = Math.sin(progress * Math.PI * 20) * (waviness * 0.2);
+            const noise = (Math.random() - 0.5) * 10;
+            const y = this.canvas.height * verticalPosition + mainWave + microWave + noise;
+            
+            this.tearPoints.push({ x, y });
         }
-        
-        return jaggedPoints;
     }
 
-drawPaperDebris(progress) {
-    // 🎨 DEBRIS EFFECT CONTROLS
-    const DEBRIS_SETTINGS = {
-        enabled: false,           // Turn debris on/off
-        startAt: 0.5,           // When debris starts (0-1)
-        intensity: 20,          // Max number of debris pieces
-        sizeMin: 2,             // Minimum debris size
-        sizeMax: 5,            // Maximum debris size
-        opacity: 0,           // Debris transparency
-        colors: ['#f5f2e8', '#e8dcc6', '#f0ead6'], // Paper colors
-        physics: false           // Enable falling physics
-    };
-    
-    if (!DEBRIS_SETTINGS.enabled || progress < DEBRIS_SETTINGS.startAt) return;
-    
-    const debrisCount = Math.floor(progress * DEBRIS_SETTINGS.intensity);
-    this.ctx.save();
-    this.ctx.globalAlpha = DEBRIS_SETTINGS.opacity;
-    
-    for (let i = 0; i < debrisCount; i++) {
-        // Position with physics
-        let debrisX, debrisY;
+    animate() {
+        const currentTime = performance.now();
+        const elapsed = currentTime - this.startTime;
+        const progress = Math.min(elapsed / this.duration, 1);
+        const tearProgress = 1 - Math.pow(1 - progress, 4); // easeOutQuart
+        //draw the "new page" background first
+        this.ctx.fillStyle = '#fffacd';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
-        if (DEBRIS_SETTINGS.physics) {
-            // Debris falls from tear line
-            const tearIndex = Math.floor(Math.random() * this.tearPoints.length);
-            const tearPoint = this.tearPoints[tearIndex];
-            debrisX = tearPoint.x + (Math.random() - 0.5) * 100;
-            debrisY = tearPoint.y + Math.random() * 200; // Falls down
-        } else {
-            // Random placement
-            debrisX = Math.random() * this.canvas.width;
-            debrisY = Math.random() * this.canvas.height;
+        const separationOffset = Math.pow(progress, 2) * this.TEAR_CONTROLS.separation;
+
+        // --- 1. Draw TOP half peeling UP ---
+        this.ctx.save();
+        this.ctx.translate(0, -separationOffset);
+        this.drawClippedScreenshot(tearProgress, 'top');
+        this.drawTornEdgeShadows(tearProgress, 'bottom-edge'); // Shadow on bottom edge
+        this.ctx.restore();
+
+        // --- 2. Draw BOTTOM half peeling DOWN ---
+        this.ctx.save();
+        this.ctx.translate(0, separationOffset);
+        this.drawClippedScreenshot(tearProgress, 'bottom');
+        this.drawTornEdgeShadows(tearProgress, 'top-edge'); // Shadow on top edge
+        this.ctx.restore();
+
+        // Clear the form data when the reveal is significant
+        if (progress > 0.4 && !this.dataCleared) {
+            this.dataCleared = true;
+            window.app.clearCurrentEntry(true);
+            showToast('Data cleared');
         }
-        
-        const size = Math.random() * (DEBRIS_SETTINGS.sizeMax - DEBRIS_SETTINGS.sizeMin) + DEBRIS_SETTINGS.sizeMin;
-        const color = DEBRIS_SETTINGS.colors[Math.floor(Math.random() * DEBRIS_SETTINGS.colors.length)];
-        
-        this.ctx.fillStyle = color;
+
+        if (progress < 1) {
+            this.animationId = requestAnimationFrame(() => this.animate());
+        } else {
+            this.cleanup();
+        }
+    }
+
+    // ✨ NEW & IMPROVED: Eliminates the "cone effect" artifact
+    drawClippedScreenshot(progress, part) {
+        const activePointsCount = Math.floor(progress * this.tearPoints.length);
+        if (activePointsCount < 1) return;
+
+        this.ctx.save();
         this.ctx.beginPath();
         
-        // Irregular debris shapes
-        if (Math.random() < 0.5) {
-            // Circle debris
-            this.ctx.arc(debrisX, debrisY, size, 0, Math.PI * 2);
-        } else {
-            // Rectangle debris
-            this.ctx.rect(debrisX - size/2, debrisY - size/2, size, size * (0.5 + Math.random()));
+        const pathPoints = this.tearPoints.slice(0, activePointsCount);
+        const firstPoint = pathPoints[0];
+        const lastPoint = pathPoints[pathPoints.length - 1];
+
+        if (part === 'top') {
+            // Path for the top, peeling-up piece
+            // Start at the top edge, above the first tear point
+            this.ctx.moveTo(firstPoint.x, 0);
+            // Draw along the top edge of the screen
+            this.ctx.lineTo(this.canvas.width, 0);
+            // Draw DOWN the right edge of the screen to meet the tear line
+            this.ctx.lineTo(this.canvas.width, lastPoint.y);
+            // Now draw along the tear path itself from right to left
+            pathPoints.reverse().forEach(p => this.ctx.lineTo(p.x, p.y));
+            // Close the shape by going up the left edge
+            this.ctx.lineTo(firstPoint.x, 0);
+
+        } else { // 'bottom'
+            // Path for the bottom, peeling-down piece
+            // Start at the bottom edge, below the first tear point
+            this.ctx.moveTo(firstPoint.x, this.canvas.height);
+            // Draw along the bottom edge of the screen
+            this.ctx.lineTo(this.canvas.width, this.canvas.height);
+            // Draw UP the right edge of the screen to meet the tear line
+            this.ctx.lineTo(this.canvas.width, lastPoint.y);
+            // Now draw along the tear path itself from right to left
+            pathPoints.reverse().forEach(p => this.ctx.lineTo(p.x, p.y));
+            // Close the shape by going down the left edge
+            this.ctx.lineTo(firstPoint.x, this.canvas.height);
         }
+
+        this.ctx.closePath();
+        this.ctx.clip();
         
-        this.ctx.fill();
+        // Draw the original screenshot inside this new, perfect shape
+        this.ctx.drawImage(this.screenshot, 0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.restore();
     }
-    
-    this.ctx.restore();
-}
 
-drawTornEdgeShadows(currentIndex) {
-    // 🌟 SHADOW EFFECT CONTROLS
-    const SHADOW_SETTINGS = {
-        enabled: true,
-        thickness: 15,           // Line thickness
-        opacity: 0,           // Shadow opacity
-        blur: 0,                // Shadow blur amount
-        offsetX: 15,             // Shadow X offset
-        offsetY: 15,             // Shadow Y offset
-        glowEffect: false,       // Add glow effect
-        glowColor: '#ff6b9d'    // Glow color
-    };
-    
-    if (!SHADOW_SETTINGS.enabled || currentIndex < 5) return;
-    
-    this.ctx.save();
-    
-    // Main shadow
-    this.ctx.strokeStyle = `rgba(0, 0, 0, ${SHADOW_SETTINGS.opacity})`;
-    this.ctx.lineWidth = SHADOW_SETTINGS.thickness;
-    this.ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-    this.ctx.shadowBlur = SHADOW_SETTINGS.blur;
-    this.ctx.shadowOffsetX = SHADOW_SETTINGS.offsetX;
-    this.ctx.shadowOffsetY = SHADOW_SETTINGS.offsetY;
-    
-    // Draw main tear line
-    this.ctx.beginPath();
-    for (let i = 0; i < currentIndex - 1; i++) {
-        const point = this.tearPoints[i];
-        if (i === 0) {
-            this.ctx.moveTo(point.x, point.y);
-        } else {
-            this.ctx.lineTo(point.x, point.y);
+    // ✨ Modified to draw shadow on TOP or BOTTOM edge
+    drawTornEdgeShadows(progress, edgeType) {
+        const SHADOW_SETTINGS = {
+            thickness: 6, opacity: 0.3, blur: 10
+        };
+        const activePointsCount = Math.floor(progress * this.tearPoints.length);
+        if (activePointsCount < 2) return;
+
+        this.ctx.save();
+        this.ctx.strokeStyle = `rgba(0, 0, 0, ${SHADOW_SETTINGS.opacity})`;
+        this.ctx.lineWidth = SHADOW_SETTINGS.thickness;
+        this.ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+        this.ctx.shadowBlur = SHADOW_SETTINGS.blur;
+        
+        // Offset determines if shadow is above or below
+        this.ctx.shadowOffsetY = (edgeType === 'bottom-edge') ? 4 : -4;
+        
+        this.ctx.beginPath();
+        for (let i = 0; i < activePointsCount; i++) {
+            const p = this.tearPoints[i];
+            if (i === 0) this.ctx.moveTo(p.x, p.y);
+            else this.ctx.lineTo(p.x, p.y);
         }
-    }
-    this.ctx.stroke();
-    
-    // Add glow effect
-    if (SHADOW_SETTINGS.glowEffect) {
-        this.ctx.shadowColor = SHADOW_SETTINGS.glowColor;
-        this.ctx.shadowBlur = SHADOW_SETTINGS.blur * 2;
-        this.ctx.globalAlpha = 0.3;
         this.ctx.stroke();
-    }
-    
-    this.ctx.restore();
-}
-
-    easeInOutCubic(t) {
-        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        this.ctx.restore();
     }
 
     cleanup() {
         this.isActive = false;
-        if (this.animationId) {
-            cancelAnimationFrame(this.animationId);
-        }
-        if (this.canvas && this.canvas.parentNode) {
-            this.canvas.parentNode.removeChild(this.canvas);
-        }
-        this.canvas = null;
-        this.ctx = null;
-        this.screenshot = null;
+        if (this.animationId) cancelAnimationFrame(this.animationId);
+        if (this.canvas && this.canvas.parentNode) this.canvas.parentNode.removeChild(this.canvas);
+        this.canvas = this.ctx = this.screenshot = this.debris = null;
         this.tearPoints = [];
     }
 }
@@ -7431,10 +7436,10 @@ validateFields() {
             const trainingVolume = this.calculateOptimalVolume(readinessScore, riskFactors);
             
             if (readinessScore >= 8.5) return { type: "HIGH INTENSITY", description: "Have fun.", volume: trainingVolume.high, risk: "Minimal", color: "#27ae60" };
-            if (readinessScore >= 7) return { type: "MODERATE INTENSITY", description: "Technical climbing and strength training.", volume: trainingVolume.moderate, risk: "Low", color: "#f39c12" };
-            if (readinessScore >= 5) return { type: "LIGHT TRAINING", description: "Focus on technique, mobility.", volume: trainingVolume.light, risk: "Moderate", color: "#e67e22" };
-            if (readinessScore >= 3) return { type: "RECOVERY FOCUS", description: "Active recovery, stretching.", volume: trainingVolume.recovery, risk: "Moderate-High", color: "#e74c3c" };
-            return { type: "REST DAY", description: "Take it easy", volume: "0 hours", risk: "Higher", color: "#c0392b" };
+            if (readinessScore >= 7) return { type: "MODERATE INTENSITY", description: "Technical, Strength.", volume: trainingVolume.moderate, risk: "Low", color: "#f39c12" };
+            if (readinessScore >= 5) return { type: "LIGHT TRAINING", description: "Technique, mobility.", volume: trainingVolume.light, risk: "Moderate", color: "#e67e22" };
+            if (readinessScore >= 3) return { type: "RECOVERY FOCUS", description: "Active recovery.", volume: trainingVolume.recovery, risk: "Moderate-High", color: "#e74c3c" };
+            return { type: "REST DAY", description: "TAKE IT EASY", volume: "0 hours", risk: "Higher", color: "#c0392b" };
         }
         
         assessRiskFactors(inputs) {
@@ -7568,52 +7573,37 @@ climbingCheckboxes.forEach(id => {
             }
         }
 
+// ✨ REPLACE the body of your updateSliderFill function
 updateSliderFill(slider) {
     if (!slider || slider.disabled) return;
     
+    // --- Percentage Calculation (No changes needed here) ---
     const min = parseFloat(slider.min) || 0;
     const max = parseFloat(slider.max) || 100;
     const val = parseFloat(slider.value) || min;
-
-    if (isNaN(val) || isNaN(min) || isNaN(max)) {
-        console.log('Invalid slider values:', { val, min, max });
-        return;
-    }
-
     const clampedVal = Math.min(max, Math.max(min, val));
     const percentage = max === min ? 0 : ((clampedVal - min) / (max - min)) * 100;
-    
-    // 🧗 SOLID CLIMBING HOLD COLORS (No gradients!)
-    let fillColor = '#3498db';  // Default blue
-    const trackColor = '#d5d8dc';  // Light gray track
-    
-    // Assign specific colors based on slider ID
+
+    // --- Color Definitions ---
+    let thumbColor = '#3498db'; // Default thumb color
+
     switch(slider.id) {
-        case 'sleepQualitySlider':
-            fillColor = '#0088ff';  // Electric Blue Hold
-            break;
-        case 'stressSlider':
-            fillColor = '#ff0080';  // Hot Pink Hold
-            break;
-        case 'daysSinceSlider':
-            fillColor = '#00ff00';  // Neon Green Hold
-            break;
-        case 'lastRPESlider':
-            fillColor = '#ff4a18';  // Bright Orange Hold
-            break;
-        default:
-            fillColor = '#3498db';  // Default blue
+        case 'sleepQualitySlider': thumbColor = '#0088ff'; break;
+        case 'stressSlider':       thumbColor = '#ff0080'; break;
+        case 'daysSinceSlider':    thumbColor = '#00ff00'; break;
+        case 'lastRPESlider':      thumbColor = '#ff4a18'; break;
     }
     
-    // 🔥 CROSS-BROWSER COMPATIBLE: Use solid colors only
-    slider.style.background = `linear-gradient(to right, ${fillColor} 0%, ${fillColor} ${percentage}%, ${trackColor} ${percentage}%, ${trackColor} 100%)`;
-    
-    // Clean glow effect
-    if (percentage > 0) {
-        slider.style.boxShadow = `inset 0 0 3px ${fillColor}40`;  // 40 = 25% opacity
-    } else {
-        slider.style.boxShadow = 'none';
-    }
+    // --- The Critical Fix ---
+
+    // 1. Set the DYNAMIC THUMB COLOR. This works for ALL browsers.
+    slider.style.setProperty('--thumb-bg', thumbColor);
+
+    // 2. For WebKit ONLY, build the muted gradient for the track.
+    //    Firefox ignores this 'background' property on the input itself.
+    const mutedFill = getComputedStyle(slider).getPropertyValue('--track-fill-bg');
+    const emptyFill = getComputedStyle(slider).getPropertyValue('--track-empty-bg');
+    slider.style.background = `linear-gradient(to right, ${mutedFill} ${percentage}%, ${emptyFill} ${percentage}%)`;
 }
 
 setupSlider(inputId, sliderId) {
