@@ -153,85 +153,95 @@
             });
         }
         
-        startPeer() {
-            if (this.peer) return;
-            
-            // Immediate UI feedback
-            this.sendStatus.textContent = 'Generating sync code...';
-            this.sendStatus.className = 'sync-status connecting';
-            
-            this.peerId = this.generatePeerId();
-            this.peerIdDisplay.textContent = this.peerId;
-            
-            // Show QR code placeholder
-            this.sendQrContainer.innerHTML = '<div class="qr-placeholder">Generating QR code...</div>';
-            
-            // Generate QR code after a small delay to ensure container is ready
-            setTimeout(() => {
-                try {
-                    // Clear any existing QR code
-                    if (this.qrCode) {
-                        this.qrCode.clear();
-                    }
-                    
-                    // Generate new QR code
-                    this.sendQrContainer.innerHTML = '';
-                    this.qrCode = new QRCode(this.sendQrContainer, {
-                        text: this.peerId,
-                        width: 160,
-                        height: 160,
-                        colorDark: "#2c3e50",
-                        colorLight: "#ffffff",
-                        correctLevel: QRCode.CorrectLevel.H
-                    });
-                    
-                    // Update step 1 to completed
-                    document.querySelector('#sendContent .sync-step:nth-child(1)').classList.add('completed');
-                    document.querySelector('#sendContent .sync-step:nth-child(2)').classList.add('active');
-                    
-                    this.sendStatus.textContent = 'Waiting for receiver to connect...';
-                    
-                    // Initialize PeerJS
-                    this.peer = new Peer(this.peerId, {
-                        host: '0.peerjs.com',
-                        port: 443,
-                        secure: true,
-                        debug: 1
-                    });
-                    
-                    // Debug event handler
-                    this.peer.on('error', (err) => {
-                        console.error('PeerJS error:', err);
-                        this.sendStatus.textContent = `Error: ${err.type}`;
-                        this.sendStatus.className = 'sync-status error';
-                        showToast(`PeerJS error: ${err.type}`);
-                    });
-                    
-                    this.peer.on('open', (id) => {
-                        this.sendStatus.textContent = `Ready to connect with ID: ${id}`;
-                    });
-                    
-                    this.peer.on('connection', (conn) => {
-                        this.connection = conn;
-                        this.sendStatus.textContent = 'Receiver connected!';
-                        this.sendStatus.className = 'sync-status connected';
-                        
-                        // Update step 2 to completed
-                        document.querySelector('#sendContent .sync-step:nth-child(2)').classList.add('completed');
-                        document.querySelector('#sendContent .sync-step:nth-child(3)').classList.add('active');
-                        
-                        this.setupDataConnection();
-                    });
-                    
-                } catch (e) {
-                    console.error('QR code generation error:', e);
-                    this.sendQrContainer.innerHTML = '<div class="qr-error">Failed to generate QR code</div>';
-                    this.sendStatus.textContent = 'QR generation failed - try again';
-                    this.sendStatus.className = 'sync-status error';
-                    showToast('Failed to generate QR code');
-                }
-            }, 100);
+// This is the complete startPeer() function from your PeerSync class,
+// updated to include the more robust error handling you requested.
+
+startPeer() {
+    if (this.peer) return;
+
+    // Immediate UI feedback
+    this.sendStatus.textContent = 'Generating sync code...';
+    this.sendStatus.className = 'sync-status connecting';
+
+    this.peerId = this.generatePeerId();
+    this.peerIdDisplay.textContent = this.peerId;
+
+    // Show QR code placeholder
+    this.sendQrContainer.innerHTML = '<div class="qr-placeholder">Generating QR code...</div>';
+
+    // Generate QR code and initialize PeerJS after a small delay
+    setTimeout(() => {
+        // ✨ The existing try block already covers both operations.
+        try {
+            // Clear any existing QR code
+            if (this.qrCode) {
+                this.qrCode.clear();
+            }
+
+            // --- 1. Attempt to generate QR code ---
+            this.sendQrContainer.innerHTML = '';
+            this.qrCode = new QRCode(this.sendQrContainer, {
+                text: this.peerId,
+                width: 160,
+                height: 160,
+                colorDark: "#2c3e50",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            // Update step 1 to completed
+            document.querySelector('#sendContent .sync-step:nth-child(1)').classList.add('completed');
+            document.querySelector('#sendContent .sync-step:nth-child(2)').classList.add('active');
+
+            this.sendStatus.textContent = 'Waiting for receiver to connect...';
+
+            // --- 2. Attempt to initialize PeerJS ---
+            // This is the line your request focused on. If it fails,
+            // it will now be caught by the improved catch block below.
+            this.peer = new Peer(this.peerId, {
+                host: '0.peerjs.com',
+                port: 443,
+                secure: true,
+                debug: 1
+            });
+
+            // --- 3. Set up PeerJS event handlers ---
+            this.peer.on('error', (err) => {
+                console.error('PeerJS error:', err);
+                this.sendStatus.textContent = `Error: ${err.type}`;
+                this.sendStatus.className = 'sync-status error';
+                showToast(`PeerJS error: ${err.type}`);
+            });
+
+            this.peer.on('open', (id) => {
+                // This message might be briefly overridden by the 'waiting' one, which is fine.
+                this.sendStatus.textContent = `Ready to connect with ID: ${id}`;
+            });
+
+            this.peer.on('connection', (conn) => {
+                this.connection = conn;
+                this.sendStatus.textContent = 'Receiver connected!';
+                this.sendStatus.className = 'sync-status connected';
+
+                // Update step 2 to completed
+                document.querySelector('#sendContent .sync-step:nth-child(2)').classList.add('completed');
+                document.querySelector('#sendContent .sync-step:nth-child(3)').classList.add('active');
+
+                this.setupDataConnection();
+            });
+
+        // ✨ CHANGED: This catch block is now more generic to handle
+        // failures from either QR code generation or PeerJS initialization.
+        } catch (error) {
+            console.error('Initialization failed during peer setup:', error);
+            // Provide a user-friendly error message that covers any failure in the try block.
+            this.sendQrContainer.innerHTML = '<div class="qr-error">Initialization failed</div>';
+            this.sendStatus.textContent = 'Could not start sync. Please try again.';
+            this.sendStatus.className = 'sync-status error';
+            showToast('Failed to initialize sync session.');
         }
+    }, 100);
+}
         
         startCameraScan() {
             // Hide input, show video
@@ -260,38 +270,66 @@
                 });
         }
         
-        scanQRCode() {
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            
-            const scanFrame = () => {
-                if (!this.videoElement || !this.videoElement.videoWidth) {
-                    return requestAnimationFrame(scanFrame);
-                }
+// ✨ UPDATED FUNCTION: Replaces the existing scanQRCode in the PeerSync class.
+// This version uses an arrow function to fix the 'this' context issue,
+// ensuring the camera closes automatically on success.
+
+scanQRCode() {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+
+    // Use an arrow function for scanFrame to preserve the 'this' context.
+    // This is the key to fixing the auto-close issue.
+    const scanFrame = () => {
+        // If the video stream has been stopped (e.g., by clicking cancel),
+        // we must stop the animation loop.
+        if (!this.videoStream) {
+            return;
+        }
+
+        // Wait for video to have dimensions
+        if (!this.videoElement || !this.videoElement.videoWidth) {
+            requestAnimationFrame(scanFrame);
+            return;
+        }
+
+        canvas.width = this.videoElement.videoWidth;
+        canvas.height = this.videoElement.videoHeight;
+        context.drawImage(this.videoElement, 0, 0, canvas.width, canvas.height);
+
+        try {
+            const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+            if (code && code.data) {
+                // --- SUCCESS ---
+                // A valid QR code was found.
+                showToast(`QR Code Detected: ${code.data}`);
+                this.receiverCode.value = code.data;
                 
-                canvas.width = this.videoElement.videoWidth;
-                canvas.height = this.videoElement.videoHeight;
-                context.drawImage(this.videoElement, 0, 0, canvas.width, canvas.height);
+                // This call will now work correctly because 'this' refers to the PeerSync instance.
+                this.stopCameraScan();
                 
-                try {
-                    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-                    const code = jsQR(imageData.data, imageData.width, imageData.height);
-                    
-                    if (code) {
-                        this.receiverCode.value = code.data;
-                        this.stopCameraScan();
-                        this.connectToPeer();
-                    } else {
-                        requestAnimationFrame(scanFrame);
-                    }
-                } catch (e) {
-                    console.error('QR scanning error:', e);
-                    requestAnimationFrame(scanFrame);
-                }
-            };
-            
+                this.connectToPeer();
+                
+                // Important: Do NOT request another animation frame. The scan is complete.
+                return;
+
+            } else {
+                // --- NO CODE FOUND ---
+                // Continue scanning on the next available frame.
+                requestAnimationFrame(scanFrame);
+            }
+        } catch (e) {
+            console.error('QR scanning error:', e);
+            // Even if one frame errors, try the next one.
             requestAnimationFrame(scanFrame);
         }
+    };
+
+    // Start the scanning loop.
+    requestAnimationFrame(scanFrame);
+}
         
         stopCameraScan() {
             if (this.videoStream) {
@@ -508,9 +546,7 @@
         }
     }
     
-    /* ============================================
-   ✨ UPGRADED FLUID TEAR EFFECT
-   ============================================ */
+
 /* ============================================
    ✨ REVEAL TEAR EFFECT - FULLY CUSTOMIZABLE
    ============================================ */
@@ -519,19 +555,19 @@ class FluidTearEffect {
         // --- 🖌️ YOUR CUSTOMIZATION CONTROLS ---
         this.TEAR_CONTROLS = {
             // How long the animation takes in milliseconds (e.g., 1200 = 1.2s)
-            duration: 1200,
+            duration: 1000,
             
             // 'left-to-right' or 'right-to-left'
             direction: 'left-to-right',
             
             // Where the tear happens vertically (0.1 = top, 0.5 = middle, 0.9 = bottom)
-            verticalPosition: 0.5,
+            verticalPosition: 0.2,
             
             // How wavy and chaotic the tear line is (0 = straight, 50 = very wavy)
-            waviness: 40,
+            waviness: 30,
             
             // How far the two halves fly apart
-            separation: 250
+            separation: 500
         };
         // ------------------------------------
 
@@ -772,45 +808,48 @@ async initiateTear() {
 }
     
     class MultiDayTracker {
-        constructor() {
-            this.dataVersion = 3;
-            this.initData();
-            this.weeklyChart = null;
-            this.modalCallback = null;
-            this.chartDebounce = null;
-            this.currentWeekIndex = 0;
-            
-            // Field definitions for validation
-            this.fieldDefinitions = {
-                sleepQuality: { name: 'Sleep Quality', section: 'Recovery Metrics', type: 'number' },
-                snoozeTime: { name: 'Snooze Time', section: 'Recovery Metrics', type: 'time' },
-                wakeTime: { name: 'Wake Time', section: 'Recovery Metrics', type: 'time' },
-                mood: { name: 'Mood State', section: 'Recovery Metrics', type: 'select' },
-                stress: { name: 'Stress Level', section: 'Physical State', type: 'number' },
-                doms: { name: 'Muscle Soreness (DOMS)', section: 'Physical State', type: 'select' },
-                tendons: { name: 'Tendon Condition', section: 'Physical State', type: 'select' },
-                skin: { name: 'Skin Condition', section: 'Physical State', type: 'select' },
-                mealBeforeTraining: { name: 'Pre-Training Meal', section: 'Physical State', type: 'select' },
-                daysSince: { name: 'Days Since Last Session', section: 'Training History', type: 'number' },
-                lastRPE: { name: 'Last Session RPE', section: 'Training History', type: 'number' },
-                climbingType: { name: 'Climbing Type', section: 'Training History', type: 'checkbox' }
-            };
-            
-            this.setInitialDate();
-            this.setupEventListeners();
-            this.loadDataForDate();
-            this.restoreAutoSave();
-            this.setupSwipeGestures();
-            
-            // Show welcome modal on first visit
-            this.checkFirstVisit();
-            
-            // Start auto-save timer
-            this.startAutoSave();
-            
-            // Initialize sync module
-            this.sync = new PeerSync(this);
-        }
+constructor() {
+    this.dataVersion = 3;
+    this.initData();
+    this.weeklyChart = null;
+    this.modalCallback = null;
+    this.chartDebounce = null;
+    this.currentWeekIndex = 0;
+
+    // 🔥 NEW: Track form state changes for optimized auto-save
+    this.lastAutoSaveHash = null;
+    this.hasUnsavedChanges = false;
+    this.autoSaveInterval = null;
+
+    // Field definitions (remains the same)
+    this.fieldDefinitions = {
+        sleepQuality: { name: 'Sleep Quality', section: 'Recovery Metrics', type: 'number' },
+        snoozeTime: { name: 'Snooze Time', section: 'Recovery Metrics', type: 'time' },
+        wakeTime: { name: 'Wake Time', section: 'Recovery Metrics', type: 'time' },
+        mood: { name: 'Mood State', section: 'Recovery Metrics', type: 'select' },
+        stress: { name: 'Stress Level', section: 'Physical State', type: 'number' },
+        doms: { name: 'Muscle Soreness (DOMS)', section: 'Physical State', type: 'select' },
+        tendons: { name: 'Tendon Condition', section: 'Physical State', type: 'select' },
+        skin: { name: 'Skin Condition', section: 'Physical State', type: 'select' },
+        mealBeforeTraining: { name: 'Pre-Training Meal', section: 'Physical State', type: 'select' },
+        daysSince: { name: 'Days Since Last Session', section: 'Training History', type: 'number' },
+        lastRPE: { name: 'Last Session RPE', section: 'Training History', type: 'number' },
+        climbingType: { name: 'Climbing Type', section: 'Training History', type: 'checkbox' }
+    };
+
+    this.setInitialDate();
+    this.setupEventListeners();
+    this.loadDataForDate();
+    this.restoreAutoSave();
+    this.setupSwipeGestures();
+    
+    this.checkFirstVisit();
+    
+    // 🔥 UPDATED: Start optimized auto-save
+    this.startOptimizedAutoSave();
+    
+    this.sync = new PeerSync(this);
+}
         
         initData() {
             const savedData = localStorage.getItem('climbingTrackerData');
@@ -826,54 +865,39 @@ async initiateTear() {
             }
         }
         
-        startAutoSave() {
-            setInterval(() => {
-                const inputs = this.getInputs();
-                if (Object.keys(inputs).length > 0) {
-                    localStorage.setItem('climbSmartAutoSave', JSON.stringify({
-                        date: this.currentDate,
-                        inputs: inputs
-                    }));
-                }
-            }, 30000);
+        
+restoreAutoSave() {
+    const autoSave = localStorage.getItem('climbSmartAutoSave');
+    if (!autoSave) return;
+    
+    try {
+        const data = JSON.parse(autoSave);
+        
+        // Check if auto-save is recent (within last 24 hours)
+        const autoSaveAge = Date.now() - (data.timestamp || 0);
+        const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+        
+        if (autoSaveAge > maxAge) {
+            localStorage.removeItem('climbSmartAutoSave');
+            return;
         }
         
-        restoreAutoSave() {
-            const autoSave = localStorage.getItem('climbSmartAutoSave');
-            if (autoSave) {
-                const data = JSON.parse(autoSave);
-                this.currentDate = data.date;
-                document.getElementById('currentDate').value = this.currentDate;
-                
-                // Restore inputs
-                Object.keys(data.inputs).forEach(id => {
-                    if (id === 'climbingType' || id === 'sleepDuration') return;
-                    const el = document.getElementById(id);
-                    if(el) {
-                       el.value = data.inputs[id];
-                       // Trigger input event for sliders to update
-                       if (el.type === 'number') {
-                           el.dispatchEvent(new Event('input'));
-                       }
-                    }
-                });
-                
-                const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingWeights', 'climbingCardio', 'climbingNone'];
-                climbingCheckboxes.forEach(id => document.getElementById(id).checked = false);
-
-                if(data.inputs.climbingType){
-                    const savedTypes = data.inputs.climbingType.split(', ');
-                    savedTypes.forEach(type => {
-                       const checkbox = document.querySelector(`input[value="${type}"]`);
-                       if(checkbox) checkbox.checked = true;
-                    });
-                }
-                
-                this.calculateAndDisplaySleepDuration();
-                this.handleTrainingChange(); // Update disabled state
-                showToast('Restored your unsaved data from previous session.');
-            }
-        }
+        this.currentDate = data.date;
+        document.getElementById('currentDate').value = this.currentDate;
+        
+        this.setFormInputs(data.inputs);
+        
+        this.calculateAndDisplaySleepDuration();
+        this.handleTrainingChange();
+        this.calculateRecommendation();
+        
+        this.markAsSaved(); // Sync hash after restoring
+        showToast('📱 Restored unsaved changes from previous session');
+    } catch (error) {
+        console.error('Failed to restore auto-save:', error);
+        localStorage.removeItem('climbSmartAutoSave');
+    }
+}
         
 setupSwipeGestures() {
     let touchStartX = 0;
@@ -1009,6 +1033,8 @@ return Math.max(0, Math.min(10, baseReadiness * 10 * interactionMultiplier));
             if (avgSleep > 6) return 0.9;
             return 0.8;
         }
+        
+        
         
         calculateInjuryRiskFactor(inputs) {
             const entries = Object.values(this.trainingData);
@@ -1187,8 +1213,6 @@ validateFields() {
             document.getElementById('modalCancelBtn').addEventListener('click', () => this.hideModal('customModal'));
             document.getElementById('validationOkBtn').addEventListener('click', () => this.hideModal('validationModal'));
             document.getElementById('closeWelcomeBtn').addEventListener('click', () => this.closeWelcomeModal());
-            document.getElementById('validationOkBtn').addEventListener('click', () => this.hideModal('validationModal'));
-            document.getElementById('closeWelcomeBtn').addEventListener('click', () => this.closeWelcomeModal());
             
             // Help modal events
             document.getElementById('helpBtn').addEventListener('click', () => showModal('helpModal'));
@@ -1328,53 +1352,53 @@ setupSlider(inputId, sliderId) {
     const min = parseFloat(sliderInput.min) || 0;
     const max = parseFloat(sliderInput.max) || 100;
     const step = parseFloat(sliderInput.step) || 1;
-    
-    console.log(`Setting up slider: ${inputId}, range: ${min}-${max}, step: ${step}`);
 
     // 🔥 Block invalid characters while typing
     numberInput.addEventListener('keydown', (e) => {
-        // Allow: backspace, delete, tab, escape, enter
         if ([8, 9, 27, 13, 46].indexOf(e.keyCode) !== -1 ||
-            // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
             (e.keyCode === 65 && e.ctrlKey === true) ||
             (e.keyCode === 67 && e.ctrlKey === true) ||
             (e.keyCode === 86 && e.ctrlKey === true) ||
             (e.keyCode === 88 && e.ctrlKey === true) ||
-            // Allow: home, end, left, right
             (e.keyCode >= 35 && e.keyCode <= 39)) {
             return;
         }
         
-        // Block everything except numbers and ONE decimal point
         if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && 
             (e.keyCode < 96 || e.keyCode > 105) && 
             e.keyCode !== 190 && e.keyCode !== 110) {
             e.preventDefault();
         }
         
-        // Block multiple decimal points
         if ((e.keyCode === 190 || e.keyCode === 110) && 
             numberInput.value.indexOf('.') !== -1) {
             e.preventDefault();
         }
         
-        // Block decimal points if step is 1 (integers only)
         if ((e.keyCode === 190 || e.keyCode === 110) && step === 1) {
             e.preventDefault();
         }
     });
 
-    // 🔥 NEW: Limit decimal places while typing
+    // 🔥 FIXED: Update slider position as user types
     numberInput.addEventListener('input', (e) => {
         let value = numberInput.value;
         
-        // If there's a decimal point, limit decimal places
+        // Limit decimal places while typing
         if (value.includes('.')) {
             const parts = value.split('.');
             if (parts[1] && parts[1].length > 1) {
-                // Limit to 1 decimal place maximum
                 numberInput.value = parts[0] + '.' + parts[1].substring(0, 1);
+                value = numberInput.value;
             }
+        }
+        
+        // 🔥 KEY FIX: Update slider position immediately
+        const numericValue = parseFloat(value);
+        if (!isNaN(numericValue)) {
+            const clampedValue = Math.min(max, Math.max(min, numericValue));
+            sliderInput.value = clampedValue;
+            this.updateSliderFill(sliderInput); // Update visual fill
         }
     });
 
@@ -1401,9 +1425,7 @@ setupSlider(inputId, sliderId) {
             numberInput.value = min;
             value = min;
         } else {
-            // Clamp to min/max
             value = Math.min(max, Math.max(min, value));
-            // 🔥 NEW: Limit decimal places based on step
             value = this.limitDecimalPlaces(value, step);
         }
         
@@ -1420,9 +1442,7 @@ setupSlider(inputId, sliderId) {
             numberInput.value = min;
             value = min;
         } else {
-            // Clamp to min/max
             value = Math.min(max, Math.max(min, value));
-            // 🔥 NEW: Limit decimal places based on step
             value = this.limitDecimalPlaces(value, step);
         }
         
@@ -1431,11 +1451,14 @@ setupSlider(inputId, sliderId) {
         this.updateSliderFill(sliderInput);
     });
 
-    // Slider input change handler (unchanged)
+    // 🔥 Slider input change handler - update number input
     sliderInput.addEventListener('input', () => {
         const value = parseFloat(sliderInput.value);
         numberInput.value = value;
         this.updateSliderFill(sliderInput);
+        
+        // ✨ THE FIX: Manually tell the app a change happened.
+        this.markAsChanged(); 
     });
 
     // Set initial values and fill
@@ -1461,43 +1484,12 @@ limitDecimalPlaces(value, step) {
     }
 }
 
-/* ============================================
-   📱 ALSO ADD THIS TO LOAD DATA FUNCTION:
-   ============================================ */
-
-// ADD THIS TO THE END OF YOUR loadDataForDate() FUNCTION:
 loadDataForDate() {
     this.currentDate = document.getElementById('currentDate').value;
     const data = this.trainingData[this.currentDate];
     
     if (data) {
-        Object.keys(data.inputs).forEach(id => {
-            if (id === 'climbingType' || id === 'sleepDuration') return;
-            const el = document.getElementById(id);
-            if(el) {
-                el.value = data.inputs[id];
-                // Trigger input event for sliders to update
-                if (el.type === 'number') {
-                    el.dispatchEvent(new Event('input'));
-                }
-                
-                // ✨ ADD THIS: Update slider fills for range inputs
-                if (el.type === 'range') {
-                    this.updateSliderFill(el);
-                }
-            }
-        });
-        
-        const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingWeights', 'climbingCardio', 'climbingNone'];
-        climbingCheckboxes.forEach(id => document.getElementById(id).checked = false);
-
-        if(data.inputs.climbingType){
-            const savedTypes = data.inputs.climbingType.split(', ');
-            savedTypes.forEach(type => {
-               const checkbox = document.querySelector(`input[value="${type}"]`);
-               if(checkbox) checkbox.checked = true;
-            });
-        }
+        this.setFormInputs(data.inputs);
     } else {
         this.clearCurrentEntry(false);
     }
@@ -1506,14 +1498,170 @@ loadDataForDate() {
     this.handleTrainingChange();
     this.calculateRecommendation();
     
-    // ✨ ADD THIS: Force update all slider fills after loading
     ['sleepQualitySlider', 'stressSlider', 'daysSinceSlider', 'lastRPESlider'].forEach(id => {
         const slider = document.getElementById(id);
-        if (slider) {
-            this.updateSliderFill(slider);
+        if (slider) this.updateSliderFill(slider);
+    });
+    
+    // This is the crucial addition
+    this.markAsSaved();
+}
+
+// --- Start: Block of New Functions ---
+
+generateFormHash() {
+    const inputs = this.getInputs();
+    const dataString = JSON.stringify({
+        date: this.currentDate,
+        inputs: inputs
+    });
+    let hash = 0;
+    for (let i = 0; i < dataString.length; i++) {
+        const char = dataString.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return hash.toString();
+}
+
+hasFormChanged() {
+    return this.generateFormHash() !== this.lastAutoSaveHash;
+}
+
+markAsChanged() {
+    this.hasUnsavedChanges = true;
+}
+markAsSaved() {
+    this.hasUnsavedChanges = false;
+    this.lastAutoSaveHash = this.generateFormHash();
+}
+
+startOptimizedAutoSave() {
+    this.setupChangeDetection();
+    this.autoSaveInterval = setInterval(() => {
+        this.performAutoSaveIfNeeded();
+    }, 10000); // Check every 10 seconds
+}
+
+// ✨ REPLACEMENT for the setupChangeDetection function
+
+setupChangeDetection() {
+    // This list contains elements that should trigger a change on 'input' (while typing/sliding)
+    const watchedInputs = [
+        'sleepQuality', 'stress', 'daysSince', 'lastRPE', 'sessionNotes'
+    ];
+    
+    // This list contains elements where 'change' is more reliable (after selection)
+    const watchedSelects = [
+        'snoozeTime', 'wakeTime', 'mood', 'doms', 'tendons', 'skin',
+        'mealBeforeTraining', 'currentDate'
+    ];
+    
+    // This list contains the checkboxes
+    const watchedCheckboxes = [
+        'climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingWeights', 'climbingCardio', 'climbingNone'
+    ];
+
+    const setupListener = (elementId, eventType) => {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.addEventListener(eventType, () => this.markAsChanged());
+        } else {
+            // This log can help you find if an ID is missing in your HTML
+            console.warn(`Change detection setup warning: Element with ID "${elementId}" not found.`);
+        }
+    };
+
+    // Listen for 'input' on fields that change continuously
+    watchedInputs.forEach(id => setupListener(id, 'input'));
+    
+    // Listen for 'change' on fields that have a distinct final selection
+    watchedSelects.forEach(id => setupListener(id, 'change'));
+    
+    // Listen for 'change' on checkboxes
+    watchedCheckboxes.forEach(id => setupListener(id, 'change'));
+}
+
+performAutoSaveIfNeeded() {
+    // We are keeping the old logs to see the whole story
+    
+    
+    
+
+    if (!this.hasUnsavedChanges || !this.hasFormChanged()) {
+        return;
+    }
+
+    const inputs = this.getInputs();
+    if (this.isFormEmpty(inputs)) {
+        
+        return;
+    }
+
+    // ✅ THIS IS THE MOST IMPORTANT NEW LOG
+    
+    
+    localStorage.setItem('climbSmartAutoSave', JSON.stringify({
+        date: this.currentDate,
+        inputs: inputs,
+        timestamp: Date.now()
+    }));
+    this.markAsSaved();
+    this.showAutoSaveIndicator();
+}
+
+isFormEmpty(inputs) {
+    return inputs.sleepQuality === 1 && inputs.stress === 1 && inputs.daysSince === 0 && inputs.lastRPE === 0 && !inputs.climbingType;
+}
+
+showAutoSaveIndicator() {
+    let indicator = document.getElementById('autoSaveIndicator');
+    if (!indicator) {
+        indicator = document.createElement('div');
+        indicator.id = 'autoSaveIndicator';
+        indicator.style.cssText = `
+            position: fixed; top: 20px; right: 20px;
+            background: rgba(39, 174, 96, 0.9); color: white;
+            padding: 8px 16px; border-radius: 20px; font-size: 12px;
+            z-index: 10000; opacity: 0;
+            transition: opacity 0.3s ease-in-out; pointer-events: none;
+        `;
+        indicator.textContent = '💾 Auto-saved';
+        document.body.appendChild(indicator);
+    }
+    indicator.style.opacity = '1';
+    setTimeout(() => { indicator.style.opacity = '0'; }, 2000);
+}
+
+setFormInputs(inputs) {
+    Object.keys(this.fieldDefinitions).forEach(id => {
+        const el = document.getElementById(id);
+        if (el && inputs[id] !== undefined) {
+            if (id === 'snoozeTime' || id === 'wakeTime' || id === 'sessionNotes' || el.tagName === 'SELECT') {
+                el.value = inputs[id];
+            } else {
+                el.value = inputs[id];
+                if (el.type === 'number') el.dispatchEvent(new Event('input'));
+            }
         }
     });
+
+    ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingWeights', 'climbingCardio', 'climbingNone'].forEach(id => document.getElementById(id).checked = false);
+    if (inputs.climbingType) {
+        inputs.climbingType.split(', ').forEach(type => {
+            const checkbox = document.querySelector(`input[value="${type}"]`);
+            if (checkbox) checkbox.checked = true;
+        });
+    }
 }
+
+destroy() {
+    if (this.autoSaveInterval) {
+        clearInterval(this.autoSaveInterval);
+    }
+}
+
+// --- End: Block of New Functions ---
 
         calculateAndDisplaySleepDuration() {
     const snoozeTime = document.getElementById('snoozeTime').value;
@@ -1630,131 +1778,84 @@ loadDataForDate() {
             localStorage.setItem('climbSmartVersion', this.dataVersion);
         }
         
-        saveEntry() {
-            const date = document.getElementById('currentDate').value;
-            if (!date) {
-                showToast('Please select a date.');
-                return;
-            }
-            
-            // Prevent future dates
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const day = String(today.getDate()).padStart(2, '0');
-            const todayStr = `${year}-${month}-${day}`;
-            
-            if (date > todayStr) {
-                showToast('Cannot save entries for future dates.');
-                return;
-            }
-            
-            const validation = this.validateFields();
-            if (validation.hasErrors) {
-                this.showValidationModal(validation.missingFields);
-                return;
-            }
-            
-            document.getElementById('loader').style.display = 'flex';
-            
-            setTimeout(() => {
-                const inputs = this.getInputs();
-                const readinessScore = this.calculateAdvancedReadiness(inputs);
-                const recommendation = this.generateRecommendation(readinessScore, inputs);
-                
-                this.trainingData[date] = { inputs, readinessScore, recommendation };
-                this.saveData();
-                
-                // Clear autosave after successful save
-                localStorage.removeItem('climbSmartAutoSave');
-                
-                document.getElementById('loader').style.display = 'none';
-                
-                showToast(`Entry for ${date} saved successfully!`);
-                this.updateHistory();
-                this.updateAnalytics();
-            }, 1000);
-        }
+saveEntry() {
+    const date = document.getElementById('currentDate').value;
+    if (!date) {
+        showToast('Please select a date.');
+        return;
+    }
+    
+    const today = new Date();
+    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    if (date > todayStr) {
+        showToast('Cannot save entries for future dates.');
+        return;
+    }
+    
+    const validation = this.validateFields();
+    if (validation.hasErrors) {
+        this.showValidationModal(validation.missingFields);
+        return;
+    }
+    
+    document.getElementById('loader').style.display = 'flex';
+    
+    setTimeout(() => {
+        const inputs = this.getInputs();
+        const readinessScore = this.calculateAdvancedReadiness(inputs);
+        const recommendation = this.generateRecommendation(readinessScore, inputs);
         
-        loadDataForDate() {
-            this.currentDate = document.getElementById('currentDate').value;
-            const data = this.trainingData[this.currentDate];
-            if (data) {
-                Object.keys(data.inputs).forEach(id => {
-                    if (id === 'climbingType' || id === 'sleepDuration') return;
-                    const el = document.getElementById(id);
-                    if(el) {
-                        el.value = data.inputs[id];
-                        // Trigger input event for sliders to update
-                        if (el.type === 'number') {
-                            el.dispatchEvent(new Event('input'));
-                        }
-                    }
-                });
-                
-                const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingWeights', 'climbingCardio', 'climbingNone'];
-                climbingCheckboxes.forEach(id => document.getElementById(id).checked = false);
-
-                if(data.inputs.climbingType){
-                    const savedTypes = data.inputs.climbingType.split(', ');
-                    savedTypes.forEach(type => {
-                       const checkbox = document.querySelector(`input[value="${type}"]`);
-                       if(checkbox) checkbox.checked = true;
-                    });
-                }
-
-            } else {
-                this.clearCurrentEntry(false);
-            }
-            this.calculateAndDisplaySleepDuration();
-            this.handleTrainingChange(); // Update disabled state
-            this.calculateRecommendation();
-        }
+        this.trainingData[date] = { inputs, readinessScore, recommendation };
+        this.saveData();
+        
+        localStorage.removeItem('climbSmartAutoSave');
+        this.markAsSaved(); // Reset change tracking
+        
+        document.getElementById('loader').style.display = 'none';
+        showToast(`Entry for ${date} saved successfully!`);
+        this.updateHistory();
+        this.updateAnalytics();
+    }, 1000);
+}
+        
 
 clearCurrentEntry(clearDate = true) {
+    // The body of this function to clear fields remains the same
     const ids = ['sleepQuality', 'mood', 'stress', 'doms', 'tendons', 'skin', 'daysSince', 'lastRPE', 'mealBeforeTraining', 'sessionNotes', 'snoozeTime', 'wakeTime'];
     ids.forEach(id => { 
         const el = document.getElementById(id);
         if (el) {
             el.value = '';
             el.classList.remove('error');
-            if(el.type === 'number') {
-                el.dispatchEvent(new Event('input'));
-            }
+            if(el.type === 'number') el.dispatchEvent(new Event('input'));
         }
     });
     
-    // Reset all sliders to minimum values
     const sliderResets = [
-        { numberId: 'sleepQuality', sliderId: 'sleepQualitySlider', minValue: 1 },
-        { numberId: 'stress', sliderId: 'stressSlider', minValue: 1 },
-        { numberId: 'daysSince', sliderId: 'daysSinceSlider', minValue: 0 },
-        { numberId: 'lastRPE', sliderId: 'lastRPESlider', minValue: 0 }
+        { id: 'sleepQuality', min: 1 }, { id: 'stress', min: 1 },
+        { id: 'daysSince', min: 0 }, { id: 'lastRPE', min: 0 }
     ];
-    
-    sliderResets.forEach(({ numberId, sliderId, minValue }) => {
-        const numberInput = document.getElementById(numberId);
-        const slider = document.getElementById(sliderId);
-        
-        if (numberInput && slider) {
-            numberInput.value = minValue;
-            slider.value = minValue;
-            // Update visual fill
+    sliderResets.forEach(({ id, min }) => {
+        const numInput = document.getElementById(id);
+        const slider = document.getElementById(id + 'Slider');
+        if(numInput && slider) {
+            numInput.value = min;
+            slider.value = min;
             this.updateSliderFill(slider);
         }
     });
     
     document.getElementById('sleepDurationDisplay').textContent = '--:-- hours';
-
-    const climbingCheckboxes = ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingWeights', 'climbingCardio', 'climbingNone'];
-    climbingCheckboxes.forEach(id => document.getElementById(id).checked = false);
+    ['climbingBouldering', 'climbingTopRope', 'climbingLead', 'climbingWeights', 'climbingCardio', 'climbingNone'].forEach(id => document.getElementById(id).checked = false);
     document.getElementById('climbingTypeGroup').classList.remove('error');
 
-    if (clearDate) {
-        this.setInitialDate();
-    }
-    this.handleTrainingChange(); // Update disabled state
+    if (clearDate) this.setInitialDate();
+    
+    this.handleTrainingChange();
     this.calculateRecommendation();
+    
+    // This is the crucial addition
+    this.markAsSaved(); 
 }
 async clearDataWithTearEffect() {
     // Create tear effect instance
@@ -1770,7 +1871,7 @@ async clearDataWithTearEffect() {
     
     // Clear data during tear
     setTimeout(() => {
-        this.clearCurrentEntry(true);
+        this.clearCurrentEntry(true); // ✅ use instance reference
         showToast('Data cleared');
     }, 800);
 }
@@ -1812,92 +1913,154 @@ async clearDataWithTearEffect() {
             }
         }
         
-        prevWeek() {
-            this.currentWeekIndex++;
-            this.updateHistory();
-            this.updateWeekDisplay();
-        }
-        
-        nextWeek() {
-            this.currentWeekIndex--;
-            if (this.currentWeekIndex < 0) this.currentWeekIndex = 0;
-            this.updateHistory();
-            this.updateWeekDisplay();
-        }
-        
-        updateWeekDisplay() {
-            const now = new Date();
-            const weekStart = new Date(now);
-            weekStart.setDate(now.getDate() - now.getDay() - (this.currentWeekIndex * 7));
-            
-            const weekEnd = new Date(weekStart);
-            weekEnd.setDate(weekStart.getDate() + 6);
-            
-            const options = { month: 'short', day: 'numeric' };
-            const weekText = `${weekStart.toLocaleDateString(undefined, options)} - ${weekEnd.toLocaleDateString(undefined, options)}`;
-            document.getElementById('currentWeek').textContent = weekText;
-        }
+// Replace your existing prevWeek, nextWeek, and updateWeekDisplay functions
 
-        updateHistory() {
-            const historyList = document.getElementById('historyList');
-            historyList.innerHTML = '';
-            const sortedDates = Object.keys(this.trainingData).sort((a,b) => new Date(b) - new Date(a));
-            
-            if (sortedDates.length === 0) {
-                historyList.innerHTML = '<p style="text-align:center; color:#7f8c8d;">No training history found.</p>';
-                return;
-            }
-            
-            let displayDates = sortedDates;
-            if (this.currentWeekIndex > 0) {
-                const now = new Date();
-                const weekStart = new Date(now);
-                weekStart.setDate(now.getDate() - now.getDay() - (this.currentWeekIndex * 7));
-                weekStart.setHours(0,0,0,0);
-                
-                const weekEnd = new Date(weekStart);
-                weekEnd.setDate(weekStart.getDate() + 7);
-                
-                displayDates = sortedDates.filter(date => {
-                    const dateObj = new Date(date + 'T00:00:00');
-                    return dateObj >= weekStart && dateObj < weekEnd;
-                });
-                
-                if (displayDates.length === 0) {
-                    historyList.innerHTML = '<p style="text-align:center; color:#7f8c8d;">No entries for this week.</p>';
-                    return;
-                }
-            } else {
-                 displayDates = sortedDates.slice(this.currentWeekIndex * 7, (this.currentWeekIndex * 7) + 7);
-            }
-            
-            displayDates.forEach(date => {
-                const entry = this.trainingData[date];
-                const notesHTML = entry.inputs.sessionNotes ? `<div class="log-notes"><strong>Notes:</strong> ${entry.inputs.sessionNotes}</div>` : '';
-                const sleepDuration = entry.inputs.sleepDuration ? `${parseFloat(entry.inputs.sleepDuration).toFixed(1)}h` : 'N/A';
-                const logHTML = `
-                    <div class="log-entry" style="border-left-color: ${entry.recommendation.color};">
-                        <div class="log-date">
-                            <span>${new Date(date + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                            <button class="delete-btn" onclick="app.deleteEntry('${date}')">Delete</button>
-                        </div>
-                        <div class="log-metrics">
-                            <div class="log-metric"><strong>Readiness:</strong> ${entry.readinessScore.toFixed(1)}</div>
-                            <div class="log-metric"><strong>Sleep:</strong> ${sleepDuration} (${entry.inputs.sleepQuality}/10)</div>
-                            <div class="log-metric"><strong>Stress:</strong> ${entry.inputs.stress}/10</div>
-                            <div class="log-metric"><strong>DOMS:</strong> ${entry.inputs.doms}/7</div>
-                            <div class="log-metric"><strong>Tendons:</strong> ${entry.inputs.tendons}/6</div>
-                            <div class="log-metric"><strong>Completed Today:</strong> ${entry.inputs.climbingType || 'N/A'}</div>
-                        </div>
-                        <div class="log-recommendation" style="color: ${entry.recommendation.color};">
-                            <strong>Recommendation:</strong> ${entry.recommendation.type} - ${entry.recommendation.description}
-                        </div>
-                        ${notesHTML}
-                    </div>
-                `;
-                historyList.innerHTML += logHTML;
-            });
-        }
+prevWeek() {
+    this.currentWeekIndex++;
+    this.updateHistory();
+    this.updateWeekDisplay();
+}
+
+nextWeek() {
+    this.currentWeekIndex = Math.max(0, this.currentWeekIndex - 1);
+    this.updateHistory();
+    this.updateWeekDisplay();
+}
+
+updateWeekDisplay() {
+    const now = new Date();
+    
+    // Calculate the start of the current week (Sunday)
+    const currentWeekStart = new Date(now);
+    currentWeekStart.setDate(now.getDate() - now.getDay());
+    currentWeekStart.setHours(0, 0, 0, 0);
+    
+    // Calculate the target week by going back currentWeekIndex weeks
+    const targetWeekStart = new Date(currentWeekStart);
+    targetWeekStart.setDate(currentWeekStart.getDate() - (this.currentWeekIndex * 7));
+    
+    const targetWeekEnd = new Date(targetWeekStart);
+    targetWeekEnd.setDate(targetWeekStart.getDate() + 6);
+    
+    // Format the display
+    const options = { month: 'short', day: 'numeric' };
+    let weekText;
+    
+    if (this.currentWeekIndex === 0) {
+        weekText = 'This Week';
+    } else if (this.currentWeekIndex === 1) {
+        weekText = 'Last Week';
+    } else {
+        const startStr = targetWeekStart.toLocaleDateString(undefined, options);
+        const endStr = targetWeekEnd.toLocaleDateString(undefined, options);
+        weekText = `${startStr} - ${endStr}`;
+    }
+    
+    document.getElementById('currentWeek').textContent = weekText;
+    
+    // Update button states
+    const nextBtn = document.getElementById('nextWeekBtn');
+    const prevBtn = document.getElementById('prevWeekBtn');
+    
+    // Disable "Next" button if we're at current week
+    if (nextBtn) {
+        nextBtn.disabled = this.currentWeekIndex === 0;
+        nextBtn.style.opacity = this.currentWeekIndex === 0 ? '0.5' : '1';
+    }
+    
+    // Check if there's data beyond the current week range
+    const sortedDates = Object.keys(this.trainingData).sort((a, b) => new Date(b) - new Date(a));
+    const oldestDate = sortedDates.length > 0 ? new Date(sortedDates[sortedDates.length - 1]) : new Date();
+    const hasOlderData = oldestDate < targetWeekStart;
+    
+    if (prevBtn) {
+        prevBtn.style.opacity = hasOlderData ? '1' : '0.5';
+    }
+}
+
+updateHistory() {
+    const historyList = document.getElementById('historyList');
+    historyList.innerHTML = '';
+    
+    const sortedDates = Object.keys(this.trainingData).sort((a, b) => new Date(b) - new Date(a));
+    
+    if (sortedDates.length === 0) {
+        historyList.innerHTML = '<p style="text-align:center; color:#7f8c8d; padding: 40px;">No training history found.</p>';
+        this.updateWeekDisplay();
+        return;
+    }
+    
+    let displayDates = [];
+    
+    if (this.currentWeekIndex === 0) {
+        // Current week - show last 7 entries regardless of actual week
+        displayDates = sortedDates.slice(0, 7);
+    } else {
+        // Historical weeks - show entries from that specific week
+        const now = new Date();
+        const currentWeekStart = new Date(now);
+        currentWeekStart.setDate(now.getDate() - now.getDay());
+        currentWeekStart.setHours(0, 0, 0, 0);
+        
+        const targetWeekStart = new Date(currentWeekStart);
+        targetWeekStart.setDate(currentWeekStart.getDate() - (this.currentWeekIndex * 7));
+        
+        const targetWeekEnd = new Date(targetWeekStart);
+        targetWeekEnd.setDate(targetWeekStart.getDate() + 7);
+        
+        displayDates = sortedDates.filter(date => {
+            const dateObj = new Date(date + 'T00:00:00');
+            return dateObj >= targetWeekStart && dateObj < targetWeekEnd;
+        });
+    }
+    
+    if (displayDates.length === 0) {
+        historyList.innerHTML = '<p style="text-align:center; color:#7f8c8d; padding: 40px;">No entries for this week.</p>';
+        this.updateWeekDisplay();
+        return;
+    }
+    
+    // 🟢 OPTIMIZED: Batch HTML creation
+    let htmlFragments = [];
+    
+    displayDates.forEach(date => {
+        const entry = this.trainingData[date];
+        const notesHTML = entry.inputs.sessionNotes ? 
+            `<div class="log-notes"><strong>Notes:</strong> ${entry.inputs.sessionNotes}</div>` : '';
+        const sleepDuration = entry.inputs.sleepDuration ? 
+            `${parseFloat(entry.inputs.sleepDuration).toFixed(1)}h` : 'N/A';
+        
+        const logHTML = `
+            <div class="log-entry" style="border-left-color: ${entry.recommendation.color};">
+                <div class="log-date">
+                    <span>${new Date(date + 'T00:00:00').toLocaleDateString(undefined, { 
+                        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+                    })}</span>
+                    <button class="delete-btn" onclick="app.deleteEntry('${date}')">Delete</button>
+                </div>
+                <div class="log-metrics">
+                    <div class="log-metric"><strong>Readiness:</strong> ${entry.readinessScore.toFixed(1)}</div>
+                    <div class="log-metric"><strong>Sleep:</strong> ${sleepDuration} (${entry.inputs.sleepQuality}/10)</div>
+                    <div class="log-metric"><strong>Stress:</strong> ${entry.inputs.stress}/10</div>
+                    <div class="log-metric"><strong>DOMS:</strong> ${entry.inputs.doms}/7</div>
+                    <div class="log-metric"><strong>Tendons:</strong> ${entry.inputs.tendons}/6</div>
+                    <div class="log-metric"><strong>Completed Today:</strong> ${entry.inputs.climbingType || 'N/A'}</div>
+                </div>
+                <div class="log-recommendation" style="color: ${entry.recommendation.color};">
+                    <strong>Recommendation:</strong> ${entry.recommendation.type} - ${entry.recommendation.description}
+                </div>
+                ${notesHTML}
+            </div>
+        `;
+        
+        htmlFragments.push(logHTML);
+    });
+    
+    // 🟢 SINGLE DOM operation instead of multiple +=
+    historyList.innerHTML = htmlFragments.join('');
+    
+    this.updateWeekDisplay();
+}
 
 updateAnalytics() {
     clearTimeout(this.chartDebounce);
@@ -1928,9 +2091,9 @@ updateAnalytics() {
         const skin = sortedData.map(([, data]) => data.inputs.skin);
         const lastRPE = sortedData.map(([, data]) => data.inputs.lastRPE);
 
-        if (this.weeklyChart) {
-            this.weeklyChart.destroy();
-        }
+        if (this.weeklyChart instanceof Chart) {
+             this.weeklyChart.destroy();
+    }
 
         const ctx = chartCanvas.getContext('2d');
         this.weeklyChart = new Chart(ctx, {
@@ -2418,13 +2581,5 @@ addChartControls() {
     
     
     
-    document.addEventListener('DOMContentLoaded', () => {
-        // We create the app here. No need for `window.app`.
-        // The classes and functions above can still see and use it.
-        const app = new MultiDayTracker();
-
-        // If you absolutely needed to access `app` from the console for debugging:
-        // window.app = app; // But it's better practice to avoid this.
-    });
 
 })(); // The parentheses at the end here are what make it run.
