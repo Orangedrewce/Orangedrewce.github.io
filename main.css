@@ -1,0 +1,31 @@
+/* ============================================
+   MAIN STYLESHEET
+   Imports all CSS modules in a logical order.
+   Link ONLY this file in your HTML.
+   ============================================ */
+
+/* 1. Base styles, variables, and resets */
+@import url("modules/base.css");
+
+/* 2. Reusable animations (keyframes) */
+@import url("modules/animations.css");
+
+/* 3. Core layout structure */
+@import url("modules/layout.css");
+
+/* 4. Common components */
+@import url("modules/tabs.css");
+@import url("modules/buttons.css");
+@import url("modules/forms.css");
+@import url("modules/sliders.css");
+@import url("modules/modals.css");
+@import url("modules/recommendation-panel.css");
+
+/* 5. Page/Tab specific styles */
+@import url("modules/daily-tab.css");
+@import url("modules/history-tab.css");
+@import url("modules/analytics-tab.css");
+@import url("modules/sync-tab.css");
+
+/* 6. Utility and helper classes */
+@import url("modules/utilities.css");
