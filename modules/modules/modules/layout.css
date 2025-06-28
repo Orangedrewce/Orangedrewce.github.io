@@ -1,0 +1,83 @@
+/* modules/layout.css */
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background-color: #fffacd;  /* Legal pad yellow */
+    border-radius: 0 0 15px 15px;  /* Only round bottom corners */
+    padding: 60px 20px 20px 80px;  /* Extra top padding for torn edge */
+    box-shadow: 
+        0 15px 30px rgba(0, 0, 0, 0.1),
+        inset 0 2px 4px rgba(0, 0, 0, 0.05);  /* Subtle inset shadow */
+    position: relative;
+    z-index: 1;
+    overflow: visible;  /* Allow torn edge to show */
+    
+    /* Yellow legal pad lines */
+    background-image: 
+        /* Red margin line */
+        linear-gradient(
+            to right, 
+            transparent 65px, 
+            #ff6b6b 65px, 
+            #ff6b6b 67px, 
+            transparent 67px
+        ),
+        /* Blue horizontal lines */
+        repeating-linear-gradient(
+            transparent,
+            transparent 31px,
+            rgba(70, 130, 180, 0.4) 31px,
+            rgba(70, 130, 180, 0.4) 32px
+        ),
+        /* Paper texture */
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 1px,
+            rgba(0, 0, 0, 0.01) 1px,
+            rgba(0, 0, 0, 0.01) 2px
+        );
+}
+
+/* Torn top edge */
+.container::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: #fffacd;
+    z-index: -1;
+    
+    /* Create torn edge effect */
+    clip-path: polygon(0% 50%, 2% 45%, 4% 55%, 6% 40%, 8% 60%, 10% 45%, 12% 50%, 14% 35%, 16% 65%, 18% 40%, 20% 55%, 22% 45%, 24% 60%, 26% 35%, 28% 50%, 30% 45%, 32% 65%, 34% 40%, 36% 55%, 38% 50%, 40% 35%, 42% 60%, 44% 45%, 46% 50%, 48% 40%, 50% 65%, 52% 45%, 54% 55%, 56% 35%, 58% 50%, 60% 45%, 62% 60%, 64% 40%, 66% 55%, 68% 50%, 70% 35%, 72% 65%, 74% 45%, 76% 50%, 78% 40%, 80% 60%, 82% 45%, 84% 55%, 86% 35%, 88% 50%, 90% 45%, 92% 65%, 94% 40%, 96% 55%, 98% 50%, 100% 45%, 100% 100%, 0% 100%);
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+@media (max-width: 992px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 50px 15px 15px 60px;
+        border-radius: 10px;
+    }
+    
+    .container::before {
+        background-size: 60px 20px;
+        background-position: 15px 10px;
+    }
+}
