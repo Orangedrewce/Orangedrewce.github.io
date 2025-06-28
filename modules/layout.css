@@ -13,7 +13,7 @@
     z-index: 1;
     overflow: visible;  /* Allow torn edge to show */
     
-    /* Yellow legal pad lines */
+    /* Yellow legal pad lines - DESKTOP version */
     background-image: 
         /* Red margin line */
         linear-gradient(
@@ -70,10 +70,39 @@
     }
 }
 
+/* 
+ * FIX: This section restores the original, more spacious mobile layout.
+ * It reduces the left padding and adjusts the red line position accordingly.
+*/
 @media (max-width: 768px) {
     .container {
-        padding: 50px 15px 15px 60px;
+        padding: 50px 15px 15px 40px; /* Reduced left padding for more content space */
         border-radius: 10px;
+        /* Redefine background for mobile to move the red line */
+        background-image: 
+            /* Red margin line at a smaller position */
+            linear-gradient(
+                to right, 
+                transparent 25px, /* <-- ADJUSTED */
+                #ff6b6b 25px,     /* <-- ADJUSTED */
+                #ff6b6b 27px,     /* <-- ADJUSTED */
+                transparent 27px  /* <-- ADJUSTED */
+            ),
+            /* Horizontal lines can stay the same */
+            repeating-linear-gradient(
+                transparent,
+                transparent 31px,
+                rgba(70, 130, 180, 0.4) 31px,
+                rgba(70, 130, 180, 0.4) 32px
+            ),
+            /* Texture can stay the same */
+            repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 1px,
+                rgba(0, 0, 0, 0.01) 1px,
+                rgba(0, 0, 0, 0.01) 2px
+            );
     }
     
     .container::before {
