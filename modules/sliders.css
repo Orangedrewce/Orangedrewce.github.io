@@ -1,0 +1,152 @@
+/* modules/sliders.css */
+
+.slider-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 10px 0;
+}
+
+.slider-container input[type="number"] {
+    width: 70px;
+    text-align: center;
+    flex-shrink: 0;
+    border: 2px solid var(--slider-track-bg);
+    border-radius: 6px;
+    padding: 8px;
+}
+
+.slider-container:hover input[type="number"] {
+    background-color: #f0ebf4;
+    border-color: #8e44ad;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(142, 68, 173, 0.1);
+}
+
+/* --- Base Modern Slider Styles --- */
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 24px;
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+    --track-height: 10px;
+    --track-radius: 6px;
+    --track-empty-bg: #d5d8dc;
+    --thumb-bg: #764ba2; /* Default thumb color */
+}
+
+/* --- WebKit (Chrome, Edge, Safari) --- */
+input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: var(--track-height);
+    background: var(--slider-track-bg, #d5d8dc);
+    border-radius: var(--track-radius);
+    border: 1px solid #bdc3c7;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    margin-top: -7px; /* (10px track - 24px thumb) / 2 */
+    height: 24px;
+    width: 24px;
+    background: var(--thumb-bg);
+    border-radius: 50%;
+    border: 2px solid #ffffff; /* Default white border */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s ease-out;
+    cursor: grab;
+}
+
+input[type="range"]:active::-webkit-slider-thumb {
+    transform: scale(1.15);
+    cursor: grabbing;
+}
+
+/* --- Firefox --- */
+input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: var(--track-height);
+    background: var(--track-empty-bg);
+    border-radius: var(--track-radius);
+    border: 1px solid #bdc3c7;
+}
+
+input[type="range"]::-moz-range-progress {
+    background: linear-gradient(to right, var(--slider-fill-start, #3498db), var(--slider-fill-end, #9b59b6));
+    height: var(--track-height);
+    border-radius: var(--track-radius) 0 0 var(--track-radius);
+}
+
+input[type="range"]::-moz-range-thumb {
+    height: 24px;
+    width: 24px;
+    background: var(--thumb-bg);
+    border-radius: 50%;
+    border: 2px solid #ffffff; /* Default white border */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s ease-out;
+    cursor: grab;
+}
+
+input[type="range"]:active::-moz-range-thumb {
+    transform: scale(1.15);
+}
+
+/* 
+ * FIX: Re-introducing the specific styles for each slider thumb ('climbing hold').
+ * This restores the unique colors, white outlines, and glow effects.
+*/
+/* --- Individual Slider Thumb Styles ('Climbing Holds') --- */
+
+/* Sleep Quality - Blue Hold */
+#sleepQualitySlider::-webkit-slider-thumb,
+#sleepQualitySlider::-moz-range-thumb {
+    background: #0088ff !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+}
+
+/* Stress Level - Hot Pink Hold */
+#stressSlider::-webkit-slider-thumb,
+#stressSlider::-moz-range-thumb {
+    background: #ff0080 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 0 8px rgba(255, 20, 147, 0.5);
+}
+
+/* Days Since - Neon Green Hold */
+#daysSinceSlider::-webkit-slider-thumb,
+#daysSinceSlider::-moz-range-thumb {
+    background: #00ff00 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 0 8px rgba(57, 255, 20, 0.5);
+}
+
+/* Last RPE - Bright Orange Hold */
+#lastRPESlider::-webkit-slider-thumb,
+#lastRPESlider::-moz-range-thumb {
+    background: #ff4a18 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 0 8px rgba(255, 74, 24, 0.5);
+}
+
+/* --- Overrides & Disabled State --- */
+.input-section:hover input[type="range"] {
+    background: transparent !important;
+    border: none !important;
+}
+
+input[type="range"].disabled-input {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+input[type="range"].disabled-input::-webkit-slider-thumb,
+input[type="range"].disabled-input::-moz-range-thumb {
+    cursor: not-allowed;
+    background: #95a5a6;
+}
