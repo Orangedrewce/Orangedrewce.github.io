@@ -1,0 +1,261 @@
+/* modules/buttons.css */
+
+/* --- General Button Group --- */
+.button-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 30px;
+    margin-top: 20px;
+    padding-bottom: 10px;
+}
+
+/* --- Main Action Buttons (.update-btn) --- */
+.update-btn {
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 140px;
+    max-width: 200px;
+    position: relative;
+    overflow: hidden;
+}
+
+.update-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    filter: brightness(1.15);
+}
+
+.update-btn:active {
+    transform: translateY(0) scale(0.98);
+    transition: all 0.1s ease;
+}
+
+#updateRecBtn {
+    background: var(--primary-gradient);
+}
+#updateRecBtn:hover {
+    box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
+}
+
+#loadDateBtn {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+}
+#loadDateBtn:hover {
+    box-shadow: 0 10px 25px rgba(52, 152, 219, 0.4);
+    color: #ecf0f1;
+}
+
+#saveEntryBtn {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+}
+#saveEntryBtn:hover {
+    box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
+}
+
+#clearEntryBtn {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+}
+#clearEntryBtn:hover {
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+}
+
+/* --- Export / Backup Buttons (.export-btn) --- */
+.export-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-weight: 500;
+}
+
+.export-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    filter: brightness(1.15);
+}
+
+.export-btn:active {
+    transform: translateY(0) scale(0.98);
+    transition: all 0.1s ease;
+}
+
+#exportCsvBtn {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    border: 2px solid transparent;
+}
+#exportCsvBtn:hover {
+    background: linear-gradient(135deg, #229954 0%, #27ae60 100%);
+    box-shadow: 0 8px 20px rgba(39, 174, 96, 0.4);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+#exportCsvBtn:before {
+    content: "📊";
+    margin-right: 8px;
+}
+
+#exportBackupBtn {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    border: 2px solid transparent;
+}
+#exportBackupBtn:hover {
+    background: linear-gradient(135deg, #2980b9 0%, #21618c 100%);
+    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+#exportBackupBtn:before {
+    content: "💾";
+    margin-right: 8px;
+}
+
+#importBackupBtn {
+    background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+    border: 2px solid transparent;
+}
+#importBackupBtn:hover {
+    background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%);
+    box-shadow: 0 8px 20px rgba(155, 89, 182, 0.4);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+#importBackupBtn:before {
+    content: "📥";
+    margin-right: 8px;
+}
+
+#clearAllDataBtn {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    border: 2px solid transparent;
+    position: relative;
+}
+#clearAllDataBtn:hover {
+    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.5);
+    border-color: rgba(255, 255, 255, 0.2);
+    animation: danger-pulse 1s ease-in-out infinite alternate;
+}
+#clearAllDataBtn:before {
+    content: "🗑️";
+    margin-right: 8px;
+}
+
+/* --- Delete Button --- */
+.delete-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 15px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.delete-btn:hover {
+    background: #c0392b;
+    transform: translateY(-2px) scale(1.08);
+    box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
+}
+
+/* --- History Navigation Button --- */
+.nav-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    background: #2980b9;
+    transform: translateY(-1px) scale(1.05);
+    box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+}
+
+/* --- Help Button --- */
+.help-button {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.help-button:hover {
+    background: linear-gradient(135deg, #2980b9 0%, #21618c 100%);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+    animation: curious-tilt 2s ease-in-out infinite;
+}
+
+/* --- Mobile Adjustments --- */
+@media (max-width: 768px) {
+    .button-group {
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+    .update-btn {
+        padding: 12px 20px;
+        font-size: 14px;
+        min-width: 120px;
+        border-radius: 20px;
+        min-height: 44px;
+    }
+    .export-btn {
+        padding: 10px 18px;
+        font-size: 12px;
+        margin: 5px;
+        min-height: 44px;
+    }
+    .delete-btn {
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+    .help-button {
+        top: 5px;
+        right: 5px;
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
+        z-index: 20; /* Higher than tabs */
+    }
+}
+
+@media (hover: none) {
+    .update-btn:hover,
+    .export-btn:hover,
+    .delete-btn:hover,
+    .nav-btn:hover {
+        transform: none;
+        box-shadow: none;
+        filter: none;
+    }
+    .help-button:hover {
+        animation: none;
+    }
+}
