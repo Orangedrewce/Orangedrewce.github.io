@@ -1857,6 +1857,8 @@ clearCurrentEntry(clearDate = true) {
     // This is the crucial addition
     this.markAsSaved(); 
 }
+// In the MultiDayTracker class
+
 async clearDataWithTearEffect() {
     // Create tear effect instance
     const tearEffect = new FluidTearEffect();
@@ -1866,14 +1868,14 @@ async clearDataWithTearEffect() {
     clearBtn.classList.add('clear-data-pressed');
     setTimeout(() => clearBtn.classList.remove('clear-data-pressed'), 100);
     
-    // Start fluid tear
-    await tearEffect.initiateTear();
-    
-    // Clear data during tear
-    setTimeout(() => {
-        this.clearCurrentEntry(true); // ✅ use instance reference
-        showToast('Data cleared');
-    }, 800);
+    // --- THE FIX ---
+    // Introduce a tiny delay (e.g., 50 milliseconds) to allow the browser to
+    // finish any pending rendering before taking the screenshot. This prevents
+    // capturing a "dirty" or glitched frame.
+    setTimeout(async () => {
+        // Start the fluid tear animation *after* the delay
+        await tearEffect.initiateTear();
+    }, 50); // A small delay is usually sufficient.
 }
         switchTab(tabName) {
             const currentTab = document.querySelector('.tab-content.active');
