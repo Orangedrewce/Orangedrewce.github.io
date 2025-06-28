@@ -1,0 +1,153 @@
+/* modules/modals.css */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s 0.3s;
+    padding: 20px;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+}
+
+.modal-content h3 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.modal-content p {
+    margin-bottom: 25px;
+    color: #34495e;
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.modal-btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    min-width: 100px;
+}
+
+.modal-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.modal-btn-confirm {
+    background: #e74c3c;
+    color: white;
+}
+.modal-btn-confirm:hover {
+    background: #c0392b;
+    box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
+}
+
+.modal-btn-cancel {
+    background: #ecf0f1;
+    color: #7f8c8d;
+}
+.modal-btn-cancel:hover {
+    background: #bdc3c7;
+    box-shadow: 0 4px 12px rgba(189, 195, 199, 0.3);
+}
+
+/* --- Validation Modal --- */
+.validation-modal .modal-content { text-align: left; max-width: 500px; }
+.validation-modal h3 { text-align: center; color: #e74c3c; margin-bottom: 20px; }
+.validation-errors { margin-bottom: 20px; }
+.validation-error-group { margin-bottom: 15px; }
+.validation-error-group h4 { color: #2c3e50; margin-bottom: 8px; font-size: 1.1em; }
+.validation-error-list { list-style: none; padding-left: 20px; }
+.validation-error-list li { color: #e74c3c; margin-bottom: 5px; position: relative; }
+.validation-error-list li:before { content: "•"; position: absolute; left: -15px; font-weight: bold; }
+.validation-modal .modal-buttons { justify-content: center; }
+.validation-modal .modal-btn { background: var(--primary-gradient); color: white; }
+
+/* --- Welcome Modal --- */
+.welcome-modal .modal-content {
+    background: rgba(255, 255, 255, 0.95) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    backdrop-filter: blur(30px) !important;
+}
+.welcome-modal .modal-content::before {
+    content: ''; position: absolute; top: 50%; left: 50%; width: 200px; height: 200px; background: radial-gradient(circle, rgba(52, 152, 219, 0.4) 0%, rgba(52, 152, 219, 0.2) 40%, transparent 70%); border-radius: 50%; animation: pulse-ring 4s ease-in-out infinite; pointer-events: none; z-index: -1; transform: translate(-50%, -50%);
+}
+.welcome-modal .modal-content::after {
+    content: ''; position: absolute; top: 75%; left: 50%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(155, 89, 182, 0.3) 0%, rgba(155, 89, 182, 0.15) 40%, transparent 70%); border-radius: 50%; animation: pulse-ring 4s ease-in-out infinite 2s; pointer-events: none; z-index: -1; transform: translate(-50%, -50%);
+}
+.welcome-modal h2 { color: #667eea; margin-bottom: 20px; font-size: 2em; }
+.welcome-modal .intro-text { font-size: 0.95em; line-height: 1.25; margin-bottom: 15px; }
+.welcome-modal .developer-info { background: #f8f9fa; padding: 25px; border-radius: 12px; margin-bottom: 25px; }
+.welcome-modal .support-section { text-align: center; padding: 15px; background: linear-gradient(135deg, #667eea15 0%, #fa3f0815 100%); border-radius: 8px; margin-bottom: 15px; }
+.welcome-modal .qr-link { display: inline-block; text-decoration: none; transition: all 0.3s ease; }
+.welcome-modal .qr-link:hover { transform: translateY(-1px) scale(1.05); }
+.welcome-modal .paypal-qr { width: 200px; height: 200px; margin: 20px auto; background: #f0f0f0; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #7f8c8d; border: 2px solid #ddd; overflow: hidden; cursor: pointer; transition: all 0.3s ease; }
+.welcome-modal .qr-link:hover .paypal-qr { border-color: #667eea; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3); transform: translateY(-2px); }
+.welcome-modal .paypal-qr img { width: 100%; height: 100%; object-fit: contain; }
+.welcome-modal .support-text { color: #34495e; font-size: 0.85em; line-height: 1.4; margin-top: 10px; font-style: italic; }
+.welcome-modal .close-welcome-btn { background: var(--primary-gradient); color: white; border: none; padding: 14px 40px; border-radius: 25px; font-size: 16px; cursor: pointer; transition: all 0.3s ease; margin-top: 10px; }
+.welcome-modal .close-welcome-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3); }
+
+/* --- Help Modal --- */
+.help-modal-content { max-width: 600px; max-height: 80vh; overflow-y: auto; }
+.help-content { text-align: left; margin-bottom: 25px; }
+.help-content p { margin-bottom: 15px; line-height: 1.5; font-size: 14px; }
+.help-content strong { color: #2c3e50; font-weight: 600; }
+
+/* --- Mobile Adjustments --- */
+@media (max-width: 768px) {
+    .modal-content { padding: 20px; width: 100%; max-width: 350px; }
+    .modal-content p { font-size: 1em; margin-bottom: 20px; }
+    .modal-buttons { gap: 10px; flex-wrap: wrap; }
+    .modal-btn { padding: 10px 20px; font-size: 14px; flex: 1; }
+    
+    .welcome-modal .modal-content { padding: 25px; }
+    .welcome-modal h2 { font-size: 1.6em; }
+    .welcome-modal .intro-text { font-size: 1em; }
+    .welcome-modal .paypal-qr { width: 150px; height: 150px; }
+    .welcome-modal .modal-content::before { width: 150px; height: 150px; animation-duration: 5s; }
+    .welcome-modal .modal-content::after { width: 220px; height: 220px; animation-duration: 5s; }
+    
+    .help-modal-content { max-width: 95%; margin: 20px auto; }
+    .help-content p { font-size: 13px; margin-bottom: 12px; }
+}
