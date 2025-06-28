@@ -1,0 +1,126 @@
+/* modules/tabs.css */
+
+.nav-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    z-index: 10;  /* Ensure tabs stay on top */
+}
+
+.tab-button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    z-index: 10; /* Higher than title */
+}
+
+/* Individual tab standby colors - subtle Post-it tints */
+.tab-button[data-tab="daily"] {
+    background: linear-gradient(135deg, #FFFDE7 0%, #FFF8E1 100%);
+    color: #F57F17;
+    border: 1px solid #FFE082;
+}
+
+.tab-button[data-tab="history"] {
+    background: linear-gradient(135deg, #FFF3E0 0%, #FFEDDE 100%);
+    color: #E65100;
+    border: 1px solid #FFCC80;
+}
+
+.tab-button[data-tab="analytics"] {
+    background: linear-gradient(135deg, #F1F8E9 0%, #E8F5E8 100%);
+    color: #33691E;
+    border: 1px solid #C8E6C9;
+}
+
+.tab-button[data-tab="sync"] {
+    background: linear-gradient(135deg, #E3F2FD 0%, #E1F5FE 100%);
+    color: #0D47A1;
+    border: 1px solid #BBDEFB;
+}
+
+/* Fallback for unspecified tabs */
+.tab-button:not([data-tab]) {
+    background: #ecf0f1;
+    color: #7f8c8d;
+}
+
+/* Tab hover effect with hop */
+.tab-button:hover:not(.active) {
+    background: linear-gradient(135deg, #d5d8dc 0%, #bdc3c7 100%);
+    color: #2c3e50;
+    transform: translateY(-2px) scale(1.05);  /* Enhanced hop effect */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Active tab styling */
+.tab-button.active {
+    background: var(--primary-gradient);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Active tab hover effects */
+.tab-button.active:hover,
+.tab-button[data-tab="daily"].active:hover,
+.tab-button[data-tab="history"].active:hover,
+.tab-button[data-tab="analytics"].active:hover,
+.tab-button[data-tab="sync"].active:hover {
+    transform: translateY(-1px) scale(1.02);
+    filter: brightness(1.1);
+}
+
+.tab-button[data-tab="daily"].active:hover {
+    box-shadow: 0 10px 20px rgba(255, 225, 53, 0.5);
+}
+.tab-button[data-tab="history"].active:hover {
+    box-shadow: 0 10px 20px rgba(255, 152, 0, 0.5);
+}
+.tab-button[data-tab="analytics"].active:hover {
+    box-shadow: 0 10px 20px rgba(139, 195, 74, 0.5);
+}
+.tab-button[data-tab="sync"].active:hover {
+    box-shadow: 0 10px 20px rgba(33, 150, 243, 0.5);
+}
+.tab-button.active:hover {
+     box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+}
+
+.tab-content {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    height: 0;
+    overflow: hidden;
+}
+
+.tab-content.active {
+    display: block;
+    opacity: 1;
+    height: auto;
+    overflow: visible;
+}
+
+@media (max-width: 768px) {
+    .nav-tabs {
+        margin-bottom: 20px;
+        gap: 5px;
+    }
+
+    .tab-button {
+        padding: 10px 16px;
+        font-size: 14px;
+        min-height: 44px;
+    }
+}
