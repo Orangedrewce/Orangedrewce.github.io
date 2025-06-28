@@ -5928,3 +5928,45 @@ div.modal-overlay.welcome-modal div.modal-content::after {
     transform: translateY(-2px) scale(1.05);  /* Added hop effect */
     box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
 }
+
+
+.help-button:hover {
+
+
+
+
+    transform: translateY(-2px) scale(1.1) rotate(-15deg); /* Tilt to 11 o'clock */
+
+
+    transform: translateY(-2px) scale(1.1);
+
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+
+    background: linear-gradient(135deg, #2980b9 0%, #21618c 100%);
+
+
+    animation: curious-tilt 2s ease-in-out infinite; /* Gentle back-and-forth */
+
+
+}
+
+
+
+
+
+/* head-tilt animation */
+
+
+@keyframes curious-tilt {
+
+
+    0% { transform: translateY(-2px) scale(1.1) rotate(-15deg); } /* 11 o'clock */
+
+
+    50% { transform: translateY(-2px) scale(1.1) rotate(15deg); }  /* 1 o'clock */
+
+
+    100% { transform: translateY(-2px) scale(1.1) rotate(-15deg); } /* Back to 11 o'clock */Add commentMore actions
+
+}
+
