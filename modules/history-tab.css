@@ -1,0 +1,165 @@
+/* modules/history-tab.css */
+
+/* --- Handwritten Font Consistency --- */
+.log-entry, .current-week {
+    font-family: 'Kalam';
+    font-weight: 400;
+}
+.log-metric, .log-recommendation, .log-notes {
+    font-size: 15px;
+    line-height: 1.5;
+}
+.log-date, .log-recommendation strong {
+    font-weight: 700;
+}
+.backup-section h3, .backup-section:hover h3, .backup-section:focus-within h3 {
+    font-style: normal !important;
+    transform: rotate(0deg) !important;
+}
+.history-nav .nav-btn, .history-nav .current-week,
+.history-nav:hover .nav-btn, .history-nav:focus-within .nav-btn,
+.history-nav:hover .current-week, .history-nav:focus-within .current-week {
+    font-style: normal;
+}
+
+/* 
+ * Restoring the original, complex "Da Vinci Sketch" styles for all history tab components.
+*/
+/* ============================================
+   📜 DA VINCI SKETCH EFFECT - HISTORY TAB ELEMENTS
+   ============================================ */
+
+/* --- History Navigation --- */
+.history-nav {
+    background: #faf9f7;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    position: relative;
+    transition: all 0.4s ease;
+    overflow: hidden;
+    filter: grayscale(100%) contrast(1.1) brightness(0.95);
+    background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 3px, transparent 3px, transparent 8px),
+        repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(0, 0, 0, 0.06) 2px, rgba(0, 0, 0, 0.06) 3px, transparent 3px, transparent 8px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), inset 0 0 50px rgba(0, 0, 0, 0.03);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.history-nav::before {
+    content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px; border: 2px dashed #7f8c8d; border-radius: 6px; pointer-events: none; z-index: 1; opacity: 0.6;
+}
+.history-nav .current-week {
+    color: #2c3e50; font-style: italic; transform: rotate(-0.1deg); text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); font-weight: bold; position: relative; z-index: 2;
+}
+.history-nav .nav-btn {
+    background: rgba(189, 195, 199, 0.6); color: #2c3e50; border: 2px dashed #7f8c8d; border-radius: 4px; padding: 8px 12px; font-style: italic; transform: rotate(-0.1deg); text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; position: relative; z-index: 2; backdrop-filter: blur(1px); margin: 0 5px;
+}
+.history-nav:hover, .history-nav:focus-within {
+    filter: none; background: white; background-image: none; border: 2px solid #ecf0f1; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+.history-nav:hover::before, .history-nav:focus-within::before { opacity: 0; }
+.history-nav:hover .current-week, .history-nav:focus-within .current-week { font-style: italic; transform: rotate(0deg); text-shadow: none; }
+.history-nav:hover .nav-btn, .history-nav:focus-within .nav-btn { background: #3498db; color: white; border: 2px solid #3498db; border-style: solid; border-radius: 5px; font-style: italic; transform: rotate(0deg); text-shadow: none; backdrop-filter: none; }
+
+/* --- Export Section & Backup Section --- */
+.export-section, .backup-section {
+    background: #faf9f7;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    transition: all 0.4s ease;
+    overflow: hidden;
+    filter: grayscale(100%) contrast(1.1) brightness(0.95);
+    background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 3px, transparent 3px, transparent 8px),
+        repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(0, 0, 0, 0.06) 2px, rgba(0, 0, 0, 0.06) 3px, transparent 3px, transparent 8px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), inset 0 0 50px rgba(0, 0, 0, 0.03);
+}
+.export-section::before, .backup-section::before {
+    content: ''; position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px; border: 2px dashed #7f8c8d; border-radius: 6px; pointer-events: none; z-index: 1; opacity: 0.5;
+}
+.export-section .export-btn, .backup-section .export-btn {
+    background: rgba(189, 195, 199, 0.6) !important; color: #2c3e50 !important; border: 2px dashed #7f8c8d !important; border-radius: 4px !important; font-style: italic; transform: rotate(-0.1deg); text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); transition: all 0.3s ease !important; position: relative; z-index: 2; backdrop-filter: blur(1px);
+}
+.export-section:hover, .export-section:focus-within,
+.backup-section:hover, .backup-section:focus-within {
+    filter: none; background: white; background-image: none; border: 2px solid #ecf0f1; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+.export-section:hover::before, .export-section:focus-within::before,
+.backup-section:hover::before, .backup-section:focus-within::before { opacity: 0; }
+.export-section:hover .export-btn, .export-section:focus-within .export-btn,
+.backup-section:hover .export-btn, .backup-section:focus-within .export-btn { font-style: italic !important; transform: rotate(0deg) !important; text-shadow: none !important; border-style: solid !important; border-radius: 20px !important; backdrop-filter: none !important; }
+
+/* Export Section Specifics */
+.export-buttons-row { display: flex; justify-content: space-between; align-items: center; gap: 15px; }
+.export-buttons-row .export-btn { flex: 0 0 auto; min-width: 140px; margin: 0; }
+.export-section:hover #exportCsvBtn, .export-section:focus-within #exportCsvBtn { background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%) !important; color: white !important; border: 2px solid #27ae60 !important; }
+.export-section:hover #clearAllDataBtn, .export-section:focus-within #clearAllDataBtn { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important; color: white !important; border: 2px solid #e74c3c !important; }
+
+/* Backup Section Specifics */
+/*
+ * FIX: Restored original styles for the Backup Section Header.
+ * Added emoji and adjusted padding/margins to match the original image.
+*/
+.backup-section h3 {
+    color: #2c3e50;
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    border-bottom: 2px dashed #7f8c8d;
+    padding-bottom: 8px;
+    margin-bottom: 15px; /* Added margin to create space */
+    position: relative;
+    z-index: 2;
+    display: flex; /* Added for alignment */
+    align-items: center; /* Added for alignment */
+}
+
+/* FIX: Added ::before pseudo-element to restore the lock emoji */
+.backup-section h3::before {
+    content: "🔐";
+    margin-right: 10px;
+    font-size: 1.2em;
+    font-style: normal; /* Ensure emoji is not italic */
+}
+
+.backup-input { background: rgba(255, 255, 255, 0.3); border: 2px dashed #7f8c8d; border-radius: 4px; color: #2c3e50; font-family: 'Courier New', monospace; font-style: italic; transform: rotate(-0.1deg); backdrop-filter: blur(1px); position: relative; z-index: 2; transition: all 0.3s ease; width: 100%; }
+.backup-buttons-row { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-top: 15px; }
+.backup-buttons-row .export-btn { flex: 0 0 auto; min-width: 140px; margin: 0; }
+.backup-section:hover h3, .backup-section:focus-within h3 { font-style: italic; transform: rotate(0deg); text-shadow: none; border-bottom: none; border-left: 4px solid #3498db; padding-left: 12px; margin-left: -16px; }
+.backup-section:hover .backup-input, .backup-section:focus-within .backup-input { background: white; border: 2px solid #ecf0f1; border-style: solid; font-style: italic; transform: rotate(0deg); backdrop-filter: none; }
+.backup-section:hover #exportBackupBtn, .backup-section:focus-within #exportBackupBtn { background: linear-gradient(135deg, #3498db 0%, #2980b9 100%) !important; color: white !important; border: 2px solid #3498db !important; }
+.backup-section:hover #importBackupBtn, .backup-section:focus-within #importBackupBtn { background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%) !important; color: white !important; border: 2px solid #9b59b6 !important; }
+
+/* --- Log Entries --- */
+.log-entry {
+    background: #faf9f7; border: 2px solid transparent; border-radius: 10px; padding: 15px; margin-bottom: 15px; position: relative; transition: filter 0.2s ease, background 0.2s ease, box-shadow 0.2s ease; overflow: hidden; filter: grayscale(100%) contrast(1.1) brightness(0.95);
+    background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 3px, transparent 3px, transparent 8px),
+        repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(0, 0, 0, 0.06) 2px, rgba(0, 0, 0, 0.06) 3px, transparent 3px, transparent 8px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), inset 0 0 50px rgba(0, 0, 0, 0.03);
+}
+.log-entry::before { content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px; border: 2px dashed #7f8c8d; border-radius: 6px; pointer-events: none; z-index: 1; opacity: 0.6; transition: opacity 0.2s ease; }
+.log-date { color: #2c3e50; font-style: italic; transform: rotate(-0.1deg); text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); position: relative; z-index: 2; transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+.log-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.log-metric, .log-recommendation, .log-notes { background: rgba(248, 249, 250, 0.4); border: 2px dashed #bdc3c7; border-radius: 4px; padding: 8px; font-style: italic; color: #34495e; position: relative; z-index: 2; backdrop-filter: blur(1px); transition: all 0.2s ease; }
+.log-recommendation, .log-notes { margin-top: 10px; padding: 10px; }
+.log-notes { white-space: pre-wrap; word-wrap: break-word; }
+.delete-btn { background: rgba(231, 76, 60, 0.6); color: #2c3e50; border: 2px dashed #c0392b; border-radius: 4px; font-style: italic; transform: rotate(-0.1deg); text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); position: relative; z-index: 2; backdrop-filter: blur(1px); transition: all 0.2s ease; padding: 8px 15px; }
+
+.log-entry:hover, .log-entry:focus-within { filter: none; background: white; background-image: none; border-color: #ecf0f1; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12); }
+.log-entry:hover::before, .log-entry:focus-within::before { opacity: 0; }
+.log-entry:hover .log-date, .log-entry:focus-within .log-date { font-style: italic; transform: rotate(0deg); text-shadow: none; }
+.log-entry:hover .log-metric, .log-entry:focus-within .log-metric { background: #f8f9fa; border: 2px solid #ecf0f1; border-style: solid; font-style: italic; backdrop-filter: none; }
+.log-entry:hover .log-recommendation, .log-entry:focus-within .log-recommendation { background: #e8f4f8; border: 2px solid #ecf0f1; border-style: solid; font-style: italic; backdrop-filter: none; }
+.log-entry:hover .log-notes, .log-entry:focus-within .log-notes { background: #fdf8e2; border: 2px solid #ecf0f1; border-style: solid; font-style: italic; backdrop-filter: none; }
+.log-entry:hover .delete-btn, .log-entry:focus-within .delete-btn { background: #e74c3c; color: white; border: 2px solid #e74c3c; border-style: solid; font-style: italic; transform: rotate(0deg); text-shadow: none; backdrop-filter: none; }
+
+@media (max-width: 768px) {
+    .history-nav, .export-section, .backup-section, .log-entry { transform: none !important; }
+}
