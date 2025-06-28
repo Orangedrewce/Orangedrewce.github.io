@@ -1,0 +1,80 @@
+/* modules/analytics-tab.css */
+
+.charts-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.chart-container {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.weekly-chart {
+    grid-column: 1 / -1;
+    height: 400px;
+}
+
+.no-data-message {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #7f8c8d;
+    font-size: 18px;
+    padding: 20px;
+}
+
+.chart-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.chart-toggle {
+    background: #ecf0f1;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.chart-toggle.active {
+    background: #3498db;
+    color: white;
+}
+
+.chart-toggle:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    filter: brightness(1.1);
+}
+
+@media (max-width: 768px) {
+    .charts-section {
+        margin-top: 20px;
+    }
+    .chart-container {
+        padding: 15px;
+        border-radius: 10px;
+    }
+    .weekly-chart {
+        height: 300px;
+    }
+    .no-data-message {
+        font-size: 16px;
+    }
+}
