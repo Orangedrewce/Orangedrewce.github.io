@@ -1,0 +1,353 @@
+/* modules/sync-tab.css */
+
+/* FIX: Restoring original modern styles for the Sync tab. */
+
+.sync-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.sync-tabs {
+    display: flex;
+    background: var(--primary-gradient);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+.sync-tab {
+    flex: 1;
+    padding: 15px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sync-tab.active {
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.sync-content {
+    display: none;
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.sync-content.active {
+    display: block;
+}
+
+.sync-title {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.6em;
+}
+
+.sync-description {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    text-align: center;
+    line-height: 1.6;
+    font-weight: 500;
+    font-size: 1.05em;
+}
+
+.qr-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.qr-container {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.qr-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    color: #ffffff;
+    font-style: italic;
+    text-align: center;
+    padding: 10px;
+    background: #a9a9a9;
+    border-radius: 8px;
+    border: 2px dashed #000000;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.qr-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    color: #e74c3c;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+}
+
+.peer-id-display {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: 2px;
+    color: #2c3e50;
+}
+
+.sync-input-group {
+    margin-bottom: 25px;
+}
+
+.sync-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #ecf0f1;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.sync-input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.sync-status {
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-weight: 500;
+    text-align: center;
+}
+.sync-status.connecting { background: #fdf8e2; color: #f39c12; }
+.sync-status.connected { background: #e8f4f8; color: #3498db; }
+.sync-status.success { background: #e8f6ef; color: #27ae60; }
+.sync-status.error { background: #fceae9; color: #e74c3c; }
+
+.sync-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.sync-btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 140px;
+}
+.sync-btn.primary {
+    background: linear-gradient(135deg, #FF6B9D 0%, #F06292 100%); /* Pink Post-it */
+    color: white;
+}
+.sync-btn.secondary {
+    background: #ecf0f1;
+    color: #7f8c8d;
+}
+.sync-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.sync-progress {
+    height: 6px;
+    background: #ecf0f1;
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 25px 0;
+}
+.sync-progress-bar {
+    height: 100%;
+    background: var(--primary-gradient);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.sync-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.sync-steps::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: #ecf0f1;
+    z-index: 1;
+}
+
+.sync-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+}
+
+.sync-step-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #ecf0f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.sync-step.active .sync-step-icon {
+    background: #667eea;
+    color: white;
+}
+
+.sync-step.completed .sync-step-icon {
+    background: #27ae60;
+    color: white;
+}
+
+.sync-step-text {
+    color: #2c3e50;
+    font-size: 0.95em;
+    text-align: center;
+    max-width: 100px;
+    font-weight: 600;
+}
+
+.sync-step.active .sync-step-text {
+    font-weight: 800;
+    color: #1a252f;
+}
+
+/* Camera scan UI */
+.camera-container {
+    display: none;
+    margin-top: 15px;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+#qrScanner {
+    width: 100%;
+    display: block;
+}
+.scan-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+.scan-box {
+    width: 70%;
+    height: 70%;
+    max-width: 300px;
+    max-height: 300px;
+    border: 2px solid #3498db;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+.scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #3498db;
+    animation: scan 2s linear infinite;
+}
+.camera-controls {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    z-index: 10;
+}
+.camera-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.8);
+    color: #2c3e50;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+.camera-btn:hover {
+    background: white;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+.camera-btn.danger:hover {
+    background: #e74c3c;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+@media (max-width: 768px) {
+    .sync-steps {
+        flex-direction: column;
+        gap: 25px;
+        align-items: center;
+    }
+    
+    .sync-steps::before {
+        display: none;
+    }
+    
+    .sync-step {
+        flex-direction: row;
+        gap: 15px;
+    }
+    
+    .sync-step-text {
+        text-align: left;
+    }
+}
