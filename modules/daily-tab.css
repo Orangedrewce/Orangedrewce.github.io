@@ -1,0 +1,194 @@
+/* modules/daily-tab.css */
+
+/* ============================================
+   DA VINCI SKETCH EFFECT - BASE CONTAINER
+   ============================================ */
+.input-section:first-child,
+.input-section:nth-child(2),
+.training-history-section,
+.input-section[style*="grid-column: 1 / -1"],
+.personalization-section,
+.date-selector,
+.button-group {
+    background: #faf9f7;
+    border: none;
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+    transition: all 0.6s ease;
+    overflow: hidden;
+    filter: grayscale(100%) contrast(1.1) brightness(0.95);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), inset 0 0 50px rgba(0, 0, 0, 0.03);
+    background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 2px, transparent 2px, transparent 8px),
+        repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(0, 0, 0, 0.06) 2px, rgba(0, 0, 0, 0.06) 2px, transparent 2px, transparent 8px);
+}
+
+.input-section:first-child:hover, .input-section:first-child:focus-within,
+.input-section:nth-child(2):hover, .input-section:nth-child(2):focus-within,
+.training-history-section:hover, .training-history-section:focus-within,
+.input-section[style*="grid-column: 1 / -1"]:hover, .input-section[style*="grid-column: 1 / -1"]:focus-within,
+.personalization-section:hover, .personalization-section:focus-within,
+.date-selector:hover, .date-selector:focus-within,
+.button-group:hover, .button-group:focus-within {
+    filter: none;
+    background: white;
+    background-image: none;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+/* ============================================
+   SKETCH BORDERS & OVERLAYS
+   ============================================ */
+.input-section:first-child::before,
+.input-section:nth-child(2)::before,
+.training-history-section::before,
+.input-section[style*="grid-column: 1 / -1"]::before,
+.personalization-section::before,
+.date-selector::before,
+.button-group::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    border: 1px dashed #34495e;
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+    box-shadow: 0 0 0 1px rgba(52, 73, 94, 0.1), inset 0 0 10px rgba(52, 73, 94, 0.05);
+}
+
+.input-section:first-child:hover::before, .input-section:first-child:focus-within::before,
+.input-section:nth-child(2):hover::before, .input-section:nth-child(2):focus-within::before,
+.training-history-section:hover::before, .training-history-section:focus-within::before,
+.input-section[style*="grid-column: 1 / -1"]:hover::before, .input-section[style*="grid-column: 1 / -1"]:focus-within::before,
+.personalization-section:hover::before, .personalization-section:focus-within::before,
+.date-selector:hover::before, .date-selector:focus-within::before,
+.button-group:hover::before, .button-group:focus-within::before {
+    opacity: 0;
+    transform: scale(0.98);
+}
+
+/* ============================================
+   SKETCH ELEMENT STYLING
+   ============================================ */
+.input-section:first-child h3, .input-section:nth-child(2) h3, .training-history-section h3, .input-section[style*="grid-column: 1 / -1"] h3, .personalization-section h3 {
+    color: #2c3e50; position: relative; z-index: 2; font-style: italic; transform: rotate(-0.1deg); opacity: 0.95; border-bottom: 1px dashed #7f8c8d; padding-bottom: 8px; text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.input-section:first-child label, .input-section:nth-child(2) label, .training-history-section label, .input-section[style*="grid-column: 1 / -1"] label {
+    color: #34495e; font-weight: 500; position: relative; z-index: 2; transform: rotate(-0.2deg); font-style: italic; opacity: 0.95; text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+.input-section:first-child input, .input-section:first-child select, .input-section:first-child textarea,
+.input-section:nth-child(2) input, .input-section:nth-child(2) select, .input-section:nth-child(2) textarea,
+.training-history-section input, .training-history-section select, .training-history-section textarea,
+.input-section[style*="grid-column: 1 / -1"] textarea {
+    background: rgba(255, 255, 255, 0.3); border: 2px dashed #7f8c8d; border-radius: 4px; color: #2c3e50; transition: all 0.1s ease; position: relative; z-index: 2; box-shadow: none; backdrop-filter: blur(1px);
+}
+
+/* Date Selector Sketch Styles */
+.date-selector label {
+    color: #34495e; position: relative; z-index: 2; transform: rotate(-0.2deg); font-style: italic; text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+.date-selector input[type="date"] {
+    background: rgba(255, 255, 255, 0.3) !important; border: 2px dashed #7f8c8d !important; border-radius: 4px !important; color: #2c3e50 !important; backdrop-filter: blur(1px);
+}
+.date-selector #loadDateBtn {
+    background: rgba(189, 195, 199, 0.6) !important; color: #2c3e50 !important; border: 1px dashed #7f8c8d !important; border-radius: 4px !important; font-style: italic; backdrop-filter: blur(1px); text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================
+   SKETCH HOVER TRANSFORMATIONS
+   ============================================ */
+/* Modern Titles on Hover */
+.input-section:first-child:hover h3, .input-section:first-child:focus-within h3,
+.input-section:nth-child(2):hover h3, .input-section:nth-child(2):focus-within h3,
+.training-history-section:hover h3, .training-history-section:focus-within h3,
+.input-section[style*="grid-column: 1 / -1"]:hover h3, .input-section[style*="grid-column: 1 / -1"]:focus-within h3,
+.personalization-section:hover h3, .personalization-section:focus-within h3 {
+    color: #2c3e50; transform: rotate(0deg); font-style: italic; opacity: 1; border-bottom: none; padding-bottom: 15px; text-shadow: none; padding-left: 12px; margin-left: -16px;
+}
+.input-section:first-child:hover h3, .input-section:first-child:focus-within h3 { border-left: 4px solid #FFD54F; }
+.input-section:nth-child(2):hover h3, .input-section:nth-child(2):focus-within h3 { border-left: 4px solid #FF9800; }
+.training-history-section:hover h3, .training-history-section:focus-within h3 { border-left: 4px solid #9b59b6; }
+.input-section[style*="grid-column: 1 / -1"]:hover h3, .input-section[style*="grid-column: 1 / -1"]:focus-within h3 { border-left: 4px solid #8BC34A; }
+.personalization-section:hover h3, .personalization-section:focus-within h3 { border-left: 4px solid #f39c12; }
+
+/* Modern Labels & Inputs on Hover */
+.input-section:first-child:hover label, .input-section:first-child:focus-within label,
+.input-section:nth-child(2):hover label, .input-section:nth-child(2):focus-within label,
+.training-history-section:hover label, .training-history-section:focus-within label,
+.input-section[style*="grid-column: 1 / -1"]:hover label, .input-section[style*="grid-column: 1 / -1"]:focus-within label,
+.date-selector:hover label, .date-selector:focus-within label {
+    transform: rotate(0deg); text-shadow: none;
+}
+.input-section:first-child:hover input, .input-section:first-child:hover select, .input-section:first-child:hover textarea, .input-section:first-child:focus-within input, .input-section:first-child:focus-within select, .input-section:first-child:focus-within textarea,
+.input-section:nth-child(2):hover input, .input-section:nth-child(2):hover select, .input-section:nth-child(2):hover textarea, .input-section:nth-child(2):focus-within input, .input-section:nth-child(2):focus-within select, .input-section:nth-child(2):focus-within textarea,
+.training-history-section:hover input, .training-history-section:hover select, .training-history-section:hover textarea, .training-history-section:focus-within input, .training-history-section:focus-within select, .training-history-section:focus-within textarea,
+.input-section[style*="grid-column: 1 / -1"]:hover textarea, .input-section[style*="grid-column: 1 / -1"]:focus-within textarea,
+.date-selector:hover input[type="date"], .date-selector:focus-within input[type="date"] {
+    background: white !important; border: 2px solid #ecf0f1 !important; border-style: solid !important; border-radius: 8px !important; backdrop-filter: none;
+}
+.date-selector:hover #loadDateBtn, .date-selector:focus-within #loadDateBtn {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%) !important; color: white !important; border: none !important; border-radius: 25px !important; font-style: normal !important; backdrop-filter: none; text-shadow: none;
+}
+
+/*
+ * FIX: Added .personalization-grid and corrected .personalization-card styles
+ * to match the original two-column layout.
+*/
+/* --- Personalization Section --- */
+.personalization-section {
+    margin-top: 40px; /* More space from the chart */
+}
+
+.personalization-section h3 {
+    margin-bottom: 15px;
+    font-family: 'Kalam';
+    font-weight: 400;
+}
+
+.personalization-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.personalization-card {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 15px;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px dashed #95a5a6;
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(1px);
+}
+
+.personalization-value {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #2c3e50;
+    transform: rotate(-0.1deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.personalization-section:hover .personalization-card,
+.personalization-section:focus-within .personalization-card {
+    background: rgba(255, 255, 255, 0.7);
+    border: 2px solid #ecf0f1;
+    border-style: solid;
+    border-radius: 8px;
+    backdrop-filter: none;
+}
+
+.personalization-section:hover .personalization-value,
+.personalization-section:focus-within .personalization-value {
+    transform: rotate(0deg);
+    text-shadow: none;
+}
