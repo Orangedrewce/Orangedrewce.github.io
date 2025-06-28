@@ -1,0 +1,89 @@
+/* modules/recommendation-panel.css */
+
+/* --- Base Recommendation Panel --- */
+.recommendation-panel {
+    grid-column: 1 / -1;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: left; /* Aligns content to the left */
+    margin: 15px 0;
+    transition: all 0.3s ease;
+}
+
+/* --- State: Incomplete Data (Gray Gradient) --- */
+.recommendation-panel.incomplete-data {
+    background: linear-gradient(to right, #6c7a89, #2c3e50);
+}
+
+/* FIX: Set DARK text color specifically for the incomplete state */
+.recommendation-panel.incomplete-data h2,
+.recommendation-panel.incomplete-data .recommendation-text {
+    color: #dfe6e9; /* A light grey/off-white for high contrast on the dark gradient */
+    text-shadow: 0 1px 1px rgba(0,0,0,0.5); /* Add a subtle shadow for depth */
+}
+
+/* --- State: Default/Ready to Train (Pink Post-it) --- */
+.recommendation-panel:not(.incomplete-data) {
+     background: var(--primary-gradient);
+}
+
+/* Set WHITE text color for all other states */
+.recommendation-panel:not(.incomplete-data) h2,
+.recommendation-panel:not(.incomplete-data) .recommendation-text,
+.recommendation-panel:not(.incomplete-data) .metric-card {
+     color: white;
+}
+
+
+/* --- General Text Styling (applies to all states) --- */
+.recommendation-panel h2 {
+    font-size: 1.6em;
+    margin-bottom: 5px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Override Kalam font */
+    font-weight: bold;
+    font-style: normal;
+    transform: none;
+}
+
+.recommendation-panel .recommendation-text {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: normal;
+}
+
+/* --- Metrics Grid (for when data is complete) --- */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.metric-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.metric-value {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+@media (max-width: 768px) {
+    .recommendation-panel {
+        padding: 15px;
+        border-radius: 10px;
+        margin: 10px 0;
+    }
+    .recommendation-panel h2 {
+        font-size: 1.3em;
+    }
+    .recommendation-panel .recommendation-text {
+        font-size: 1em;
+        margin-bottom: 12px;
+    }
+}
