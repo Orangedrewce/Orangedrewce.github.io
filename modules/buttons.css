@@ -1,6 +1,6 @@
 /* modules/buttons.css */
 
-/* --- General Button Group --- */
+/* --- General Button Group --- ✨ FIXED: Added sketch container effect */
 .button-group {
     display: flex;
     gap: 10px;
@@ -8,15 +8,93 @@
     justify-content: center;
     margin-bottom: 30px;
     margin-top: 20px;
-    padding-bottom: 10px;
+    padding: 20px;
+    
+    /* ✨ SKETCH CONTAINER STYLING */
+    background: #faf9f7;
+    border: none;
+    border-radius: 15px;
+    position: relative;
+    transition: all 0.6s ease;
+    overflow: hidden;
+    filter: grayscale(100%) contrast(1.1) brightness(0.95);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), inset 0 0 50px rgba(0, 0, 0, 0.03);
+    background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 2px, transparent 2px, transparent 8px),
+        repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(0, 0, 0, 0.06) 2px, rgba(0, 0, 0, 0.06) 2px, transparent 2px, transparent 8px);
+}
+
+/* ✨ SKETCH BORDER EFFECT */
+.button-group::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    border: 1px dashed #34495e;
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+    box-shadow: 0 0 0 1px rgba(52, 73, 94, 0.1), inset 0 0 10px rgba(52, 73, 94, 0.05);
+}
+
+/* ✨ HOVER TRANSFORMATION - WAKE UP ALL BUTTONS */
+.button-group:hover, .button-group:focus-within {
+    filter: none;
+    background: white;
+    background-image: none;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.button-group:hover::before, .button-group:focus-within::before {
+    opacity: 0;
+    transform: scale(0.98);
+}
+
+/* ✨ WAKE UP ALL BUTTONS WHEN CONTAINER IS HOVERED */
+.button-group:hover .update-btn, .button-group:focus-within .update-btn {
+    font-style: normal !important;
+    transform: rotate(0deg) !important;
+    text-shadow: none !important;
+    border-style: solid !important;
+    border-radius: 25px !important;
+    backdrop-filter: none !important;
+}
+
+.button-group:hover #updateRecBtn, .button-group:focus-within #updateRecBtn {
+    background: var(--primary-gradient) !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.button-group:hover #loadDateBtn, .button-group:focus-within #loadDateBtn {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%) !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.button-group:hover #saveEntryBtn, .button-group:focus-within #saveEntryBtn {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%) !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.button-group:hover #clearEntryBtn, .button-group:focus-within #clearEntryBtn {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
 }
 
 /* --- Main Action Buttons (.update-btn) --- */
 .update-btn {
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    border-radius: 25px;
+    background: rgba(189, 195, 199, 0.6);
+    color: #2c3e50;
+    border: 2px dashed #7f8c8d;
+    border-radius: 4px;
+    padding: 12px 25px;
     font-size: 16px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -25,11 +103,21 @@
     max-width: 200px;
     position: relative;
     overflow: hidden;
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(1px);
+    z-index: 2;
 }
 
+/* ✨ INDIVIDUAL BUTTON HOVER (still works for direct hover) */
 .update-btn:hover {
-    transform: translateY(-4px) scale(1.05);
-    filter: brightness(1.15);
+    border: 2px solid;
+    border-radius: 25px !important;
+    font-style: normal !important;
+    transform: translateY(-4px) scale(1.05) rotate(0deg) !important;
+    text-shadow: none !important;
+    backdrop-filter: none !important;
 }
 
 .update-btn:active {
@@ -37,55 +125,63 @@
     transition: all 0.1s ease;
 }
 
-#updateRecBtn {
-    background: var(--primary-gradient);
-}
 #updateRecBtn:hover {
-    box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
+    background: var(--primary-gradient) !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
 }
 
-#loadDateBtn {
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-}
 #loadDateBtn:hover {
-    box-shadow: 0 10px 25px rgba(52, 152, 219, 0.4);
-    color: #ecf0f1;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%) !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
 }
 
-#saveEntryBtn {
-    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
-}
 #saveEntryBtn:hover {
-    box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%) !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 8px 20px rgba(39, 174, 96, 0.4);
 }
 
-#clearEntryBtn {
-    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-}
 #clearEntryBtn:hover {
-    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.5);
+    animation: danger-pulse 1s ease-in-out infinite alternate;
 }
 
 /* --- Export / Backup Buttons (.export-btn) --- */
 .export-btn {
-    background: #27ae60;
-    color: white;
-    border: none;
+    background: rgba(189, 195, 199, 0.6);
+    color: #2c3e50;
+    border: 2px dashed #7f8c8d;
+    border-radius: 4px;
     padding: 12px 24px;
-    border-radius: 20px;
     font-size: 14px;
     cursor: pointer;
     margin: 0 5px;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    font-weight: 500;
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(1px);
+    z-index: 2;
 }
 
 .export-btn:hover {
-    transform: translateY(-4px) scale(1.05);
-    filter: brightness(1.15);
+    font-style: normal;
+    transform: translateY(-4px) scale(1.05) rotate(0deg);
+    text-shadow: none;
+    border-style: solid;
+    border-radius: 25px;
+    backdrop-filter: none;
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .export-btn:active {
@@ -153,37 +249,66 @@
 
 /* --- Delete Button --- */
 .delete-btn {
-    background: #e74c3c;
-    color: white;
-    border: none;
+    background: rgba(231, 76, 60, 0.6);
+    color: #2c3e50;
+    border: 2px dashed #c0392b;
+    border-radius: 4px;
     padding: 8px 15px;
-    border-radius: 15px;
     font-size: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(1px);
+    position: relative;
+    z-index: 2;
 }
 
 .delete-btn:hover {
-    background: #c0392b;
-    transform: translateY(-2px) scale(1.08);
-    box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    border: 2px solid #e74c3c;
+    border-style: solid;
+    border-radius: 20px;
+    font-style: normal;
+    transform: translateY(-4px) scale(1.05) rotate(0deg);
+    text-shadow: none;
+    backdrop-filter: none;
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* --- History Navigation Button --- */
 .nav-btn {
-    background: #3498db;
-    color: white;
-    border: none;
+    background: rgba(189, 195, 199, 0.6);
+    color: #2c3e50;
+    border: 2px dashed #7f8c8d;
+    border-radius: 4px;
     padding: 8px 15px;
-    border-radius: 5px;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(1px);
+    position: relative;
+    z-index: 2;
+    margin: 0 5px;
 }
 
 .nav-btn:hover {
-    background: #2980b9;
-    transform: translateY(-1px) scale(1.05);
-    box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: 2px solid #3498db;
+    border-style: solid;
+    border-radius: 20px;
+    font-style: normal;
+    transform: translateY(-4px) scale(1.05) rotate(0deg);
+    text-shadow: none;
+    backdrop-filter: none;
+    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* --- Help Button --- ✨ COMPLETELY FIXED */
@@ -229,6 +354,7 @@
     .button-group {
         gap: 8px;
         margin-bottom: 15px;
+        padding: 15px;
     }
     .update-btn {
         padding: 12px 20px;
@@ -254,6 +380,11 @@
         height: 24px;
         font-size: 14px;
         z-index: 20; /* Higher than tabs */
+    }
+    
+    /* ✨ Disable container hover effects on mobile */
+    .button-group:hover, .button-group:focus-within {
+        transform: none !important;
     }
 }
 
