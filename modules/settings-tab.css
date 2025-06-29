@@ -34,7 +34,7 @@
 .setting-item:last-child {
     border-bottom: none;
 }
-
+/*test
 .setting-info {
     flex: 1;
 }
