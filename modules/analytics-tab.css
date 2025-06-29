@@ -78,3 +78,134 @@
         font-size: 16px;
     }
 }
+
+
+/* ✨ TRANSPARENT ANALYTICS SECTIONS - Visible content & lines, invisible boxes */
+
+/* Target the personalization section in analytics tab */
+.personalization-section {
+    background: transparent; /* ✅ Invisible box */
+    border: none;
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 40px; /* ✅ Space from chart above */
+    margin-bottom: 30px; /* ✅ Proper bottom spacing */
+    position: relative;
+    transition: all 0.6s ease;
+    overflow: hidden;
+    /* ✅ Contents are fully visible */
+    opacity: 1;
+    filter: grayscale(100%) contrast(1.1) brightness(0.95);
+    box-shadow: none;
+    background-image: none;
+}
+
+/* ✅ Visible dashed border initially */
+.personalization-section::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    border: 1px dashed #34495e; /* ✅ Visible sketched lines */
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5; /* ✅ Visible but subtle */
+    box-shadow: 0 0 0 1px rgba(52, 73, 94, 0.1), inset 0 0 10px rgba(52, 73, 94, 0.05);
+    transition: all 0.6s ease;
+}
+
+/* ✅ Default sketch styling for personalization header */
+.personalization-section h3 {
+    color: #2c3e50; 
+    position: relative; 
+    z-index: 2; 
+    font-style: italic; 
+    transform: rotate(-0.1deg); 
+    opacity: 1; /* ✅ Fully visible */
+    border-bottom: 1px dashed #7f8c8d; 
+    padding-bottom: 8px; 
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    transition: all 0.6s ease;
+    margin-bottom: 15px;
+    font-family: 'Kalam';
+    font-weight: 400;
+}
+
+/* ✅ Default sketch styling for personalization cards */
+.personalization-card {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 15px;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px dashed #95a5a6;
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(1px);
+    opacity: 1; /* ✅ Fully visible */
+    transition: all 0.6s ease;
+}
+
+.personalization-value {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #2c3e50;
+    transform: rotate(-0.1deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    opacity: 1; /* ✅ Fully visible */
+    transition: all 0.6s ease;
+}
+
+.personalization-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+/* ✨ MODERN TRANSFORMATION ON HOVER */
+.personalization-section:hover, .personalization-section:focus-within {
+    filter: none;
+    background: white;
+    background-image: none;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+/* Hide dashed borders on hover */
+.personalization-section:hover::before, .personalization-section:focus-within::before {
+    opacity: 0;
+    transform: scale(0.98);
+}
+
+/* Modern header on hover */
+.personalization-section:hover h3, .personalization-section:focus-within h3 {
+    color: #2c3e50; 
+    transform: rotate(0deg); 
+    font-style: italic; 
+    opacity: 1; 
+    border-bottom: none; 
+    padding-bottom: 15px; 
+    text-shadow: none; 
+    padding-left: 12px; 
+    margin-left: -16px;
+    border-left: 4px solid #f39c12; /* Orange accent for analytics */
+}
+
+/* Modern cards on hover */
+.personalization-section:hover .personalization-card,
+.personalization-section:focus-within .personalization-card {
+    background: rgba(255, 255, 255, 0.7);
+    border: 2px solid #ecf0f1;
+    border-style: solid;
+    border-radius: 8px;
+    backdrop-filter: none;
+}
+
+.personalization-section:hover .personalization-value,
+.personalization-section:focus-within .personalization-value {
+    transform: rotate(0deg);
+    text-shadow: none;
+}
