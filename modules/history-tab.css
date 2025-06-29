@@ -159,18 +159,21 @@
     opacity: 0.5;
 }
 
-/* Keep original button row layout exactly */
 .export-buttons-row { 
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
     gap: 15px; 
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+    padding: 0 5px; /* Add small padding to prevent overflow */
 }
 
 .export-buttons-row .export-btn { 
-    flex: 0 0 auto; 
-    min-width: 140px; 
+    flex: 1 1 auto; /* Allow buttons to shrink */
+    min-width: 120px; /* Reduced from 140px */
+    max-width: 180px; /* Prevent buttons from getting too wide */
     margin: 0; 
+    box-sizing: border-box; /* Include padding and border in width calculation */
 }
 
 /* Keep original button styling exactly */
@@ -290,13 +293,14 @@
     width: 100%; 
 }
 
-/* Keep original button row layout exactly */
 .backup-buttons-row { 
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
     gap: 15px; 
     margin-top: 15px; 
+    flex-direction: row-reverse;
+    flex-wrap: wrap; /* ✅ Add this for consistency */
 }
 
 .backup-buttons-row .export-btn { 
@@ -461,4 +465,31 @@
     background-image: none; 
     border-color: #ecf0f1; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12); 
+}
+
+/* ===================================================================
+   ✨ RESPONSIVE FIX: Stack buttons on small screens
+   =================================================================== */
+
+/* On screens 600px wide or less, apply these styles */
+@media (max-width: 600px) {
+
+    /* Target both button containers */
+    .export-buttons-row,
+    .backup-buttons-row {
+        /* Change the layout from a row to a vertical column */
+        flex-direction: column;
+        
+        /* Make the buttons stretch to the full width of the container */
+        align-items: stretch;
+        
+        /* Adjust the gap for a vertical layout */
+        gap: 10px;
+    }
+
+    /* Ensure buttons don't have a max-width that prevents stretching */
+    .export-buttons-row .export-btn,
+    .backup-buttons-row .export-btn {
+        max-width: none;
+    }
 }
