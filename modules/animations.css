@@ -140,3 +140,197 @@
     50% { transform: translateY(-1px) scale(0.98); }
     100% { transform: translateY(-4px) scale(1.05); }
 }
+
+
+/* ============================================
+   SMOOTH ANIMATED TITLE WITH INDIVIDUAL LETTER EFFECTS
+   ============================================ */
+
+/* Base title container */
+h1.animated-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.2em;
+    cursor: pointer;
+    user-select: none;
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    /* Use will-change as a performance hint to the browser */
+    will-change: transform;
+}
+
+/* Base styling for each individual letter */
+.letter {
+    display: inline-block;
+    color: #2c3e50;
+    position: relative;
+    /* This transition is for the "pop" effect when hovering a single letter */
+    transition: transform 0.2s cubic-bezier(0.47, 0, 0.745, 0.715), 
+                filter 0.2s ease-out;
+    will-change: transform, filter;
+}
+
+/* Special handling for space characters */
+.letter.space {
+    width: 0.5em;
+}
+
+/* ============================================
+   TITLE HOVER EFFECT - SMOOTH WAVE
+   ============================================ */
+
+/* On parent hover, all letters get the rainbow gradient and glow */
+.animated-title:hover .letter:not(.space) {
+    background: linear-gradient(45deg, #ff6b35, #f7931e, #ff9900, #00d4ff, #8e44ad);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: electric-flow 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4));
+}
+
+/* On parent hover, each letter gets a gentle lift. The animation delay is 
+   calculated from the '--i' variable set by JavaScript. This creates a smooth, 
+   cascading wave effect that is highly performant. */
+.animated-title:hover .letter {
+    animation: wave-up 0.5s ease-out forwards;
+    animation-delay: calc(var(--i) * 40ms); /* Stagger the start of each animation */
+}
+
+/* ============================================
+   INDIVIDUAL LETTER HOVER - THE "POP"
+   ============================================ */
+
+/* When a single letter is hovered, it gets a much stronger transform. 
+   This overrides the gentle wave effect for just that letter, making it pop. 
+   The !important ensures this style wins over the parent-hover effect. */
+.letter:hover {
+    transform: translateY(-20px) scale(1.3) !important;
+    filter: drop-shadow(0 10px 15px rgba(255, 215, 0, 0.6)) !important;
+    z-index: 10;
+    /* Disable the wave animation so it doesn't fight the pop transform */
+    animation: none !important;
+}
+
+/* ============================================
+   KEYFRAME ANIMATIONS
+   ============================================ */
+
+/* Gradient flow animation */
+@keyframes electric-flow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* The gentle wave-up animation for the entire title */
+@keyframes wave-up {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0); }
+}
+
+/* ============================================
+   DANCE ANIMATION (triggered by "Start Tracking" button)
+   ============================================ */
+
+/* Dance animation class - will be added via JavaScript */
+.animated-title.dancing .letter {
+    animation: letter-dance 1.5s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 80ms);
+}
+
+/* Individual letter dance keyframes */
+@keyframes letter-dance {
+    0%, 100% { 
+        transform: translateY(0) rotate(0deg); 
+    }
+    15% { 
+        transform: translateY(-15px) rotate(-5deg) scale(1.1); 
+    }
+    30% { 
+        transform: translateY(5px) rotate(3deg) scale(0.95); 
+    }
+    45% { 
+        transform: translateY(-10px) rotate(-2deg) scale(1.05); 
+    }
+    60% { 
+        transform: translateY(8px) rotate(4deg) scale(0.98); 
+    }
+    75% { 
+        transform: translateY(-5px) rotate(-1deg) scale(1.02); 
+    }
+}
+
+/* Enhanced dance mode with rainbow colors */
+.animated-title.dancing .letter:not(.space) {
+    background: linear-gradient(45deg, #ff6b35, #f7931e, #ff9900, #00d4ff, #8e44ad, #e74c3c);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: letter-dance 1.5s ease-in-out infinite, 
+               electric-flow 1s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 80ms), calc(var(--i) * 60ms);
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
+}
+
+/* ============================================
+   MOBILE & NON-HOVER DEVICE OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 768px) {
+    h1.animated-title {
+        font-size: 1.8em;
+        letter-spacing: 1px;
+    }
+    
+    /* Reduce dance intensity on mobile for better performance */
+    .animated-title.dancing .letter {
+        animation-duration: 2s;
+    }
+    
+    @keyframes letter-dance {
+        0%, 100% { 
+            transform: translateY(0) rotate(0deg); 
+        }
+        25% { 
+            transform: translateY(-10px) rotate(-2deg) scale(1.05); 
+        }
+        50% { 
+            transform: translateY(3px) rotate(2deg) scale(0.98); 
+        }
+        75% { 
+            transform: translateY(-5px) rotate(-1deg) scale(1.02); 
+        }
+    }
+}
+
+/* Disable all hover-based effects on devices that can't truly hover (like phones) */
+@media (hover: none) {
+    .animated-title:hover .letter {
+        animation: none;
+        background: none;
+        -webkit-text-fill-color: #2c3e50;
+        filter: none;
+    }
+    
+    .letter:hover {
+        transform: none !important;
+        filter: none !important;
+    }
+    
+    /* But keep the dance animation working on touch devices */
+    .animated-title.dancing .letter {
+        animation: letter-dance 2s ease-in-out infinite;
+        animation-delay: calc(var(--i) * 80ms);
+    }
+}
+
+
+
+
+
