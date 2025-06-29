@@ -160,6 +160,26 @@
 .log-entry:hover .log-notes, .log-entry:focus-within .log-notes { background: #fdf8e2; border: 2px solid #ecf0f1; border-style: solid; font-style: italic; backdrop-filter: none; }
 .log-entry:hover .delete-btn, .log-entry:focus-within .delete-btn { background: #e74c3c; color: white; border: 2px solid #e74c3c; border-style: solid; font-style: italic; transform: rotate(0deg); text-shadow: none; backdrop-filter: none; }
 
+
 @media (max-width: 768px) {
-    .history-nav, .export-section, .backup-section, .log-entry { transform: none !important; }
+    /* THE MISSING PIECE: This disables the "lift" animation on mobile */
+    .history-nav:hover, .export-section:hover, .backup-section:hover, .log-entry:hover { 
+        transform: none !important; 
+    }
+
+    /* Target both button row containers */
+    .export-buttons-row,
+    .backup-buttons-row {
+        flex-direction: column; /* Stack the buttons vertically */
+        align-items: stretch;   /* Make buttons take up the full width */
+        gap: 10px;              /* Add some space between the stacked buttons */
+    }
+
+    /* Ensure the buttons themselves are flexible */
+    .export-buttons-row .export-btn,
+    .backup-buttons-row .export-btn {
+        width: 100%;        /* Allow the button to fill the container width */
+        min-width: unset;   /* Remove the minimum width constraint */
+        margin: 0;          /* Reset any horizontal margins */
+    }
 }
