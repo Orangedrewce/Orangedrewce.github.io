@@ -21,7 +21,7 @@
     background-image: none;
 }
 
-/* ✅ Visible dashed border initially for ALL sections including button group (REMOVED .personalization-section) */
+/* ✅ Visible dashed border initially for ALL sections including button group - MATCH HISTORY STYLE */
 .input-section:first-child::before,
 .input-section:nth-child(2)::before,
 .training-history-section::before,
@@ -30,16 +30,15 @@
 .button-group::before {
     content: '';
     position: absolute;
-    top: 8px;
-    left: 8px;
-    right: 8px;
-    bottom: 8px;
-    border: 1px dashed #34495e; /* ✅ Visible sketched lines */
-    border-radius: 8px;
+    top: 5px; /* ✅ Changed from 8px to 5px to match history */
+    left: 5px; /* ✅ Changed from 8px to 5px to match history */
+    right: 5px; /* ✅ Changed from 8px to 5px to match history */
+    bottom: 5px; /* ✅ Changed from 8px to 5px to match history */
+    border: 2px dashed #7f8c8d; /* ✅ Changed from 1px #34495e to 2px #7f8c8d to match history */
+    border-radius: 6px; /* ✅ Changed from 8px to 6px to match history */
     pointer-events: none;
     z-index: 1;
-    opacity: 0.5; /* ✅ Visible but subtle */
-    box-shadow: 0 0 0 1px rgba(52, 73, 94, 0.1), inset 0 0 10px rgba(52, 73, 94, 0.05);
+    opacity: 0.6; /* ✅ Changed from 0.5 to 0.6 to match history */
     transition: all 0.6s ease;
 }
 
