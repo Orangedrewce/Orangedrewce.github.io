@@ -1779,9 +1779,22 @@ destroy() {
             return inputs;
         }
         
-        sanitizeNotes(text) {
-            return text.replace(/<[^>]*>/g, '');
-        }
+sanitizeNotes(text) {
+    // Basic HTML tag removal (your existing logic)
+    let cleaned = text.replace(/<[^>]*>/g, '');
+    
+    // Additional XSS protection
+    cleaned = cleaned.replace(/javascript:/gi, '')
+                    .replace(/on\w+\s*=/gi, '')
+                    .replace(/data:/gi, '');
+    
+    // Limit length to prevent massive notes
+    if (cleaned.length > 1000) {
+        cleaned = cleaned.substring(0, 1000) + '...';
+    }
+    
+    return cleaned;
+}
 
         calculateRecommendation() {
             const inputs = this.getInputs();
@@ -2618,17 +2631,264 @@ addChartControls() {
         }
     }
 
-    // --- INITIALIZE APP ---
-    document.addEventListener('DOMContentLoaded', () => {
-      initializeAnimatedTitle(); // Add this line
-        window.app = new MultiDayTracker();
-    });
 
+    function loadClimbSmartSettings() {
+        // Load settings from localStorage
+        const settings = JSON.parse(localStorage.getItem('climbSmartSettings') || '{}');
+        
+        // Apply loaded settings to UI
+        if (settings.autoSave) {
+            document.getElementById('autoSaveFrequency').value = settings.autoSave;
+        }
+        if (settings.animations !== undefined) {
+            document.getElementById('animationsToggle').checked = settings.animations;
+        }
+        if (settings.dailyReminder) {
+            document.getElementById('dailyReminderToggle').checked = settings.dailyReminder;
+        }
+        if (settings.successNotifications !== undefined) {
+            document.getElementById('successNotificationsToggle').checked = settings.successNotifications;
+        }
+        if (settings.autoBackup) {
+            document.getElementById('autoBackupToggle').checked = settings.autoBackup;
+        }
+        if (settings.dataRetention) {
+            document.getElementById('dataRetention').value = settings.dataRetention;
+        }
+    }
+
+    function addSettingsEventListeners() {
+        // Toggle switches
+        document.getElementById('animationsToggle').addEventListener('change', toggleAnimations);
+        document.getElementById('dailyReminderToggle').addEventListener('change', toggleDailyReminder);
+        document.getElementById('successNotificationsToggle').addEventListener('change', toggleSuccessNotifications);
+        document.getElementById('autoBackupToggle').addEventListener('change', toggleAutoBackup);
+        
+        // Select dropdowns
+        document.getElementById('autoSaveFrequency').addEventListener('change', updateAutoSave);
+        document.getElementById('dataRetention').addEventListener('change', updateDataRetention);
+        
+        // Action buttons
+        document.getElementById('clearCacheBtn').addEventListener('click', clearBrowserCache);
+        document.getElementById('resetSettingsBtn').addEventListener('click', resetAllSettings);
+        document.getElementById('deleteAllDataBtn').addEventListener('click', deleteAllAppData);
+        
+        // Data retention
+        document.getElementById('dataRetention').addEventListener('change', function() {
+        updateDataRetention(event);
+        applyDataRetention(); // Apply retention policy immediately
+    });
+        
+    }
+
+function updateAutoSave(event) {
+    const frequency = event.target.value;
+    saveSettingValue('autoSave', frequency);
+    console.log('Auto-save frequency:', frequency + ' seconds');
+    
+    // Apply the new auto-save frequency immediately
+    if (window.app && window.app.autoSaveInterval) {
+        clearInterval(window.app.autoSaveInterval);
+        
+        if (frequency > 0) {
+            window.app.autoSaveInterval = setInterval(() => {
+                window.app.performAutoSaveIfNeeded();
+            }, frequency * 1000);
+        }
+    }
+}
+
+
+    function toggleAnimations(event) {
+        const enabled = event.target.checked;
+        saveSettingValue('animations', enabled);
+        console.log('Animations enabled:', enabled);
+    }
+
+    function toggleDailyReminder(event) {
+        const enabled = event.target.checked;
+        saveSettingValue('dailyReminder', enabled);
+        console.log('Daily reminder enabled:', enabled);
+    }
+
+    function toggleSuccessNotifications(event) {
+        const enabled = event.target.checked;
+        saveSettingValue('successNotifications', enabled);
+        console.log('Success notifications enabled:', enabled);
+    }
+
+    function toggleAutoBackup(event) {
+        const enabled = event.target.checked;
+        saveSettingValue('autoBackup', enabled);
+        console.log('Auto backup enabled:', enabled);
+    }
+
+    function updateDataRetention(event) {
+        const retention = event.target.value;
+        saveSettingValue('dataRetention', retention);
+        console.log('Data retention:', retention);
+    }
+
+    function clearBrowserCache() {
+        // Clear temporary data but keep training data
+        const confirmClear = confirm('Clear browser cache? This will reset temporary app data but keep your training entries.');
+        if (confirmClear) {
+            // Clear cache-like data but preserve training data
+            localStorage.removeItem('tempData');
+            localStorage.removeItem('chartCache');
+            location.reload();
+        }
+    }
+
+    function resetAllSettings() {
+        const confirmReset = confirm('Reset all settings to default values? Your training data will not be affected.');
+        if (confirmReset) {
+            localStorage.removeItem('climbSmartSettings');
+            location.reload();
+        }
+    }
+
+// This can be a global function or a method inside your MultiDayTracker class.
+function deleteAllAppData() {
+    // 1. Use prompt() to ask the user for text input.
+    const userInput = prompt('⚠️ DANGER: This will permanently delete ALL your training data. This cannot be undone!\n\nPlease type "DELETE" to confirm:');
+
+    // 2. First, check if the user clicked "Cancel" (which returns null).
+    if (userInput === null) {
+        // User cancelled the action, so do nothing.
+        return;
+    }
+
+    // 3. Compare the user's input to the required string.
+    //    Use .trim() to remove accidental spaces and .toUpperCase() to make the check case-insensitive.
+    if (userInput.trim().toUpperCase() === 'DELETE') {
+        // The input is correct, proceed with deletion.
+        localStorage.clear();
+        location.reload();
+    } else {
+        // The input was incorrect.
+        alert('Incorrect confirmation text. Data was not deleted.');
+    }
+}
+    function saveSettingValue(key, value) {
+        const settings = JSON.parse(localStorage.getItem('climbSmartSettings') || '{}');
+        settings[key] = value;
+        localStorage.setItem('climbSmartSettings', JSON.stringify(settings));
+    }
+
+    function updateSettingsStatistics() {
+        // Calculate and display user statistics
+        const data = JSON.parse(localStorage.getItem('climbingTrackerData') || '{}');
+        const entries = Object.keys(data).length;
+        
+        document.getElementById('totalEntries').textContent = entries;
+        
+        if (entries > 0) {
+            const avgReadiness = Object.values(data)
+                .reduce((sum, entry) => sum + (entry.readinessScore || 0), 0) / entries;
+            document.getElementById('averageReadiness').textContent = avgReadiness.toFixed(1);
+        }
+        
+        document.getElementById('totalDays').textContent = entries;
+        document.getElementById('currentStreak').textContent = calculateSettingsStreak(data);
+    }
+
+function calculateSettingsStreak(data) {
+    // 1. Get entry dates and sort them from most recent to oldest.
+    const sortedDates = Object.keys(data).sort((a, b) => new Date(b) - new Date(a));
+
+    if (sortedDates.length === 0) {
+        return 0;
+    }
+
+    let streak = 0;
+    
+    // 2. Establish the starting point for the streak check (today at midnight).
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // 3. Check if the most recent entry is today or yesterday.
+    const mostRecentEntryDate = new Date(sortedDates[0]);
+    mostRecentEntryDate.setHours(0, 0, 0, 0);
+    
+    const diff = today - mostRecentEntryDate;
+    const oneDay = 24 * 60 * 60 * 1000;
+
+    // If the most recent entry is older than yesterday, the streak is 0.
+    if (diff > oneDay) {
+        return 0;
+    }
+
+    // 4. Iterate backwards from the most recent entry to count the streak.
+    let expectedDate = mostRecentEntryDate;
+
+    for (const dateStr of sortedDates) {
+        const entryDate = new Date(dateStr);
+        entryDate.setHours(0, 0, 0, 0);
+
+        // If the entry date matches the expected date in the sequence...
+        if (entryDate.getTime() === expectedDate.getTime()) {
+            streak++;
+            // Set the next expected date to the day before the current one.
+            expectedDate.setDate(expectedDate.getDate() - 1);
+        } else {
+            // A gap was found, so the consecutive streak is broken.
+            break;
+        }
+    }
+
+    return streak;
+    }
+    
+    function applyDataRetention() {
+    const policy = document.getElementById('dataRetention').value;
+    
+    // Skip if policy is "forever"
+    if (policy === 'forever') return;
+    
+    const cutoffDays = parseInt(policy);
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - cutoffDays);
+    
+    let deletedCount = 0;
+    Object.keys(window.app.trainingData).forEach(date => {
+        if (new Date(date + 'T00:00:00') < cutoff) {
+            delete window.app.trainingData[date];
+            deletedCount++;
+        }
+    });
+    
+    if (deletedCount > 0) {
+        window.app.saveData();
+        window.app.updateHistory();
+        window.app.updateAnalytics();
+        updateSettingsStatistics();
+        showToast(`Deleted ${deletedCount} old entries based on retention policy.`);
+    }
+}
     
     
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize non-class features first
+    initializeAnimatedTitle();
     
+    // Create the one and only application instance
+    window.app = new MultiDayTracker();
     
+    // Now initialize the settings, which might depend on app data
+    loadClimbSmartSettings();
+    addSettingsEventListeners();
+    updateSettingsStatistics();
+    
+    // Apply initial settings policies after app is fully loaded
+    setTimeout(() => {
+        applyDataRetention(); // Clean old data on startup
+    }, 1000);
+});
+
     
     
 
 })(); // The parentheses at the end here are what make it run.
+
+
