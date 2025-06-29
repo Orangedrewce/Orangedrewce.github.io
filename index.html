@@ -369,7 +369,7 @@
 
                     <div class="sync-input-group">
                         <div style="display: flex; gap: 10px; align-items: center;">
-                            <input type="text" class="sync-input" id="receiverCode" placeholder="Click to Enter 6-digit code" maxlength="6" style="flex: 1;">
+                            <input type="text" class="sync-input" id="receiverCode" placeholder="Tap the camera to scan or click here to Enter 6-digit code" maxlength="6" style="flex: 1;">
                             <button id="scanQRBtn" class="sync-btn" style="padding: 12px; min-width: auto;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M12 20h7a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7M4 6.001H2v14a2 2 0 0 0 2 2h14v-2H4z"></path>
@@ -427,10 +427,11 @@
             </div>
         </div>
     </div>
-    <div id="helpModal" class="modal-overlay">
+<div id="helpModal" class="modal-overlay">
     <div class="modal-content help-modal-content">
         <h3>How to Use ClimbSmart</h3>
         <div class="help-content">
+            <p><strong>📊 Daily Entry:</strong></p>
             <p><strong>Sleep Quality (1-10):</strong> Rate how well you slept. 1 = terrible, 10 = perfect.</p>
             <p><strong>Snooze/Wake Time:</strong> When you went to bed and woke up. App calculates sleep duration automatically.</p>
             <p><strong>Mood State:</strong> How you feel mentally. "Psyched" = excited to climb, "Exhausted" = need rest.</p>
@@ -438,9 +439,23 @@
             <p><strong>DOMS & Tendons:</strong> How sore your muscles and tendons feel. Higher = more pain.</p>
             <p><strong>Skin Condition:</strong> "Perfect" = ready to grip, "Raw/Burning" = needs recovery.</p>
             <p><strong>Days Since Last Session:</strong> How many days since you last climbed or trained.</p>
-            <p><strong>Intensity (RPE 1-10, 0=rest):</strong> How hard your last workout felt. Skip if it was a rest day.</p>
-            <p><strong>Completed Today:</strong> Check all activities you did today (climbing, weights, cardio, etc).</p>
-            <p><strong>Pre-Training Meal:</strong> Did you eat before training?</p>
+            <p><strong>Intensity (RPE 1-10, 0=rest):</strong> How hard your last workout felt. Skip if it was a rest day.</p>             <p><strong>Completed Today:</strong> Check all activities you did today (climbing, weights, cardio, etc).</p>
+            <p><strong>Pre-Training Meal:</strong> Did you eat before training? Affects energy levels.</p>
+            
+            <p><strong>📈 History & Analytics:</strong></p>
+            <p><strong>Training History:</strong> View all your past entries organized by week. Each entry shows your readiness score, metrics, and recommendations.</p>
+            <p><strong>Delete Entries:</strong> Click the "Delete" button on any log entry to remove it permanently.</p>
+            <p><strong>Export Data:</strong> Export your training data as CSV for analysis in other apps.</p>
+            <p><strong>Analytics Charts:</strong> Toggle different metrics on/off to see trends over time. Click the colored buttons to show/hide specific data lines.</p>
+            <p><strong>Personalization Factors:</strong> See how your sleep patterns and injury history affect your recommendations.</p>
+            
+            <p><strong>🔄 Data Sync:</strong></p>
+            <p><strong>Send Data:</strong> Generate a 6-digit code to share your training data with another device. The receiving device scans your QR code or enters the code manually.</p>
+            <p><strong>Receive Data:</strong> Enter a 6-digit code from another device, or use the 📷 camera button to scan a QR code and receive training data.</p>
+            <p><strong>Data Backup:</strong> Create backup codes to save your data safely. Copy the generated code and store it somewhere safe.</p>
+            <p><strong>Restore Data:</strong> Paste a backup code to restore your training history from a previous backup.</p>
+            
+            <p><strong>Data Privacy:</strong> All data stays on your device - nothing is sent to external servers unless you manually sync with another device.</p>
         </div>
         <div class="modal-buttons">
             <button class="modal-btn" id="helpCloseBtn">Close</button>
