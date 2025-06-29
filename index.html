@@ -66,6 +66,117 @@
             <button class="tab-button" data-tab="sync" role="tab" aria-selected="false">Sync</button>
             <button class="tab-button" data-tab="settings" role="tab" aria-selected="false">Settings</button>
         </div>
+        
+        <div id="settings" class="tab-content" role="tabpanel">
+    <div class="settings-container">
+        
+        <!-- User Preferences Section -->
+        <div class="settings-section">
+            <h3>⚙️ Preferences</h3>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-title">Auto-Save Frequency</div>
+                    <div class="setting-description">How often to automatically save your progress</div>
+                </div>
+                <div class="setting-control">
+                    <select class="settings-select" id="autoSaveFrequency">
+                        <option value="5">Every 5 seconds</option>
+                        <option value="10" selected>Every 10 seconds</option>
+                        <option value="30">Every 30 seconds</option>
+                        <option value="60">Every minute</option>
+                        <option value="0">Disabled</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-title">Fancy Animations</div>
+                    <div class="setting-description">Enable tear effects, title dance, and hover animations</div>
+                </div>
+                <div class="setting-control">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="animationsToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Management Section -->
+        <div class="settings-section">
+            <h3>📊 Your Data</h3>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-title">Total Entries</div>
+                    <div class="setting-description">Number of training logs you've saved</div>
+                </div>
+                <div class="setting-control">
+                    <span class="stats-value" id="totalEntries">0</span>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-title">Data Storage</div>
+                    <div class="setting-description">All data is stored locally on your device</div>
+                </div>
+                <div class="setting-control">
+                    <span style="color: #27ae60; font-weight: bold;">✓ Local & Private</span>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-title">Clear All Data</div>
+                    <div class="setting-description">Permanently delete all training data (cannot be undone)</div>
+                </div>
+                <div class="setting-control">
+                    <button class="update-btn" id="clearAllDataSettingsBtn" style="background: #e74c3c;">Clear Data</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- App Information Section -->
+        <div class="settings-section">
+            <h3>ℹ️ About ClimbSmart</h3>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-title">Version</div>
+                    <div class="setting-description">Current app version</div>
+                </div>
+                <div class="setting-control">
+                    <span style="color: #7f8c8d; font-weight: bold;">v69.420</span>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-title">Storage Usage</div>
+                    <div class="setting-description">How much browser storage you're using</div>
+                </div>
+                <div class="setting-control">
+                    <span style="color: #7f8c8d;" id="storageUsage">Calculating...</span>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-title">Privacy</div>
+                    <div class="setting-description">Your data never leaves your device</div>
+                </div>
+                <div class="setting-control">
+                    <span style="color: #27ae60; font-weight: bold;">🔐 Secure</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+        
         <div id="daily" class="tab-content active" role="tabpanel">
             <div class="date-selector">
                 <label for="currentDate">Date:</label>
