@@ -1,6 +1,6 @@
 Target Audience
 
-This application is designed for the data-driven, self-coached athlete who is serious about optimizing their performance, managing fatigue, and minimizing injury risk. The ideal user is someone who understands that progress isn't just about training harder, but training smarter.
+This application is designed for the data-driven, self-coached athlete who are serious about optimizing performance, managing fatigue, and minimizing injury risk. The ideal user is someone who understands that progress isn't just about training harder, but training smarter.
 
 Specifically, this program would greatly benefit:
 
@@ -19,9 +19,9 @@ ClimbSmart is a offline-first Training Readiness Tracker designed to provide ath
 
 All data is stored exclusively in the browser's localStorage, ensuring complete privacy and offline functionality.
 
-"Da Vinci Sketch" user interface, where data entry panels appear as grayscale, hand-drawn sketches that "come to life" with full color and modern styling upon user interaction. This is complemented by a suite of powerful features, including a historical analytics dashboard with dynamic charts, a secure peer-to-peer data sync using WebRTC (PeerJS) and QR codes, and a robust data backup and CSV export system.
+"Da Vinci Sketch" ui, Data entry panels appear as grayscale, hand-drawn sketches that "come to life" with color and styling upon user interaction. This is complemented by a suite of features, including a historical analytics dashboard with dynamic charts, a secure peer-to-peer data sync using WebRTC (PeerJS) and QR codes, and a robust data backup and CSV export system.
 
-The core recommendation algorithm goes beyond daily inputs, incorporating historical trends for factors like sleep adaptation and injury risk to deliver a truly personalized readiness score, making ClimbSmart a tool for any athlete serious about optimizing their performance and recovery.
+The core recommendation algorithm goes beyond daily inputs, incorporating historical trends for factors like sleep adaptation and injury risk to deliver a personalized readiness score, making ClimbSmart a tool for any athlete serious about optimizing their performance and recovery.
 
 
 
