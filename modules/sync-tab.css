@@ -332,22 +332,17 @@
 }
 
 @media (max-width: 768px) {
-    .sync-steps {
-        flex-direction: column;
-        gap: 25px;
-        align-items: center;
+    /* Target the button container */
+    .sync-actions {
+        flex-direction: column; /* Stack the buttons vertically */
+        align-items: stretch;   /* Make buttons take up the full width */
+        gap: 10px;              /* Add space between stacked buttons */
     }
-    
-    .sync-steps::before {
-        display: none;
-    }
-    
-    .sync-step {
-        flex-direction: row;
-        gap: 15px;
-    }
-    
-    .sync-step-text {
-        text-align: left;
+
+    /* Ensure the buttons themselves are flexible */
+    .sync-actions .sync-btn {
+        width: 100%;        /* Allow button to fill the container width */
+        min-width: unset;   /* Remove minimum width constraint */
+        margin: 0;          /* Reset any horizontal margins */
     }
 }
