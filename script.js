@@ -51,6 +51,22 @@
         }, duration);
     }
 
+function initializeAnimatedTitle() {
+    const title = document.getElementById('appTitle');
+    if (!title) return;
+    
+    const text = title.textContent;
+    title.innerHTML = '';
+    
+    [...text].forEach((char, i) => {
+        const span = document.createElement('span');
+        span.className = char === ' ' ? 'letter space' : 'letter';
+        span.textContent = char;
+        span.style.setProperty('--i', i);
+        title.appendChild(span);
+    });
+}
+
 // --- MODAL MANAGEMENT ---
 function showModal(modalId) {
     const modal = document.getElementById(modalId);
@@ -2593,6 +2609,7 @@ addChartControls() {
 
     // --- INITIALIZE APP ---
     document.addEventListener('DOMContentLoaded', () => {
+      initializeAnimatedTitle(); // Add this line
         window.app = new MultiDayTracker();
     });
 
