@@ -980,10 +980,21 @@ restoreAutoSave() {
             showModal('welcomeModal');
         }
         
-        closeWelcomeModal() {
-            hideModal('welcomeModal');
-            localStorage.setItem('climbSmartVisited', 'true');
-        }
+closeWelcomeModal() {
+    // Start the title dance animation
+    const title = document.getElementById('appTitle');
+    if (title) {
+        title.classList.add('dancing');
+        
+        // Stop dancing after 3 seconds
+        setTimeout(() => {
+            title.classList.remove('dancing');
+        }, 3000);
+    }
+    
+    hideModal('welcomeModal');
+    localStorage.setItem('climbSmartVisited', 'true');
+}
         
         setInitialDate() {
             const now = new Date();
