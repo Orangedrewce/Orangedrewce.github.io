@@ -1,37 +1,111 @@
-/* Basic Settings Styles - Add to modules/settings-tab.css */
+/* Replace the basic settings CSS with this enhanced version that matches your app theme */
+
 .settings-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
 }
 
+/* Apply Da Vinci Sketch Effect to Settings Sections */
 .settings-section {
-    background: white;
-    padding: 20px;
+    background: #faf9f7;
+    border: none;
     border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    border-left: 4px solid #3498db;
+    padding: 20px;
     margin-bottom: 25px;
+    position: relative;
+    transition: all 0.6s ease;
+    overflow: hidden;
+    filter: grayscale(100%) contrast(1.1) brightness(0.95);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), inset 0 0 50px rgba(0, 0, 0, 0.03);
+    background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 2px, transparent 2px, transparent 8px),
+        repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(0, 0, 0, 0.06) 2px, rgba(0, 0, 0, 0.06) 2px, transparent 2px, transparent 8px);
 }
 
+/* Sketch Border Effect */
+.settings-section::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    border: 1px dashed #34495e;
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+    box-shadow: 0 0 0 1px rgba(52, 73, 94, 0.1), inset 0 0 10px rgba(52, 73, 94, 0.05);
+}
+
+/* Hover Effect - Transform to Modern */
+.settings-section:hover,
+.settings-section:focus-within {
+    filter: none;
+    background: white;
+    background-image: none;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.settings-section:hover::before,
+.settings-section:focus-within::before {
+    opacity: 0;
+    transform: scale(0.98);
+}
+
+/* Sketch Style Headers */
 .settings-section h3 {
     color: #2c3e50;
     margin-bottom: 20px;
     font-size: 1.4em;
     font-family: 'Kalam';
     font-weight: 400;
+    position: relative;
+    z-index: 2;
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    opacity: 0.95;
+    border-bottom: 1px dashed #7f8c8d;
+    padding-bottom: 8px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
 }
 
+/* Modern Headers on Hover */
+.settings-section:hover h3,
+.settings-section:focus-within h3 {
+    color: #2c3e50;
+    transform: rotate(0deg);
+    font-style: italic;
+    opacity: 1;
+    border-bottom: none;
+    padding-bottom: 15px;
+    text-shadow: none;
+    padding-left: 12px;
+    margin-left: -16px;
+    border-left: 4px solid #3498db;
+}
+
+/* Setting Items */
 .setting-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px 0;
-    border-bottom: 1px solid #ecf0f1;
+    border-bottom: 1px dashed #bdc3c7;
+    position: relative;
+    z-index: 2;
 }
 
 .setting-item:last-child {
     border-bottom: none;
+}
+
+/* Modern Items on Hover */
+.settings-section:hover .setting-item,
+.settings-section:focus-within .setting-item {
+    border-bottom: 1px solid #ecf0f1;
 }
 
 .setting-info {
@@ -42,20 +116,71 @@
     font-weight: 600;
     color: #2c3e50;
     margin-bottom: 5px;
+    position: relative;
+    z-index: 2;
+    transform: rotate(-0.1deg);
+    font-style: italic;
+    opacity: 0.95;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
 }
 
 .setting-description {
     font-size: 0.9em;
     color: #7f8c8d;
     line-height: 1.4;
+    position: relative;
+    z-index: 2;
+    transform: rotate(-0.05deg);
+    font-style: italic;
+    opacity: 0.95;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+/* Modern Text on Hover */
+.settings-section:hover .setting-title,
+.settings-section:focus-within .setting-title {
+    transform: rotate(0deg);
+    text-shadow: none;
+    font-style: normal;
+}
+
+.settings-section:hover .setting-description,
+.settings-section:focus-within .setting-description {
+    transform: rotate(0deg);
+    text-shadow: none;
+    font-style: normal;
 }
 
 .setting-control {
     min-width: 120px;
     text-align: right;
+    position: relative;
+    z-index: 2;
 }
 
-/* Toggle Switch */
+/* Sketch Style Controls */
+.settings-select {
+    padding: 8px 12px;
+    border: 2px dashed #7f8c8d;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    min-width: 140px;
+    color: #2c3e50;
+    backdrop-filter: blur(1px);
+    transition: all 0.3s ease;
+}
+
+/* Modern Controls on Hover */
+.settings-section:hover .settings-select,
+.settings-section:focus-within .settings-select {
+    background: white;
+    border: 2px solid #ecf0f1;
+    border-style: solid;
+    border-radius: 8px;
+    backdrop-filter: none;
+}
+
+/* Toggle Switch - Sketch Style */
 .toggle-switch {
     position: relative;
     display: inline-block;
@@ -76,48 +201,104 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: rgba(189, 195, 199, 0.6);
     transition: .4s;
     border-radius: 24px;
+    border: 2px dashed #7f8c8d;
+    backdrop-filter: blur(1px);
 }
 
 .toggle-slider:before {
     position: absolute;
     content: "";
-    height: 18px;
-    width: 18px;
+    height: 16px;
+    width: 16px;
     left: 3px;
-    bottom: 3px;
+    bottom: 2px;
     background-color: white;
     transition: .4s;
     border-radius: 50%;
+    border: 1px dashed #95a5a6;
 }
 
 input:checked + .toggle-slider {
-    background-color: #3498db;
+    background-color: rgba(52, 152, 219, 0.6);
 }
 
 input:checked + .toggle-slider:before {
-    transform: translateX(26px);
+    transform: translateX(24px);
+    border: 1px solid #3498db;
 }
 
-/* Select Dropdown */
-.settings-select {
-    padding: 8px 12px;
+/* Modern Toggle on Hover */
+.settings-section:hover .toggle-slider,
+.settings-section:focus-within .toggle-slider {
     border: 2px solid #ecf0f1;
-    border-radius: 6px;
-    background: white;
-    min-width: 140px;
+    border-style: solid;
+    backdrop-filter: none;
+    background-color: #ccc;
 }
 
+.settings-section:hover input:checked + .toggle-slider,
+.settings-section:focus-within input:checked + .toggle-slider {
+    background-color: #3498db;
+}
+
+.settings-section:hover .toggle-slider:before,
+.settings-section:focus-within .toggle-slider:before {
+    border: none;
+}
+
+/* Stats Value */
 .stats-value {
     font-size: 1.5em;
     font-weight: bold;
     color: #3498db;
+    transform: rotate(-0.1deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.settings-section:hover .stats-value,
+.settings-section:focus-within .stats-value {
+    transform: rotate(0deg);
+    text-shadow: none;
+}
+
+/* Buttons in Settings */
+.settings-section .update-btn {
+    background: rgba(189, 195, 199, 0.6);
+    color: #2c3e50;
+    border: 2px dashed #7f8c8d;
+    border-radius: 4px;
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(1px);
+    transition: all 0.3s ease;
+}
+
+.settings-section:hover .update-btn,
+.settings-section:focus-within .update-btn {
+    border: none;
+    border-radius: 25px;
+    font-style: normal;
+    transform: rotate(0deg);
+    text-shadow: none;
+    backdrop-filter: none;
+}
+
+.settings-section:hover #clearAllDataSettingsBtn,
+.settings-section:focus-within #clearAllDataSettingsBtn {
+    background: #e74c3c !important;
+    color: white;
 }
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
+    .settings-container {
+        padding: 15px;
+    }
+    
     .setting-item {
         flex-direction: column;
         align-items: flex-start;
@@ -128,5 +309,10 @@ input:checked + .toggle-slider:before {
         width: 100%;
         text-align: left;
     }
+    
+    /* Disable hover effects on mobile */
+    .settings-section:hover,
+    .settings-section:focus-within {
+        transform: none;
+    }
 }
-
