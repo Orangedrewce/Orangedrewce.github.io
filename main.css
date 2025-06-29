@@ -26,6 +26,7 @@
 @import url("modules/history-tab.css");
 @import url("modules/analytics-tab.css");
 @import url("modules/sync-tab.css");
+@import url("modules/settings-tab.css");
 
 /* 6. Utility and helper classes */
 @import url("modules/utilities.css");
