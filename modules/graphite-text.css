@@ -1,1 +1,210 @@
+/* ✨ THICK PENCIL GRAPHITE TEXT EFFECT */
 
+/* Import a handwriting font */
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Caveat:wght@400;500;600;700&display=swap');
+
+/* ✨ REMOVE ALL ITALIC TEXT FROM APP */
+* {
+    font-style: normal !important;
+}
+
+/* Apply pencil effect to most text elements */
+body,
+h1, h2, h3, h4, h5, h6,
+p, span, div,
+label,
+input::placeholder,
+textarea::placeholder,
+.log-date,
+.log-metric,
+.log-recommendation,
+.log-notes,
+.current-week,
+.recommendation-text,
+.setting-title,
+.setting-description,
+.sync-description,
+.help-content p,
+.validation-error-list li,
+.personalization-card,
+.metric-card {
+    font-family: 'Kalam', 'Caveat', sans-serif !important; /* ✅ REMOVED cursive */
+    font-weight: 600 !important; /* Thick strokes */
+    color: #2c2c2c !important; /* Dark graphite color */
+    text-shadow: 
+        0.5px 0.5px 0px rgba(0, 0, 0, 0.3),
+        1px 1px 0px rgba(0, 0, 0, 0.2),
+        1.5px 1.5px 0px rgba(0, 0, 0, 0.1) !important; /* Pencil texture depth */
+    letter-spacing: 0.3px !important; /* Slightly spread for hand-drawn feel */
+    line-height: 1.4 !important; /* Natural handwriting spacing */
+    font-style: normal !important; /* Force normal, not italic */
+}
+
+/* Extra thick for headers */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700 !important;
+    color: #1a1a1a !important; /* Darker for emphasis */
+    text-shadow: 
+        0.5px 0.5px 0px rgba(0, 0, 0, 0.4),
+        1px 1px 0px rgba(0, 0, 0, 0.3),
+        1.5px 1.5px 0px rgba(0, 0, 0, 0.2),
+        2px 2px 0px rgba(0, 0, 0, 0.1) !important;
+    font-style: normal !important;
+}
+
+/* Preserve clean text for buttons */
+button,
+.update-btn,
+.export-btn,
+.nav-btn,
+.delete-btn,
+.sync-btn,
+.modal-btn,
+.help-button,
+.tab-button,
+.chart-toggle {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    font-weight: 500 !important;
+    text-shadow: none !important;
+    letter-spacing: normal !important;
+    font-style: normal !important;
+}
+
+/* Preserve clean text for modals and system messages */
+.modal-content h3,
+.modal-content p,
+.recommendation-panel.incomplete-data h2,
+.recommendation-panel.incomplete-data .recommendation-text,
+.validation-modal h3,
+.validation-modal p,
+.help-modal-content h3,
+.toast,
+.loader-content,
+.sync-status,
+.no-data-message {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    font-weight: normal !important;
+    text-shadow: none !important;
+    letter-spacing: normal !important;
+    color: inherit !important; /* Keep original colors */
+    font-style: normal !important;
+}
+
+/* Pencil effect for input values when typed */
+input[type="text"],
+input[type="number"],
+input[type="time"],
+input[type="date"],
+textarea,
+select {
+    font-family: 'Kalam', 'Caveat', sans-serif !important; /* ✅ REMOVED cursive */
+    font-weight: 600 !important;
+    color: #2c2c2c !important;
+    text-shadow: 0.5px 0.5px 0px rgba(0, 0, 0, 0.2) !important;
+    font-style: normal !important;
+}
+
+/* ✨ LARGER TEXT FOR FORM LABELS AND CHECKBOXES */
+label,
+.checkbox-group label,
+.setting-title {
+    font-size: 16px !important; /* Bigger labels */
+    font-weight: 600 !important;
+}
+
+/* ✨ LARGER TEXT FOR FORM INPUTS */
+input[type="text"],
+input[type="number"],
+input[type="time"],
+input[type="date"],
+textarea,
+select {
+    font-size: 16px !important; /* Bigger input text */
+}
+
+/* ✨ LARGER TEXT FOR SELECT OPTIONS */
+select option {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    font-family: 'Kalam', 'Caveat', sans-serif !important; /* ✅ REMOVED cursive */
+}
+
+/* ✨ LARGER TEXT FOR SPECIFIC FORM ELEMENTS */
+.slider-container label,
+.input-group label {
+    font-size: 17px !important;
+    font-weight: 700 !important;
+}
+
+/* ✨ LARGER TEXT FOR CHECKBOX LABELS */
+.checkbox-group label {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
+}
+
+/* ✨ LARGER TEXT FOR SLIDER VALUES */
+.slider-container input[type="number"] {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+}
+
+/* ✨ MOBILE: Even bigger text for touch devices */
+@media (max-width: 768px) {
+    label,
+    .checkbox-group label,
+    .slider-container label,
+    .input-group label {
+        font-size: 18px !important; /* Even bigger on mobile */
+    }
+    
+    input[type="text"],
+    input[type="number"],
+    input[type="time"],
+    input[type="date"],
+    textarea,
+    select {
+        font-size: 18px !important; /* Bigger inputs on mobile */
+    }
+    
+    select option {
+        font-size: 18px !important;
+    }
+}
+
+/* Special pencil effect for specific content areas */
+.calculated-value,
+.stats-value,
+.peer-id-display,
+.personalization-value {
+    font-family: 'Kalam', 'Caveat', sans-serif !important; /* ✅ REMOVED cursive */
+    font-weight: 700 !important;
+    color: #1a1a1a !important;
+    text-shadow: 
+        0.5px 0.5px 0px rgba(0, 0, 0, 0.4),
+        1px 1px 0px rgba(0, 0, 0, 0.3),
+        1.5px 1.5px 0px rgba(0, 0, 0, 0.2) !important;
+    font-style: normal !important;
+}
+
+/* Preserve clean text for chart elements */
+.chart-container,
+.chart-container *,
+canvas,
+svg {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    text-shadow: none !important;
+    font-style: normal !important;
+}
+
+/* Optional: Add slight paper texture behind text for enhanced pencil effect */
+.input-section,
+.log-entry,
+.export-section,
+.backup-section {
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(120, 120, 120, 0.02) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(120, 120, 120, 0.02) 0%, transparent 50%),
+        linear-gradient(45deg, transparent 49%, rgba(120, 120, 120, 0.01) 50%, transparent 51%) !important;
+    background-size: 50px 50px, 30px 30px, 20px 20px !important;
+}
