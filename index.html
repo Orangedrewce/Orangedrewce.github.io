@@ -24,8 +24,10 @@
         </div>
     </div>
 
-    <div id="welcomeModal" class="modal-overlay welcome-modal">
-        <div class="modal-content">
+<div id="welcomeModal" class="modal-overlay welcome-modal">
+    <div class="modal-content">
+        <div class="welcome-scroll-wrapper">
+
             <h2>Welcome to ClimbSmart!</h2>
             <div class="intro-text">
                 <p>Fill out the required fields and press "Update Recommendation" to receive a readiness score!</p>
@@ -46,8 +48,10 @@
             </div>
 
             <button class="close-welcome-btn" id="closeWelcomeBtn">Start Tracking</button>
-        </div>
+
+        </div> 
     </div>
+</div>
 
     <div class="container">
         <div style="position: relative; text-align: center;">
@@ -60,6 +64,7 @@
             <button class="tab-button" data-tab="history" role="tab" aria-selected="false">Training History</button>
             <button class="tab-button" data-tab="analytics" role="tab" aria-selected="false">Analytics</button>
             <button class="tab-button" data-tab="sync" role="tab" aria-selected="false">Sync</button>
+            <button class="tab-button" data-tab="settings" role="tab" aria-selected="false">Settings</button>
         </div>
         <div id="daily" class="tab-content active" role="tabpanel">
             <div class="date-selector">
