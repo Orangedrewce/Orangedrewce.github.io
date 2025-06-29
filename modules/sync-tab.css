@@ -181,7 +181,6 @@
     transition: all 0.6s ease;
 }
 
-/* ✅ Default sketch styling for sync buttons */
 .sync-btn {
     padding: 12px 25px;
     border: 2px dashed #7f8c8d;
@@ -189,7 +188,7 @@
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
-    min-width: 140px;
+    min-width: 120px; /* Reduced from 140px for mobile */
     position: relative;
     z-index: 2;
     backdrop-filter: blur(1px);
@@ -483,4 +482,18 @@
 .sync-content:hover .sync-step.active .sync-step-text, .sync-content:focus-within .sync-step.active .sync-step-text {
     font-weight: 800;
     color: #1a252f;
+}
+
+/* Mobile adjustments for sync buttons */
+@media (max-width: 480px) {
+    .sync-btn {
+        min-width: 100px;
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+    
+    .sync-actions {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
 }
