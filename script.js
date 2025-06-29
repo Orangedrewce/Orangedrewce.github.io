@@ -1,9 +1,44 @@
 // --- INITIALIZE APP ---
 (function() {
-    // This function runs immediately.
-    // All the code inside here is in its own "private" world.
-    
-    
+    //
+    // --- START: PASTE THIS ENTIRE SCROLL LOCK OBJECT HERE ---
+    //
+    const ScrollLock = {
+        scrollPosition: 0,
+        preventScroll(e) {
+            e.preventDefault();
+        },
+        disable() {
+            // Store the current scroll position
+            this.scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+            const body = document.body;
+            body.style.overflow = 'hidden';
+            body.style.position = 'fixed';
+            body.style.top = `-${this.scrollPosition}px`;
+            body.style.width = '100%';
+            // Actively block wheel/touch events on the overlay itself
+            document.querySelectorAll('.modal-overlay.active').forEach(overlay => {
+                overlay.addEventListener('wheel', this.preventScroll, { passive: false });
+                overlay.addEventListener('touchmove', this.preventScroll, { passive: false });
+            });
+        },
+        enable() {
+            const body = document.body;
+            body.style.removeProperty('overflow');
+            body.style.removeProperty('position');
+            body.style.removeProperty('top');
+            body.style.removeProperty('width');
+            // Restore the scroll position
+            window.scrollTo(0, this.scrollPosition);
+            // Clean up event listeners
+            document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                overlay.removeEventListener('wheel', this.preventScroll);
+                overlay.removeEventListener('touchmove', this.preventScroll);
+            });
+        }
+    };
+    //
+    // --- END: SCROLL LOCK OBJECT ---
     
     // --- TOAST NOTIFICATIONS ---
     function showToast(message, duration = 3000) {
@@ -16,16 +51,22 @@
         }, duration);
     }
 
-    // --- MODAL MANAGEMENT ---
-    function showModal(modalId) {
-        const modal = document.getElementById(modalId);
+// --- MODAL MANAGEMENT ---
+function showModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
         modal.classList.add('active');
+        document.body.classList.add('modal-open');
     }
+}
 
-    function hideModal(modalId) {
-        const modal = document.getElementById(modalId);
+function hideModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
         modal.classList.remove('active');
+        document.body.classList.remove('modal-open');
     }
+}
     
     // --- PEER-TO-PEER SYNC MODULE ---
     class PeerSync {
@@ -841,7 +882,6 @@ constructor() {
     this.setupEventListeners();
     this.loadDataForDate();
     this.restoreAutoSave();
-    this.setupSwipeGestures();
     
     this.checkFirstVisit();
     
@@ -898,28 +938,7 @@ restoreAutoSave() {
         localStorage.removeItem('climbSmartAutoSave');
     }
 }
-        
-setupSwipeGestures() {
-    let touchStartX = 0;
-    const container = document.querySelector('.container');
-    
-    container.addEventListener('touchstart', e => {
-        touchStartX = e.changedTouches[0].screenX;
-    });
-    
-    container.addEventListener('touchend', e => {
-        const touchEndX = e.changedTouches[0].screenX;
-        const diff = touchEndX - touchStartX;
-        
-        if (Math.abs(diff) > 150) { // INCREASED from 100 to 150 (less sensitive)
-            if (diff > 0) {
-                this.swipeTab(-1);
-            } else {
-                this.swipeTab(1);
-            }
-        }
-    });
-}
+
         
         swipeTab(direction) {
             const tabs = ['daily', 'history', 'analytics', 'sync'];
