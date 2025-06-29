@@ -186,7 +186,7 @@
     box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
 }
 
-/* --- Help Button --- */
+/* --- Help Button --- ✨ COMPLETELY FIXED */
 .help-button {
     position: absolute;
     top: 0;
@@ -200,17 +200,28 @@
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
+    /* ✨ Always apply the tilt animation */
+    animation: curious-tilt 3s ease-in-out infinite;
+    transform-origin: center center;
 }
 
 .help-button:hover {
     background: linear-gradient(135deg, #2980b9 0%, #21618c 100%);
     box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
-    animation: curious-tilt 2s ease-in-out infinite;
+    /* ✨ Speed up the animation on hover */
+    animation: curious-tilt 1.5s ease-in-out infinite;
+}
+
+/* ✨ Make sure the curious-tilt keyframe is defined */
+@keyframes curious-tilt {
+    0% { transform: rotate(-15deg); }
+    50% { transform: rotate(15deg); }
+    100% { transform: rotate(-15deg); }
 }
 
 /* --- Mobile Adjustments --- */
@@ -255,7 +266,12 @@
         box-shadow: none;
         filter: none;
     }
+    
+    /* ✨ Keep help button animation on mobile */
+    .help-button {
+        animation: curious-tilt 3s ease-in-out infinite;
+    }
     .help-button:hover {
-        animation: none;
+        animation: curious-tilt 3s ease-in-out infinite;
     }
 }
