@@ -310,7 +310,103 @@
                     <div class="sync-tab" data-tab="receive">Receive Data</div>
                 </div>
 
-<div id="settings" class="tab-content" role="tabpanel">
+                <div class="sync-content active" id="sendContent">
+                    <h2 class="sync-title">Send Your Training Data</h2>
+                    <p class="sync-description">Share your training data securely with another device using QR code or code</p>
+
+                    <div class="sync-steps">
+                        <div class="sync-step active">
+                            <div class="sync-step-icon">1</div>
+                            <div class="sync-step-text">Generate Code</div>
+                        </div>
+                        <div class="sync-step">
+                            <div class="sync-step-icon">2</div>
+                            <div class="sync-step-text">Connect Device</div>
+                        </div>
+                        <div class="sync-step">
+                            <div class="sync-step-icon">3</div>
+                            <div class="sync-step-text">Transfer Data</div>
+                        </div>
+                    </div>
+
+                    <div class="qr-section">
+                        <div class="qr-container" id="sendQrContainer">
+                            <div class="qr-placeholder"></div>
+                        </div>
+                        <div class="peer-id-display" id="peerIdDisplay">CLICK "GENERATE CODE"</div>
+                    </div>
+
+                    <div class="sync-progress">
+                        <div class="sync-progress-bar" id="sendProgress"></div>
+                    </div>
+
+                    <div class="sync-status" id="sendStatus">Ready to generate sync code</div>
+
+                    <div class="sync-actions">
+                        <button class="sync-btn secondary" id="copyPeerIdBtn">Copy Code</button>
+                        <button class="sync-btn primary" id="generateCodeBtn">Generate Code</button>
+                    </div>
+                </div>
+
+                <div class="sync-content" id="receiveContent">
+                    <h2 class="sync-title">Receive Training Data</h2>
+                    <p class="sync-description">Enter the code from the sender to receive training data</p>
+
+                    <div class="sync-steps">
+                        <div class="sync-step active">
+                            <div class="sync-step-icon">1</div>
+                            <div class="sync-step-text">Scan QR Code</div>
+                        </div>
+                        <div class="sync-step">
+                            <div class="sync-step-icon">2</div>
+                            <div class="sync-step-text">Connect</div>
+                        </div>
+                        <div class="sync-step">
+                            <div class="sync-step-icon">3</div>
+                            <div class="sync-step-text">Receive Data</div>
+                        </div>
+                    </div>
+
+                    <div class="sync-input-group">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="text" class="sync-input" id="receiverCode" placeholder="Enter 6-digit code" maxlength="6" style="flex: 1;">
+                            <button id="scanQRBtn" class="sync-btn" style="padding: 12px; min-width: auto;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 20h7a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7M4 6.001H2v14a2 2 0 0 0 2 2h14v-2H4z"></path>
+                                    <path d="m15 9-6 6"></path>
+                                    <path d="m9 9 6 6"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="camera-container" id="cameraContainer">
+                        <video id="qrScanner" width="100%"></video>
+                        <div class="scan-overlay">
+                            <div class="scan-box">
+                                <div class="scan-line"></div>
+                            </div>
+                        </div>
+                        <div class="camera-controls">
+                            <button id="cancelScanBtn" class="camera-btn danger">Cancel Scan</button>
+                        </div>
+                    </div>
+
+                    <div class="sync-progress">
+                        <div class="sync-progress-bar" id="receiveProgress"></div>
+                    </div>
+
+                    <div class="sync-status" id="receiveStatus">Enter code or scan QR to connect</div>
+
+                    <div class="sync-actions">
+                        <button class="sync-btn secondary" id="cancelSyncBtn">Cancel</button>
+                        <button class="sync-btn primary" id="connectToPeerBtn">Connect</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="settings" class="tab-content" role="tabpanel">
     <div class="settings-container">
         
         <!-- User Preferences Section -->
@@ -417,105 +513,10 @@
             </div>
         </div>
 
+        
     </div>
-</div>
 
-                <div class="sync-content active" id="sendContent">
-                    <h2 class="sync-title">Send Your Training Data</h2>
-                    <p class="sync-description">Share your training data securely with another device using QR code or code</p>
 
-                    <div class="sync-steps">
-                        <div class="sync-step active">
-                            <div class="sync-step-icon">1</div>
-                            <div class="sync-step-text">Generate Code</div>
-                        </div>
-                        <div class="sync-step">
-                            <div class="sync-step-icon">2</div>
-                            <div class="sync-step-text">Connect Device</div>
-                        </div>
-                        <div class="sync-step">
-                            <div class="sync-step-icon">3</div>
-                            <div class="sync-step-text">Transfer Data</div>
-                        </div>
-                    </div>
-
-                    <div class="qr-section">
-                        <div class="qr-container" id="sendQrContainer">
-                            <div class="qr-placeholder"></div>
-                        </div>
-                        <div class="peer-id-display" id="peerIdDisplay">CLICK "GENERATE CODE"</div>
-                    </div>
-
-                    <div class="sync-progress">
-                        <div class="sync-progress-bar" id="sendProgress"></div>
-                    </div>
-
-                    <div class="sync-status" id="sendStatus">Ready to generate sync code</div>
-
-                    <div class="sync-actions">
-                        <button class="sync-btn secondary" id="copyPeerIdBtn">Copy Code</button>
-                        <button class="sync-btn primary" id="generateCodeBtn">Generate Code</button>
-                    </div>
-                </div>
-
-                <div class="sync-content" id="receiveContent">
-                    <h2 class="sync-title">Receive Training Data</h2>
-                    <p class="sync-description">Enter the code from the sender to receive training data</p>
-
-                    <div class="sync-steps">
-                        <div class="sync-step active">
-                            <div class="sync-step-icon">1</div>
-                            <div class="sync-step-text">Scan QR Code</div>
-                        </div>
-                        <div class="sync-step">
-                            <div class="sync-step-icon">2</div>
-                            <div class="sync-step-text">Connect</div>
-                        </div>
-                        <div class="sync-step">
-                            <div class="sync-step-icon">3</div>
-                            <div class="sync-step-text">Receive Data</div>
-                        </div>
-                    </div>
-
-                    <div class="sync-input-group">
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <input type="text" class="sync-input" id="receiverCode" placeholder="Enter 6-digit code" maxlength="6" style="flex: 1;">
-                            <button id="scanQRBtn" class="sync-btn" style="padding: 12px; min-width: auto;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M12 20h7a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7M4 6.001H2v14a2 2 0 0 0 2 2h14v-2H4z"></path>
-                                    <path d="m15 9-6 6"></path>
-                                    <path d="m9 9 6 6"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="camera-container" id="cameraContainer">
-                        <video id="qrScanner" width="100%"></video>
-                        <div class="scan-overlay">
-                            <div class="scan-box">
-                                <div class="scan-line"></div>
-                            </div>
-                        </div>
-                        <div class="camera-controls">
-                            <button id="cancelScanBtn" class="camera-btn danger">Cancel Scan</button>
-                        </div>
-                    </div>
-
-                    <div class="sync-progress">
-                        <div class="sync-progress-bar" id="receiveProgress"></div>
-                    </div>
-
-                    <div class="sync-status" id="receiveStatus">Enter code or scan QR to connect</div>
-
-                    <div class="sync-actions">
-                        <button class="sync-btn secondary" id="cancelSyncBtn">Cancel</button>
-                        <button class="sync-btn primary" id="connectToPeerBtn">Connect</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div id="customModal" class="modal-overlay">
         <div class="modal-content">
@@ -557,7 +558,11 @@
         </div>
     </div>
 </div>
-</body>
+
+
+    </div>
+</div>
+
   <script src="script.js"></script>
 </body>
 </html>
