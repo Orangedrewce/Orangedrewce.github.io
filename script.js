@@ -1618,6 +1618,8 @@ setupChangeDetection() {
         }
     };
 
+
+
     // Listen for 'input' on fields that change continuously
     watchedInputs.forEach(id => setupListener(id, 'input'));
     
@@ -1869,7 +1871,7 @@ saveEntry() {
         
         localStorage.removeItem('climbSmartAutoSave');
         this.markAsSaved(); // Reset change tracking
-        
+        updateSettingsStatistics();
         document.getElementById('loader').style.display = 'none';
         showToast(`Entry for ${date} saved successfully!`);
         this.updateHistory();
@@ -1934,7 +1936,7 @@ async clearDataWithTearEffect() {
     setTimeout(async () => {
         // Start the fluid tear animation *after* the delay
         await tearEffect.initiateTear();
-    }, 50); // A small delay is usually sufficient.
+    }, 150); // A small delay is usually sufficient.
 }
         switchTab(tabName) {
             const currentTab = document.querySelector('.tab-content.active');
@@ -2508,6 +2510,7 @@ addChartControls() {
                 this.saveData();
                 this.updateHistory();
                 this.updateAnalytics();
+                updateSettingsStatistics();
                 hideModal('customModal');
                 showToast('Entry deleted.');
             });
@@ -2519,6 +2522,7 @@ addChartControls() {
                 this.saveData();
                 this.updateHistory();
                 this.updateAnalytics();
+                updateSettingsStatistics();
                 hideModal('customModal');
                 showToast('All data has been cleared.');
             });
@@ -2604,6 +2608,7 @@ addChartControls() {
                 this.saveData();
                 this.updateHistory();
                 this.updateAnalytics();
+                updateSettingsStatistics();
                 showToast('Data restored successfully!');
             } catch (e) {
                 console.error('Backup import error:', e);
