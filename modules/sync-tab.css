@@ -259,6 +259,27 @@
     /* ✅ NO changes to container */
 }
 
+/* ✨ ADD CENTERED CAMERA EMOJI TO SCAN BUTTON */
+#scanQRBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+    padding: 12px;
+    font-size: 24px; /* Larger emoji */
+}
+
+#scanQRBtn::before {
+    content: "📷";
+    font-size: 24px;
+}
+
+/* Hide any existing SVG or icon content */
+#scanQRBtn svg,
+#scanQRBtn .icon {
+    display: none;
+}
+
 /* ✅ Keep original QR section structure */
 .qr-section {
     display: flex;
