@@ -101,6 +101,32 @@
     gap: 10px; 
 }
 
+/* ✨ INDIVIDUAL DASHED BORDERS FOR LOG CONTENT */
+.log-metric, .log-recommendation, .log-notes {
+    background: rgba(248, 249, 250, 0.4); 
+    border: 2px dashed #bdc3c7; 
+    border-radius: 4px; 
+    padding: 8px; 
+    font-style: italic; 
+    color: #34495e; 
+    position: relative; 
+    z-index: 2; 
+    backdrop-filter: blur(1px); 
+    transition: all 0.6s ease;
+    opacity: 1; /* ✅ Fully visible */
+    margin: 2px; /* Small margin for spacing */
+}
+
+.log-recommendation, .log-notes { 
+    margin-top: 10px; 
+    padding: 10px; 
+}
+
+.log-notes { 
+    white-space: pre-wrap; 
+    word-wrap: break-word; 
+}
+
 /* ✅ INDIVIDUAL BUTTON WAKE EFFECTS - Buttons transform on their own hover */
 
 /* ✅ EXPORT SECTION - Keep original layout, just transparent background */
