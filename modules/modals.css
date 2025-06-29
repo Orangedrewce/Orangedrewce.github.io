@@ -1,5 +1,6 @@
 /* modules/modals.css */
 
+/* --- General Modal Styles --- */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -16,13 +17,11 @@
     transition: opacity 0.3s ease, visibility 0s 0.3s;
     padding: 20px;
 }
-
 .modal-overlay.active {
     opacity: 1;
     visibility: visible;
     transition: opacity 0.3s ease;
 }
-
 .modal-content {
     background: white;
     padding: 30px;
@@ -34,29 +33,24 @@
     transform: translateY(-20px);
     transition: transform 0.3s ease;
 }
-
 .modal-overlay.active .modal-content {
     transform: translateY(0);
 }
-
 .modal-content h3 {
     margin-bottom: 15px;
     color: #2c3e50;
 }
-
 .modal-content p {
     margin-bottom: 25px;
     color: #34495e;
     font-size: 1.1em;
     line-height: 1.6;
 }
-
 .modal-buttons {
     display: flex;
     justify-content: center;
     gap: 15px;
 }
-
 .modal-btn {
     padding: 12px 25px;
     border: none;
@@ -66,12 +60,10 @@
     transition: all 0.2s ease;
     min-width: 100px;
 }
-
 .modal-btn:hover {
     transform: translateY(-2px) scale(1.03);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-
 .modal-btn-confirm {
     background: #e74c3c;
     color: white;
@@ -80,7 +72,6 @@
     background: #c0392b;
     box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
 }
-
 .modal-btn-cancel {
     background: #ecf0f1;
     color: #7f8c8d;
@@ -106,9 +97,18 @@
 .welcome-modal .modal-content {
     background: rgba(255, 255, 255, 0.95) !important;
     position: relative !important;
-    overflow: hidden !important;
+    overflow: hidden !important; /* This clips the animations */
     backdrop-filter: blur(30px) !important;
+    padding: 0; /* Move padding to the inner wrapper */
 }
+
+/* THE FIX: This new wrapper handles the scrolling */
+.welcome-scroll-wrapper {
+    max-height: 85vh; /* Or a suitable height */
+    overflow-y: auto;
+    padding: 30px; /* The original padding */
+}
+
 .welcome-modal .modal-content::before {
     content: ''; position: absolute; top: 50%; left: 50%; width: 200px; height: 200px; background: radial-gradient(circle, rgba(52, 152, 219, 0.4) 0%, rgba(52, 152, 219, 0.2) 40%, transparent 70%); border-radius: 50%; animation: pulse-ring 4s ease-in-out infinite; pointer-events: none; z-index: -1; transform: translate(-50%, -50%);
 }
@@ -129,7 +129,10 @@
 .welcome-modal .close-welcome-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3); }
 
 /* --- Help Modal --- */
-.help-modal-content { max-width: 600px; max-height: 80vh; overflow-y: auto; }
+.help-modal-content {
+    max-height: 80vh;
+    overflow-y: auto;
+}
 .help-content { text-align: left; margin-bottom: 25px; }
 .help-content p { margin-bottom: 15px; line-height: 1.5; font-size: 14px; }
 .help-content strong { color: #2c3e50; font-weight: 600; }
@@ -141,7 +144,11 @@
     .modal-buttons { gap: 10px; flex-wrap: wrap; }
     .modal-btn { padding: 10px 20px; font-size: 14px; flex: 1; }
     
-    .welcome-modal .modal-content { padding: 25px; }
+    /* Make the inner scroller padding smaller on mobile */
+    .welcome-scroll-wrapper {
+        padding: 25px;
+    }
+    
     .welcome-modal h2 { font-size: 1.6em; }
     .welcome-modal .intro-text { font-size: 1em; }
     .welcome-modal .paypal-qr { width: 150px; height: 150px; }
@@ -149,5 +156,4 @@
     .welcome-modal .modal-content::after { width: 220px; height: 220px; animation-duration: 5s; }
     
     .help-modal-content { max-width: 95%; margin: 20px auto; }
-    .help-content p { font-size: 13px; margin-bottom: 12px; }
 }
