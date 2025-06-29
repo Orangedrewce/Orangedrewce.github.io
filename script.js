@@ -1312,7 +1312,7 @@ climbingCheckboxes.forEach(id => {
             // Main buttons
             document.getElementById('updateRecBtn').addEventListener('click', () => this.calculateRecommendation());
             document.getElementById('saveEntryBtn').addEventListener('click', () => this.saveEntry());
-            document.getElementById('clearEntryBtn').addEventListener('click', () => this.clearDataWithTearEffect());            document.getElementById('loadDateBtn').addEventListener('click', () => this.loadDataForDate());
+            document.getElementById('clearEntryBtn').addEventListener('click', () => this.clearDataWithTearEffect());            document.getElementById('loadDateBtn').addEventListener('click', () => {     this.showModal('This action will refresh entries or load the specified date. Do you wish to proceed?', () => {         this.loadDataForDate();     }); });
             
             // History navigation
             document.getElementById('prevWeekBtn').addEventListener('click', () => this.prevWeek());
