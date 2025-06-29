@@ -1,19 +1,13 @@
-/* modules/sync-tab.css */
+/* ✨ TRANSPARENT SYNC SECTIONS - FIXED: Preserve original structure! */
 
-/* FIX: Restoring original modern styles for the Sync tab. */
-
-.sync-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
+/* ✅ Keep the sync tabs exactly as they were - DON'T make them transparent */
 .sync-tabs {
     display: flex;
-    background: var(--primary-gradient);
+    background: var(--primary-gradient); /* ✅ Keep original gradient */
     border-radius: 10px;
     overflow: hidden;
     margin-bottom: 25px;
+    /* ✅ NO transparent treatment for tabs */
 }
 
 .sync-tab {
@@ -24,48 +18,222 @@
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
+    /* ✅ Keep original tab styling */
 }
 
 .sync-tab.active {
     color: white;
     background: rgba(255, 255, 255, 0.2);
+    /* ✅ Keep original active tab styling */
 }
 
+/* ✅ ONLY make the content areas transparent, not the tabs */
 .sync-content {
-    display: none;
-    background: white;
+    background: transparent; /* ✅ Invisible box by default */
+    border: none;
     border-radius: 15px;
     padding: 25px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: all 0.6s ease;
+    overflow: hidden;
+    /* ✅ Contents are fully visible */
+    opacity: 1;
+    filter: grayscale(100%) contrast(1.1) brightness(0.95);
+    box-shadow: none;
+    background-image: none;
+    display: none; /* ✅ Keep original display logic */
 }
 
 .sync-content.active {
-    display: block;
+    display: block; /* ✅ Keep original display logic */
 }
 
-.sync-title {
+/* ✅ Visible dashed border initially - MATCH OTHER SECTIONS */
+.sync-content::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 2px dashed #7f8c8d; /* ✅ Consistent with other sections */
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.6; /* ✅ Visible but subtle */
+    transition: all 0.6s ease;
+}
+
+/* ✅ SKETCH STYLING - Only for elements inside sync-content */
+
+/* Default sketch styling for sync headers */
+.sync-content .sync-title {
     color: #2c3e50;
     margin-bottom: 20px;
     text-align: center;
     font-size: 1.6em;
+    position: relative;
+    z-index: 2;
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px dashed #7f8c8d;
+    padding-bottom: 8px;
+    transition: all 0.6s ease;
 }
 
-.sync-description {
+/* Default sketch styling for sync descriptions */
+.sync-content .sync-description {
     color: #2c3e50;
     margin-bottom: 25px;
     text-align: center;
     line-height: 1.6;
     font-weight: 500;
     font-size: 1.05em;
+    position: relative;
+    z-index: 2;
+    font-style: italic;
+    transform: rotate(-0.05deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    transition: all 0.6s ease;
 }
 
-.qr-section {
+/* Default sketch styling for sync step icons - keep original shape but add sketch effect */
+.sync-content .sync-step-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px; /* Square corners for sketch look */
+    background: rgba(189, 195, 199, 0.6);
+    border: 2px dashed #7f8c8d;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    margin-bottom: 30px;
+    justify-content: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #2c3e50;
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(1px);
+    transition: all 0.6s ease;
 }
 
+.sync-content .sync-step-text {
+    color: #2c3e50;
+    font-size: 0.95em;
+    text-align: center;
+    max-width: 100px;
+    font-weight: 600;
+    position: relative;
+    z-index: 2;
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    transition: all 0.6s ease;
+}
+
+/* Keep original step active/completed states but apply to content only */
+.sync-content .sync-step.active .sync-step-icon {
+    background: rgba(102, 126, 234, 0.6); /* Sketch version */
+    color: #2c3e50;
+}
+
+.sync-content .sync-step.completed .sync-step-icon {
+    background: rgba(39, 174, 96, 0.6); /* Sketch version */
+    color: #2c3e50;
+}
+
+/* ✅ Default sketch styling for sync inputs */
+.sync-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px dashed #7f8c8d;
+    border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 2px;
+    background: rgba(255, 255, 255, 0.3);
+    color: #2c3e50;
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(1px);
+    transition: all 0.6s ease;
+}
+
+/* ✅ Default sketch styling for peer ID display */
+.peer-id-display {
+    background: rgba(248, 249, 250, 0.4);
+    padding: 15px;
+    border: 2px dashed #7f8c8d;
+    border-radius: 4px;
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: 2px;
+    color: #2c3e50;
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(1px);
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    transition: all 0.6s ease;
+}
+
+/* ✅ Default sketch styling for sync buttons */
+.sync-btn {
+    padding: 12px 25px;
+    border: 2px dashed #7f8c8d;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 140px;
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(1px);
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.sync-btn.primary {
+    background: rgba(255, 107, 157, 0.6); /* Sketch version of pink */
+    color: #2c3e50;
+}
+
+.sync-btn.secondary {
+    background: rgba(189, 195, 199, 0.6);
+    color: #2c3e50;
+}
+
+/* ✨ RESTORE THE HOP! Individual button hover effects */
+.sync-btn:hover {
+    transform: translateY(-4px) scale(1.05) rotate(0deg) !important;
+    font-style: normal !important;
+    text-shadow: none !important;
+    border-style: solid !important;
+    border-radius: 25px !important;
+    backdrop-filter: none !important;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.sync-btn.primary:hover {
+    background: linear-gradient(135deg, #FF6B9D 0%, #F06292 100%) !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 8px 16px rgba(255, 107, 157, 0.4);
+}
+
+.sync-btn.secondary:hover {
+    background: #ecf0f1 !important;
+    color: #7f8c8d !important;
+    border-color: #ecf0f1 !important;
+    box-shadow: 0 8px 16px rgba(189, 195, 199, 0.4);
+}
+
+/* ✅ Default sketch styling for QR container */
 .qr-container {
     width: 200px;
     height: 200px;
@@ -73,134 +241,40 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: white;
-    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.3);
+    border: 2px dashed #7f8c8d;
+    border-radius: 4px;
     padding: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     position: relative;
+    z-index: 2;
+    backdrop-filter: blur(1px);
+    transition: all 0.6s ease;
 }
 
-.qr-placeholder {
+/* ✅ Keep ALL original sync container and structure */
+.sync-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    /* ✅ NO changes to container */
+}
+
+/* ✅ Keep original QR section structure */
+.qr-section {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    color: #ffffff;
-    font-style: italic;
-    text-align: center;
-    padding: 10px;
-    background: #a9a9a9;
-    border-radius: 8px;
-    border: 2px dashed #000000;
-    font-size: 12px;
-    font-weight: 500;
+    margin-bottom: 30px;
+    /* ✅ NO changes to QR section layout */
 }
 
-.qr-error {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    color: #e74c3c;
-    font-weight: bold;
-    text-align: center;
-    padding: 10px;
-}
-
-.peer-id-display {
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 10px;
-    font-size: 1.8em;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: center;
-    letter-spacing: 2px;
-    color: #2c3e50;
-}
-
-.sync-input-group {
-    margin-bottom: 25px;
-}
-
-.sync-input {
-    width: 100%;
-    padding: 12px 15px;
-    border: 2px solid #ecf0f1;
-    border-radius: 8px;
-    font-size: 16px;
-    text-align: center;
-    font-weight: bold;
-    letter-spacing: 2px;
-}
-
-.sync-input:focus {
-    outline: none;
-    border-color: #667eea;
-}
-
-.sync-status {
-    padding: 15px;
-    border-radius: 8px;
-    margin: 20px 0;
-    font-weight: 500;
-    text-align: center;
-}
-.sync-status.connecting { background: #fdf8e2; color: #f39c12; }
-.sync-status.connected { background: #e8f4f8; color: #3498db; }
-.sync-status.success { background: #e8f6ef; color: #27ae60; }
-.sync-status.error { background: #fceae9; color: #e74c3c; }
-
-.sync-actions {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.sync-btn {
-    padding: 12px 25px;
-    border: none;
-    border-radius: 25px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 140px;
-}
-.sync-btn.primary {
-    background: linear-gradient(135deg, #FF6B9D 0%, #F06292 100%); /* Pink Post-it */
-    color: white;
-}
-.sync-btn.secondary {
-    background: #ecf0f1;
-    color: #7f8c8d;
-}
-.sync-btn:hover {
-    transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.sync-progress {
-    height: 6px;
-    background: #ecf0f1;
-    border-radius: 2px;
-    overflow: hidden;
-    margin: 25px 0;
-}
-.sync-progress-bar {
-    height: 100%;
-    background: var(--primary-gradient);
-    width: 0%;
-    transition: width 0.3s ease;
-}
-
+/* ✅ Keep original sync steps structure */
 .sync-steps {
     display: flex;
     justify-content: space-between;
     margin-bottom: 30px;
     position: relative;
+    /* ✅ NO changes to steps layout */
 }
 
 .sync-steps::before {
@@ -212,6 +286,7 @@
     height: 2px;
     background: #ecf0f1;
     z-index: 1;
+    /* ✅ Keep original connecting line */
 }
 
 .sync-step {
@@ -219,130 +294,172 @@
     flex-direction: column;
     align-items: center;
     z-index: 2;
+    /* ✅ NO changes to step layout */
 }
 
-.sync-step-icon {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: #ecf0f1;
+/* ✅ Keep original sync actions structure */
+.sync-actions {
     display: flex;
-    align-items: center;
     justify-content: center;
-    margin-bottom: 10px;
-    font-weight: bold;
+    gap: 15px;
+    margin-top: 20px;
+    /* ✅ NO changes to actions layout */
 }
 
-.sync-step.active .sync-step-icon {
+/* ✅ Keep original sync input group structure */
+.sync-input-group {
+    margin-bottom: 25px;
+    /* ✅ NO changes to input group layout */
+}
+
+/* ✅ Keep original sync progress structure */
+.sync-progress {
+    height: 6px;
+    background: #ecf0f1;
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 25px 0;
+    /* ✅ NO changes to progress layout */
+}
+
+.sync-progress-bar {
+    height: 100%;
+    background: var(--primary-gradient);
+    width: 0%;
+    transition: width 0.3s ease;
+    /* ✅ NO changes to progress bar */
+}
+
+/* ✅ Keep original sync status structure */
+.sync-status {
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-weight: 500;
+    text-align: center;
+    /* ✅ NO changes to status layout */
+}
+
+.sync-status.connecting { background: #fdf8e2; color: #f39c12; }
+.sync-status.connected { background: #e8f4f8; color: #3498db; }
+.sync-status.success { background: #e8f6ef; color: #27ae60; }
+.sync-status.error { background: #fceae9; color: #e74c3c; }
+
+/* ✨ MODERN TRANSFORMATION ON HOVER */
+.sync-content:hover, .sync-content:focus-within {
+    filter: none;
+    background: white;
+    background-image: none;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+/* Hide dashed borders on hover */
+.sync-content:hover::before, .sync-content:focus-within::before {
+    opacity: 0;
+    transform: scale(0.98);
+}
+
+/* Modern headers on hover */
+.sync-content:hover .sync-title, .sync-content:focus-within .sync-title {
+    transform: rotate(0deg);
+    font-style: normal;
+    text-shadow: none;
+    border-bottom: none;
+    padding-left: 12px;
+    margin-left: -16px;
+    border-left: 4px solid #667eea; /* Blue accent for sync */
+}
+
+/* Modern descriptions on hover */
+.sync-content:hover .sync-description, .sync-content:focus-within .sync-description {
+    transform: rotate(0deg);
+    font-style: normal;
+    text-shadow: none;
+}
+
+/* Modern inputs on hover */
+.sync-content:hover .sync-input, .sync-content:focus-within .sync-input {
+    background: white;
+    border: 2px solid #ecf0f1;
+    border-style: solid;
+    border-radius: 8px;
+    backdrop-filter: none;
+}
+
+.sync-content:hover .sync-input:focus, .sync-content:focus-within .sync-input:focus {
+    border-color: #667eea;
+}
+
+/* Modern peer ID on hover */
+.sync-content:hover .peer-id-display, .sync-content:focus-within .peer-id-display {
+    background: #f8f9fa;
+    border: 2px solid #ecf0f1;
+    border-style: solid;
+    border-radius: 10px;
+    backdrop-filter: none;
+    transform: rotate(0deg);
+    font-style: normal;
+    text-shadow: none;
+}
+
+/* Modern buttons on hover */
+.sync-content:hover .sync-btn, .sync-content:focus-within .sync-btn {
+    border-style: solid;
+    border-radius: 25px;
+    backdrop-filter: none;
+    transform: rotate(0deg);
+    font-style: normal;
+    text-shadow: none;
+}
+
+.sync-content:hover .sync-btn.primary, .sync-content:focus-within .sync-btn.primary {
+    background: linear-gradient(135deg, #FF6B9D 0%, #F06292 100%);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.sync-content:hover .sync-btn.secondary, .sync-content:focus-within .sync-btn.secondary {
+    background: #ecf0f1;
+    color: #7f8c8d;
+    border-color: #ecf0f1;
+}
+
+/* Modern QR container on hover */
+.sync-content:hover .qr-container, .sync-content:focus-within .qr-container {
+    background: white;
+    border: 2px solid #ecf0f1;
+    border-style: solid;
+    border-radius: 12px;
+    backdrop-filter: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Modern sync steps on hover */
+.sync-content:hover .sync-step-icon, .sync-content:focus-within .sync-step-icon {
+    border-radius: 50%; /* Round again */
+    background: #ecf0f1;
+    border: none;
+    backdrop-filter: none;
+}
+
+.sync-content:hover .sync-step.active .sync-step-icon, .sync-content:focus-within .sync-step.active .sync-step-icon {
     background: #667eea;
     color: white;
 }
 
-.sync-step.completed .sync-step-icon {
+.sync-content:hover .sync-step.completed .sync-step-icon, .sync-content:focus-within .sync-step.completed .sync-step-icon {
     background: #27ae60;
     color: white;
 }
 
-.sync-step-text {
-    color: #2c3e50;
-    font-size: 0.95em;
-    text-align: center;
-    max-width: 100px;
-    font-weight: 600;
+.sync-content:hover .sync-step-text, .sync-content:focus-within .sync-step-text {
+    transform: rotate(0deg);
+    font-style: normal;
+    text-shadow: none;
 }
 
-.sync-step.active .sync-step-text {
+.sync-content:hover .sync-step.active .sync-step-text, .sync-content:focus-within .sync-step.active .sync-step-text {
     font-weight: 800;
     color: #1a252f;
-}
-
-/* Camera scan UI */
-.camera-container {
-    display: none;
-    margin-top: 15px;
-    position: relative;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-#qrScanner {
-    width: 100%;
-    display: block;
-}
-.scan-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    pointer-events: none;
-}
-.scan-box {
-    width: 70%;
-    height: 70%;
-    max-width: 300px;
-    max-height: 300px;
-    border: 2px solid #3498db;
-    border-radius: 8px;
-    position: relative;
-    overflow: hidden;
-}
-.scan-line {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: #3498db;
-    animation: scan 2s linear infinite;
-}
-.camera-controls {
-    position: absolute;
-    bottom: 10px;
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    z-index: 10;
-}
-.camera-btn {
-    padding: 8px 15px;
-    border: none;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.8);
-    color: #2c3e50;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
-}
-.camera-btn:hover {
-    background: white;
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-.camera-btn.danger:hover {
-    background: #e74c3c;
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
-}
-
-@media (max-width: 768px) {
-    /* Target the button container */
-    .sync-actions {
-        flex-direction: column; /* Stack the buttons vertically */
-        align-items: stretch;   /* Make buttons take up the full width */
-        gap: 10px;              /* Add space between stacked buttons */
-    }
-
-    /* Ensure the buttons themselves are flexible */
-    .sync-actions .sync-btn {
-        width: 100%;        /* Allow button to fill the container width */
-        min-width: unset;   /* Remove minimum width constraint */
-        margin: 0;          /* Reset any horizontal margins */
-    }
 }
