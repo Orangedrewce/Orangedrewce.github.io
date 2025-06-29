@@ -1,11 +1,10 @@
 /* ✨ TRANSPARENT DAILY SECTIONS - Visible content & lines, invisible boxes */
 
-/* Target all the daily entry input sections AND button group */
+/* Target all the daily entry input sections AND button group (REMOVED .personalization-section) */
 .input-section:first-child,
 .input-section:nth-child(2),
 .training-history-section,
 .input-section[style*="grid-column: 1 / -1"],
-.personalization-section,
 .date-selector,
 .button-group {
     background: transparent; /* ✅ Invisible box */
@@ -22,12 +21,11 @@
     background-image: none;
 }
 
-/* ✅ Visible dashed border initially for ALL sections including button group */
+/* ✅ Visible dashed border initially for ALL sections including button group (REMOVED .personalization-section) */
 .input-section:first-child::before,
 .input-section:nth-child(2)::before,
 .training-history-section::before,
 .input-section[style*="grid-column: 1 / -1"]::before,
-.personalization-section::before,
 .date-selector::before,
 .button-group::before {
     content: '';
@@ -45,10 +43,9 @@
     transition: all 0.6s ease;
 }
 
-/* ✅ Default sketch styling for headers */
+/* ✅ Default sketch styling for headers (REMOVED .personalization-section) */
 .input-section:first-child h3, .input-section:nth-child(2) h3, 
-.training-history-section h3, .input-section[style*="grid-column: 1 / -1"] h3, 
-.personalization-section h3 {
+.training-history-section h3, .input-section[style*="grid-column: 1 / -1"] h3 {
     color: #2c3e50; 
     position: relative; 
     z-index: 2; 
