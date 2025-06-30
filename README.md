@@ -1,6 +1,6 @@
 Target Audience
 
-This application is designed for the data-driven, self-coached athlete who are serious about optimizing performance, managing fatigue, and minimizing injury risk. The ideal user is someone who understands that progress isn't just about training harder, but training smarter.
+This application is designed for the data-driven, self-coached athlete who are serious about optimizing performance, managing fatigue, and minimizing injury risk. 
 
 Specifically, this program would greatly benefit:
 
