@@ -440,15 +440,12 @@
                             <div class="setting-description">How often to automatically save your progress</div>
                         </div>
                         <div class="setting-control">
-                        <div class="setting-control">
                             <select class="settings-select" id="autoSaveFrequency">
+                                <option value="5">Every 5 seconds</option>
+                                <option value="10" selected>Every 10 seconds</option>
+                                <option value="30">Every 30 seconds</option>
                                 <option value="60">Every minute</option>
-                                <option value="300">Every 5 minutes</option>
-                                <option value="600">Every 10 minutes</option>
-                                <option value="1800">Every 30 minutes</option>
-                                <option value="3600">Every hour</option>         
-                            </select>
-                        </div>
+                                <option value="0">Disabled</option>
                             </select>
                         </div>
                     </div>
@@ -470,7 +467,20 @@
 
                 <!-- Notifications Section -->
                 <div class="settings-section">
-                    <h3>💾 Notification</h3>
+                    <h3>🔔 Notifications & Reminders</h3>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-title">Daily Entry Reminder</div>
+                            <div class="setting-description">Get reminded to log your daily metrics</div>
+                        </div>
+                        <div class="setting-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="dailyReminderToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
 
                     <div class="setting-item">
                         <div class="setting-info">
@@ -486,6 +496,54 @@
                     </div>
                 </div>
 
+                <!-- Data Management Section -->
+                <div class="settings-section">
+                    <h3>💾 Data Management</h3>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-title">Automatic Backups</div>
+                            <div class="setting-description">Automatically generate backup codes weekly</div>
+                        </div>
+                        <div class="setting-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="autoBackupToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-title">Data Retention</div>
+                            <div class="setting-description">How long to keep old entries</div>
+                        </div>
+                        <div class="setting-control">
+                            <select class="settings-select" id="dataRetention">
+                                <option value="forever" selected>Forever</option>
+                                <option value="365">1 Year</option>
+                                <option value="180">6 Months</option>
+                                <option value="90">3 Months</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Account & Privacy Section -->
+                <div class="settings-section">
+                    <h3>🔐 Privacy & Security</h3>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-title">Clear Browser Cache</div>
+                            <div class="setting-description">Clear temporary files and reset app state</div>
+                        </div>
+                        <div class="setting-control">
+                            <button class="settings-action-btn btn-secondary" id="clearCacheBtn">Clear Cache</button>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Danger Zone Section -->
                 <div class="settings-section danger-zone">
@@ -511,6 +569,32 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- App Information Section -->
+                <div class="settings-section">
+                    <h3>ℹ️ About ClimbSmart</h3>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-title">Version</div>
+                            <div class="setting-description">Current app version</div>
+                        </div>
+                        <div class="setting-control">
+                            <span style="color: #7f8c8d;">v3.0.1</span>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <div class="setting-title">Last Updated</div>
+                            <div class="setting-description">When the app was last modified</div>
+                        </div>
+                        <div class="setting-control">
+                            <span style="color: #7f8c8d;" id="lastUpdated">Today</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -550,7 +634,7 @@
                 <p><strong>Days Since Last Session:</strong> How many days since you last climbed or trained.</p>
                 <p><strong>Intensity (RPE 1-10, 0=rest):</strong> How hard your last workout felt. Skip if it was a rest day.</p>             
                 <p><strong>Completed Today:</strong> Check all activities you did today (climbing, weights, cardio, etc).</p>
-                <p><strong>Pre-Training Meal:</strong> Did you eat before training?</p>
+                <p><strong>Pre-Training Meal:</strong> Did you eat before training? Affects energy levels.</p>
                 
                 <p><strong>📈 History & Analytics:</strong></p>
                 <p><strong>Training History:</strong> View all your past entries organized by week. Each entry shows your readiness score, metrics, and recommendations.</p>
