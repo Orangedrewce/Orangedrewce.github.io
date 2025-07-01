@@ -1,4 +1,4 @@
-        /* Settings Page - Match Daily Tab Style */
+/* Settings Page - Match Daily Tab Style */
         .settings-container {
             max-width: 800px;
             margin: 0 auto;
@@ -84,13 +84,10 @@
             border-left: 4px solid #3498db;
         }
 
-        /* Different sections get different colors on hover */
+        /* Different sections get different colors on hover - Updated for new structure */
         .settings-section:nth-child(1):hover h3, .settings-section:nth-child(1):focus-within h3 { border-left-color: #FFD54F; }
         .settings-section:nth-child(2):hover h3, .settings-section:nth-child(2):focus-within h3 { border-left-color: #FF9800; }
         .settings-section:nth-child(3):hover h3, .settings-section:nth-child(3):focus-within h3 { border-left-color: #9b59b6; }
-        .settings-section:nth-child(4):hover h3, .settings-section:nth-child(4):focus-within h3 { border-left-color: #8BC34A; }
-        .settings-section:nth-child(5):hover h3, .settings-section:nth-child(5):focus-within h3 { border-left-color: #f39c12; }
-        .settings-section:nth-child(6):hover h3, .settings-section:nth-child(6):focus-within h3 { border-left-color: #2ecc71; }
         .settings-section.danger-zone:hover h3, .settings-section.danger-zone:focus-within h3 { border-left-color: #e74c3c; }
 
         /* Setting Items */
@@ -143,7 +140,6 @@
             text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.05);
             transition: all 0.6s ease;
         }
-
         /* Modern Text on Hover */
         .settings-section:hover .setting-title,
         .settings-section:focus-within .setting-title {
@@ -382,10 +378,35 @@
         .danger-zone:hover,
         .danger-zone:focus-within {
             background: rgba(231, 76, 60, 0.05);
+            animation: dangerPulse .7s infinite;
         }
 
         .danger-zone h3 {
             color: #e74c3c;
+        }
+
+        /* Danger Zone Pulsing Animation */
+        @keyframes dangerPulse {
+            0% { 
+                background: rgba(231, 76, 60, 0.05);
+                box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+            }
+            25% { 
+                background: rgba(231, 76, 60, 0.1);
+                box-shadow: 0 12px 25px rgba(231, 76, 60, 0.2);
+            }
+            50% { 
+                background: rgba(231, 76, 60, 0.15);
+                box-shadow: 0 12px 25px rgba(231, 76, 60, 0.3);
+            }
+            75% { 
+                background: rgba(231, 76, 60, 0.1);
+                box-shadow: 0 12px 25px rgba(231, 76, 60, 0.2);
+            }
+            100% { 
+                background: rgba(231, 76, 60, 0.05);
+                box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+            }
         }
 
         /* Mobile Responsive */
