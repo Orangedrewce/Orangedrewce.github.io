@@ -1968,13 +1968,17 @@ async clearDataWithTearEffect() {
         
 // Replace your existing prevWeek, nextWeek, and updateWeekDisplay functions
 
+// REPLACE these functions in your MultiDayTracker class
+
 prevWeek() {
+    // Going to PREVIOUS week means going BACK in time (higher index)
     this.currentWeekIndex++;
     this.updateHistory();
     this.updateWeekDisplay();
 }
 
 nextWeek() {
+    // Going to NEXT week means going FORWARD in time (lower index, closer to current)
     this.currentWeekIndex = Math.max(0, this.currentWeekIndex - 1);
     this.updateHistory();
     this.updateWeekDisplay();
@@ -2015,19 +2019,26 @@ updateWeekDisplay() {
     const nextBtn = document.getElementById('nextWeekBtn');
     const prevBtn = document.getElementById('prevWeekBtn');
     
-    // Disable "Next" button if we're at current week
+    // "Next" button should be disabled when we're at current week (index 0)
     if (nextBtn) {
         nextBtn.disabled = this.currentWeekIndex === 0;
         nextBtn.style.opacity = this.currentWeekIndex === 0 ? '0.5' : '1';
+        nextBtn.style.cursor = this.currentWeekIndex === 0 ? 'not-allowed' : 'pointer';
     }
     
-    // Check if there's data beyond the current week range
+    // "Previous" button should be disabled when there's no older data
     const sortedDates = Object.keys(this.trainingData).sort((a, b) => new Date(b) - new Date(a));
-    const oldestDate = sortedDates.length > 0 ? new Date(sortedDates[sortedDates.length - 1]) : new Date();
-    const hasOlderData = oldestDate < targetWeekStart;
+    let hasOlderData = false;
+    
+    if (sortedDates.length > 0) {
+        const oldestDate = new Date(sortedDates[sortedDates.length - 1] + 'T00:00:00');
+        hasOlderData = oldestDate < targetWeekStart;
+    }
     
     if (prevBtn) {
+        prevBtn.disabled = !hasOlderData;
         prevBtn.style.opacity = hasOlderData ? '1' : '0.5';
+        prevBtn.style.cursor = hasOlderData ? 'pointer' : 'not-allowed';
     }
 }
 
@@ -2046,21 +2057,23 @@ updateHistory() {
     let displayDates = [];
     
     if (this.currentWeekIndex === 0) {
-        // Current week - show last 7 entries regardless of actual week
+        // Current week - show last 7 entries regardless of actual week boundaries
         displayDates = sortedDates.slice(0, 7);
     } else {
-        // Historical weeks - show entries from that specific week
+        // Historical weeks - show entries from that specific week period
         const now = new Date();
         const currentWeekStart = new Date(now);
         currentWeekStart.setDate(now.getDate() - now.getDay());
         currentWeekStart.setHours(0, 0, 0, 0);
         
+        // Calculate the target week boundaries
         const targetWeekStart = new Date(currentWeekStart);
         targetWeekStart.setDate(currentWeekStart.getDate() - (this.currentWeekIndex * 7));
         
         const targetWeekEnd = new Date(targetWeekStart);
-        targetWeekEnd.setDate(targetWeekStart.getDate() + 7);
+        targetWeekEnd.setDate(targetWeekStart.getDate() + 7); // 7 days later
         
+        // Filter entries that fall within this week
         displayDates = sortedDates.filter(date => {
             const dateObj = new Date(date + 'T00:00:00');
             return dateObj >= targetWeekStart && dateObj < targetWeekEnd;
@@ -2073,7 +2086,7 @@ updateHistory() {
         return;
     }
     
-    // 🟢 OPTIMIZED: Batch HTML creation
+    // Generate HTML for entries
     let htmlFragments = [];
     
     displayDates.forEach(date => {
@@ -2109,7 +2122,7 @@ updateHistory() {
         htmlFragments.push(logHTML);
     });
     
-    // 🟢 SINGLE DOM operation instead of multiple +=
+    // Single DOM operation
     historyList.innerHTML = htmlFragments.join('');
     
     this.updateWeekDisplay();
