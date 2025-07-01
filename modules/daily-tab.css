@@ -90,6 +90,13 @@
     opacity: 1; /* ✅ Fully visible */
 }
 
+
+/* ✨ Lighter opacity for Session Notes textarea */
+.input-section[style*="grid-column: 1 / -1"] textarea {
+    background: rgba(255, 255, 255, 0.5) !important; /* Changed from 0.3 to 0.5 */
+    opacity: 0.5; /* Additional opacity control */
+}
+
 /* ✅ Default sketch styling for date button */
 .date-selector #loadDateBtn {
     background: rgba(189, 195, 199, 0.6);
@@ -185,3 +192,4 @@
     backdrop-filter: none;
     text-shadow: none;
 }
+
