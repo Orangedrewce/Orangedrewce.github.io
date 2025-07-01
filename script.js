@@ -741,6 +741,10 @@ async initiateTear() {
         }
     }
 
+drawClippedScreenshot(progress, part) {
+    this.ctx.translate(0, -separationOffset); // Forces repaint
+}
+
     animate() {
         const currentTime = performance.now();
         const elapsed = currentTime - this.startTime;
@@ -781,52 +785,40 @@ async initiateTear() {
         }
     }
 
-    // ✨ NEW & IMPROVED: Eliminates the "cone effect" artifact
-    drawClippedScreenshot(progress, part) {
-        const activePointsCount = Math.floor(progress * this.tearPoints.length);
-        if (activePointsCount < 1) return;
+drawClippedScreenshot(progress, part) {
+    const activePointsCount = Math.floor(progress * this.tearPoints.length);
+    if (activePointsCount < 1) return;
 
-        this.ctx.save();
-        this.ctx.beginPath();
-        
-        const pathPoints = this.tearPoints.slice(0, activePointsCount);
-        const firstPoint = pathPoints[0];
-        const lastPoint = pathPoints[pathPoints.length - 1];
+    this.ctx.save();
+    this.ctx.beginPath();
+    
+    const pathPoints = this.tearPoints.slice(0, activePointsCount);
+    const firstPoint = pathPoints[0];
+    const lastPoint = pathPoints[pathPoints.length - 1];
 
-        if (part === 'top') {
-            // Path for the top, peeling-up piece
-            // Start at the top edge, above the first tear point
-            this.ctx.moveTo(firstPoint.x, 0);
-            // Draw along the top edge of the screen
-            this.ctx.lineTo(this.canvas.width, 0);
-            // Draw DOWN the right edge of the screen to meet the tear line
-            this.ctx.lineTo(this.canvas.width, lastPoint.y);
-            // Now draw along the tear path itself from right to left
-            pathPoints.reverse().forEach(p => this.ctx.lineTo(p.x, p.y));
-            // Close the shape by going up the left edge
-            this.ctx.lineTo(firstPoint.x, 0);
-
-        } else { // 'bottom'
-            // Path for the bottom, peeling-down piece
-            // Start at the bottom edge, below the first tear point
-            this.ctx.moveTo(firstPoint.x, this.canvas.height);
-            // Draw along the bottom edge of the screen
-            this.ctx.lineTo(this.canvas.width, this.canvas.height);
-            // Draw UP the right edge of the screen to meet the tear line
-            this.ctx.lineTo(this.canvas.width, lastPoint.y);
-            // Now draw along the tear path itself from right to left
-            pathPoints.reverse().forEach(p => this.ctx.lineTo(p.x, p.y));
-            // Close the shape by going down the left edge
-            this.ctx.lineTo(firstPoint.x, this.canvas.height);
-        }
-
-        this.ctx.closePath();
-        this.ctx.clip();
-        
-        // Draw the original screenshot inside this new, perfect shape
-        this.ctx.drawImage(this.screenshot, 0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.restore();
+    if (part === 'top') {
+        // Path for the top, peeling-up piece
+        this.ctx.moveTo(firstPoint.x, 0);
+        this.ctx.lineTo(this.canvas.width, 0);
+        this.ctx.lineTo(this.canvas.width, lastPoint.y);
+        pathPoints.reverse().forEach(p => this.ctx.lineTo(p.x, p.y));
+        this.ctx.lineTo(firstPoint.x, 0);
+    } else { // 'bottom'
+        // Path for the bottom, peeling-down piece
+        this.ctx.moveTo(firstPoint.x, this.canvas.height);
+        this.ctx.lineTo(this.canvas.width, this.canvas.height);
+        this.ctx.lineTo(this.canvas.width, lastPoint.y);
+        pathPoints.reverse().forEach(p => this.ctx.lineTo(p.x, p.y));
+        this.ctx.lineTo(firstPoint.x, this.canvas.height);
     }
+
+    this.ctx.closePath();
+    this.ctx.clip();
+    
+    // Draw the original screenshot inside this shape
+    this.ctx.drawImage(this.screenshot, 0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.restore();
+}
 
     // ✨ Modified to draw shadow on TOP or BOTTOM edge
     drawTornEdgeShadows(progress, edgeType) {
@@ -1782,20 +1774,18 @@ destroy() {
         }
         
 sanitizeNotes(text) {
-    // Basic HTML tag removal (your existing logic)
-    let cleaned = text.replace(/<[^>]*>/g, '');
+    // Create a temporary DOM element for safe sanitization
+    const tempDiv = document.createElement('div');
+    tempDiv.textContent = text; // This escapes ALL HTML
+    let cleaned = tempDiv.innerHTML;
     
-    // Additional XSS protection
+    // Additional protection against data: and javascript: URLs
     cleaned = cleaned.replace(/javascript:/gi, '')
-                    .replace(/on\w+\s*=/gi, '')
-                    .replace(/data:/gi, '');
+                    .replace(/data:/gi, '')
+                    .replace(/vbscript:/gi, '');
     
-    // Limit length to prevent massive notes
-    if (cleaned.length > 1000) {
-        cleaned = cleaned.substring(0, 1000) + '...';
-    }
-    
-    return cleaned;
+    // Limit length
+    return cleaned.length > 1000 ? cleaned.substring(0, 1000) + '...' : cleaned;
 }
 
         calculateRecommendation() {
@@ -2637,59 +2627,89 @@ addChartControls() {
     }
 
 
-    function loadClimbSmartSettings() {
-        // Load settings from localStorage
-        const settings = JSON.parse(localStorage.getItem('climbSmartSettings') || '{}');
-        
-        // Apply loaded settings to UI
-        if (settings.autoSave) {
-            document.getElementById('autoSaveFrequency').value = settings.autoSave;
-        }
-        if (settings.animations !== undefined) {
-            document.getElementById('animationsToggle').checked = settings.animations;
-        }
-        if (settings.dailyReminder) {
-            document.getElementById('dailyReminderToggle').checked = settings.dailyReminder;
-        }
-        if (settings.successNotifications !== undefined) {
-            document.getElementById('successNotificationsToggle').checked = settings.successNotifications;
-        }
-        if (settings.autoBackup) {
-            document.getElementById('autoBackupToggle').checked = settings.autoBackup;
-        }
-        if (settings.dataRetention) {
-            document.getElementById('dataRetention').value = settings.dataRetention;
-        }
+function loadClimbSmartSettings() {
+    // Load settings from localStorage
+    const settings = JSON.parse(localStorage.getItem('climbSmartSettings') || '{}');
+    
+    // Apply loaded settings to UI - only for elements that exist
+    const autoSaveEl = document.getElementById('autoSaveFrequency');
+    if (autoSaveEl && settings.autoSave) {
+        autoSaveEl.value = settings.autoSave;
     }
+    
+    const animationsEl = document.getElementById('animationsToggle');
+    if (animationsEl && settings.animations !== undefined) {
+        animationsEl.checked = settings.animations;
+    }
+    
+    const successNotificationsEl = document.getElementById('successNotificationsToggle');
+    if (successNotificationsEl && settings.successNotifications !== undefined) {
+        successNotificationsEl.checked = settings.successNotifications;
+    }
+    
+}
 
-    function addSettingsEventListeners() {
-        // Toggle switches
-        document.getElementById('animationsToggle').addEventListener('change', toggleAnimations);
-        document.getElementById('dailyReminderToggle').addEventListener('change', toggleDailyReminder);
-        document.getElementById('successNotificationsToggle').addEventListener('change', toggleSuccessNotifications);
-        document.getElementById('autoBackupToggle').addEventListener('change', toggleAutoBackup);
-        
-        // Select dropdowns
-        document.getElementById('autoSaveFrequency').addEventListener('change', updateAutoSave);
-        document.getElementById('dataRetention').addEventListener('change', updateDataRetention);
-        
-        // Action buttons
-        document.getElementById('clearCacheBtn').addEventListener('click', clearBrowserCache);
-        document.getElementById('resetSettingsBtn').addEventListener('click', resetAllSettings);
-        document.getElementById('deleteAllDataBtn').addEventListener('click', deleteAllAppData);
-        
-        // Data retention
-        document.getElementById('dataRetention').addEventListener('change', function() {
-        updateDataRetention(event);
-        applyDataRetention(); // Apply retention policy immediately
-    });
-        
+function addSettingsEventListeners() {
+    // Toggle switches - only add listeners for elements that exist
+    const animationsToggle = document.getElementById('animationsToggle');
+    if (animationsToggle) {
+        animationsToggle.addEventListener('change', toggleAnimations);
     }
+    
+    const successNotificationsToggle = document.getElementById('successNotificationsToggle');
+    if (successNotificationsToggle) {
+        successNotificationsToggle.addEventListener('change', toggleSuccessNotifications);
+    }
+    
+    // Select dropdowns
+    const autoSaveFrequency = document.getElementById('autoSaveFrequency');
+    if (autoSaveFrequency) {
+        autoSaveFrequency.addEventListener('change', updateAutoSave);
+    }
+    
+    // Action buttons
+    const clearCacheBtn = document.getElementById('clearCacheBtn');
+    if (clearCacheBtn) {
+        clearCacheBtn.addEventListener('click', clearBrowserCache);
+    }
+    
+    const resetSettingsBtn = document.getElementById('resetSettingsBtn');
+    if (resetSettingsBtn) {
+        resetSettingsBtn.addEventListener('click', resetAllSettings);
+    }
+    
+    const deleteAllDataBtn = document.getElementById('deleteAllDataBtn');
+    if (deleteAllDataBtn) {
+        deleteAllDataBtn.addEventListener('click', deleteAllAppData);
+    }
+    
+    // REMOVED: dailyReminderToggle, autoBackupToggle, dataRetention event listeners
+}
 
 function updateAutoSave(event) {
     const frequency = event.target.value;
     saveSettingValue('autoSave', frequency);
-    console.log('Auto-save frequency:', frequency + ' seconds');
+    
+    // Show toast notification with current state
+    let message;
+    if (frequency == 0) {
+        message = '💾 Auto-save disabled';
+    } else if (frequency == 60) {
+        message = '💾 Auto-save: Every minute';
+    } else if (frequency == 300) {
+        message = '💾 Auto-save: Every 5 minutes';
+    } else if (frequency == 600) {
+        message = '💾 Auto-save: Every 10 minutes';
+    } else if (frequency == 900) {
+        message = '💾 Auto-save: Every 15 minutes';
+    } else if (frequency == 1800) {
+        message = '💾 Auto-save: Every 30 minutes';
+    } else if (frequency == 3600) {
+        message = '💾 Auto-save: Every hour';
+    } else {
+        message = `💾 Auto-save: Every ${frequency} seconds`;
+    }
+    showToast(message);
     
     // Apply the new auto-save frequency immediately
     if (window.app && window.app.autoSaveInterval) {
@@ -2704,35 +2724,24 @@ function updateAutoSave(event) {
 }
 
 
-    function toggleAnimations(event) {
-        const enabled = event.target.checked;
-        saveSettingValue('animations', enabled);
-        console.log('Animations enabled:', enabled);
-    }
+function toggleAnimations(event) {
+    const enabled = event.target.checked;
+    saveSettingValue('animations', enabled);
+    
+    // Show toast notification with current state
+    const message = enabled ? '✨ Animations enabled' : '🚫 Animations disabled';
+    showToast(message);
+}
 
-    function toggleDailyReminder(event) {
-        const enabled = event.target.checked;
-        saveSettingValue('dailyReminder', enabled);
-        console.log('Daily reminder enabled:', enabled);
-    }
+function toggleSuccessNotifications(event) {
+    const enabled = event.target.checked;
+    saveSettingValue('successNotifications', enabled);
+    
+    // Show toast notification with current state
+    const message = enabled ? '🔔 Success notifications enabled' : '🔕 Success notifications disabled';
+    showToast(message);
+}
 
-    function toggleSuccessNotifications(event) {
-        const enabled = event.target.checked;
-        saveSettingValue('successNotifications', enabled);
-        console.log('Success notifications enabled:', enabled);
-    }
-
-    function toggleAutoBackup(event) {
-        const enabled = event.target.checked;
-        saveSettingValue('autoBackup', enabled);
-        console.log('Auto backup enabled:', enabled);
-    }
-
-    function updateDataRetention(event) {
-        const retention = event.target.value;
-        saveSettingValue('dataRetention', retention);
-        console.log('Data retention:', retention);
-    }
 
     function clearBrowserCache() {
         // Clear temporary data but keep training data
@@ -2781,22 +2790,35 @@ function deleteAllAppData() {
         localStorage.setItem('climbSmartSettings', JSON.stringify(settings));
     }
 
-    function updateSettingsStatistics() {
-        // Calculate and display user statistics
-        const data = JSON.parse(localStorage.getItem('climbingTrackerData') || '{}');
-        const entries = Object.keys(data).length;
-        
-        document.getElementById('totalEntries').textContent = entries;
-        
-        if (entries > 0) {
-            const avgReadiness = Object.values(data)
-                .reduce((sum, entry) => sum + (entry.readinessScore || 0), 0) / entries;
-            document.getElementById('averageReadiness').textContent = avgReadiness.toFixed(1);
-        }
-        
-        document.getElementById('totalDays').textContent = entries;
-        document.getElementById('currentStreak').textContent = calculateSettingsStreak(data);
+function updateSettingsStatistics() {
+    // Calculate and display user statistics
+    const data = JSON.parse(localStorage.getItem('climbingTrackerData') || '{}');
+    const entries = Object.keys(data).length;
+    
+    const totalEntriesEl = document.getElementById('totalEntries');
+    if (totalEntriesEl) {
+        totalEntriesEl.textContent = entries;
     }
+    
+    if (entries > 0) {
+        const avgReadiness = Object.values(data)
+            .reduce((sum, entry) => sum + (entry.readinessScore || 0), 0) / entries;
+        const avgReadinessEl = document.getElementById('averageReadiness');
+        if (avgReadinessEl) {
+            avgReadinessEl.textContent = avgReadiness.toFixed(1);
+        }
+    }
+    
+    const totalDaysEl = document.getElementById('totalDays');
+    if (totalDaysEl) {
+        totalDaysEl.textContent = entries;
+    }
+    
+    const currentStreakEl = document.getElementById('currentStreak');
+    if (currentStreakEl) {
+        currentStreakEl.textContent = calculateSettingsStreak(data);
+    }
+}
 
 function calculateSettingsStreak(data) {
     // 1. Get entry dates and sort them from most recent to oldest.
@@ -2843,34 +2865,8 @@ function calculateSettingsStreak(data) {
     }
 
     return streak;
-    }
-    
-    function applyDataRetention() {
-    const policy = document.getElementById('dataRetention').value;
-    
-    // Skip if policy is "forever"
-    if (policy === 'forever') return;
-    
-    const cutoffDays = parseInt(policy);
-    const cutoff = new Date();
-    cutoff.setDate(cutoff.getDate() - cutoffDays);
-    
-    let deletedCount = 0;
-    Object.keys(window.app.trainingData).forEach(date => {
-        if (new Date(date + 'T00:00:00') < cutoff) {
-            delete window.app.trainingData[date];
-            deletedCount++;
-        }
-    });
-    
-    if (deletedCount > 0) {
-        window.app.saveData();
-        window.app.updateHistory();
-        window.app.updateAnalytics();
-        updateSettingsStatistics();
-        showToast(`Deleted ${deletedCount} old entries based on retention policy.`);
-    }
 }
+    
     
     
 document.addEventListener('DOMContentLoaded', function() {
@@ -2885,15 +2881,11 @@ document.addEventListener('DOMContentLoaded', function() {
     addSettingsEventListeners();
     updateSettingsStatistics();
     
-    // Apply initial settings policies after app is fully loaded
-    setTimeout(() => {
-        applyDataRetention(); // Clean old data on startup
-    }, 1000);
+    // REMOVED: applyDataRetention call (function no longer exists)
 });
 
     
     
 
 })(); // The parentheses at the end here are what make it run.
-
 
