@@ -49,10 +49,6 @@ h1 {
     padding-top: 0; /* Reset padding for mobile fix */
 }
 
-h1:hover {
-    color: #667eea;
-    transform: scale(1.01);
-}
 
 @media (max-width: 768px) {
     body {
@@ -69,3 +65,73 @@ h1:hover {
         transform: none;
     }
 }
+
+
+/* ====== ADD these fixes to your CSS ====== */
+
+/* 🔧 FIX: Toast notification - exempt from graphite styling */
+#toast,
+#toast * {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    font-weight: 500 !important;
+    color: white !important; /* Force white text */
+    text-shadow: none !important;
+    letter-spacing: normal !important;
+    font-style: normal !important;
+    background: rgba(0, 0, 0, 0.9) !important; /* Darker background for contrast */
+}
+
+/* 🔧 FIX: Auto-save indicator - exempt from graphite styling */
+#autoSaveIndicator,
+#autoSaveIndicator * {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    font-weight: 500 !important;
+    color: white !important;
+    text-shadow: none !important;
+    letter-spacing: normal !important;
+    font-style: normal !important;
+}
+
+
+/* 🔧 FIX: Ensure all system/UI text is exempt from graphite styling */
+.toast,
+.loader-content,
+.sync-status,
+.no-data-message,
+.modal-content,
+.validation-modal,
+.help-modal-content,
+.sync-btn,
+.camera-btn,
+.settings-action-btn,
+.danger-zone button,
+#autoSaveIndicator {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    font-weight: normal !important;
+    text-shadow: none !important;
+    letter-spacing: normal !important;
+    color: inherit !important;
+    font-style: normal !important;
+}
+
+/* 🔧 FIX: Button text should remain clean on all devices */
+button,
+.btn,
+.update-btn,
+.export-btn,
+.nav-btn,
+.delete-btn,
+.sync-btn,
+.modal-btn,
+.help-button,
+.tab-button,
+.chart-toggle,
+.settings-action-btn {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    font-weight: 500 !important;
+    text-shadow: none !important;
+    letter-spacing: normal !important;
+    font-style: normal !important;
+    color: inherit !important; /* Preserve button text colors */
+}
+
