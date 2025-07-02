@@ -4,14 +4,16 @@
     display: flex;
     gap: 10px;
     margin-bottom: 30px;
+    margin-top: -20px;  /* Pull tabs up slightly but keep them visible */
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     position: relative;
-    z-index: 10;  /* Ensure tabs stay on top */
+    z-index: 10;
+    padding-top: 10px;  /* Add padding to prevent clipping on transform */
 }
 
 .tab-button {
-    padding: 12px 24px;
+    padding: 12px 36px;
     border: none;
     border-radius: 8px 8px 0 0;
     cursor: pointer;
@@ -82,19 +84,19 @@
 }
 
 .tab-button[data-tab="daily"].active:hover {
-    box-shadow: 0 10px 20px rgba(255, 225, 53, 0.5);
+    box-shadow: 0 10px 1px rgba(255, 225, 53, 0.5);
 }
 .tab-button[data-tab="history"].active:hover {
-    box-shadow: 0 10px 20px rgba(255, 152, 0, 0.5);
+    box-shadow: 0 10px 1px rgba(255, 152, 0, 0.5);
 }
 .tab-button[data-tab="analytics"].active:hover {
-    box-shadow: 0 10px 20px rgba(139, 195, 74, 0.5);
+    box-shadow: 0 10px 1px rgba(139, 195, 74, 0.5);
 }
 .tab-button[data-tab="sync"].active:hover {
-    box-shadow: 0 10px 20px rgba(33, 150, 243, 0.5);
+    box-shadow: 0 10px 1px rgba(33, 150, 243, 0.5);
 }
 .tab-button.active:hover {
-     box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+     box-shadow: 0 10px 1px rgba(102, 126, 234, 0.4);
 }
 
 .tab-content {
@@ -114,7 +116,7 @@
 
 @media (max-width: 768px) {
     .nav-tabs {
-        margin-bottom: 20px;
+        margin-bottom: 1px;
         gap: 5px;
     }
 
