@@ -327,78 +327,107 @@ startPeer() {
                 });
         }
         
-// ✨ UPDATED FUNCTION: Replaces the existing scanQRCode in the PeerSync class.
-// This version uses an arrow function to fix the 'this' context issue,
-// ensuring the camera closes automatically on success.
-
-scanQRCode() {
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-
-    // Use an arrow function for scanFrame to preserve the 'this' context.
-    // This is the key to fixing the auto-close issue.
-    const scanFrame = () => {
-        // If the video stream has been stopped (e.g., by clicking cancel),
-        // we must stop the animation loop.
-        if (!this.videoStream) {
-            return;
-        }
-
-        // Wait for video to have dimensions
-        if (!this.videoElement || !this.videoElement.videoWidth) {
-            requestAnimationFrame(scanFrame);
-            return;
-        }
-
-        canvas.width = this.videoElement.videoWidth;
-        canvas.height = this.videoElement.videoHeight;
-        context.drawImage(this.videoElement, 0, 0, canvas.width, canvas.height);
-
-        try {
-            const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-            const code = jsQR(imageData.data, imageData.width, imageData.height);
-
-            if (code && code.data) {
-                // --- SUCCESS ---
-                // A valid QR code was found.
-                showToast(`QR Code Detected: ${code.data}`);
-                this.receiverCode.value = code.data;
-                
-                // This call will now work correctly because 'this' refers to the PeerSync instance.
-                this.stopCameraScan();
-                
-                this.connectToPeer();
-                
-                // Important: Do NOT request another animation frame. The scan is complete.
-                return;
-
-            } else {
-                // --- NO CODE FOUND ---
-                // Continue scanning on the next available frame.
-                requestAnimationFrame(scanFrame);
-            }
-        } catch (e) {
-            console.error('QR scanning error:', e);
-            // Even if one frame errors, try the next one.
-            requestAnimationFrame(scanFrame);
-        }
-    };
-
-    // Start the scanning loop.
-    requestAnimationFrame(scanFrame);
-}
+ scanQRCode() {
+        if (this.isScanning) return; // Prevent multiple scan loops
         
-        stopCameraScan() {
-            if (this.videoStream) {
-                this.videoStream.getTracks().forEach(track => track.stop());
-                this.videoStream = null;
+        this.isScanning = true;
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+
+        const scanFrame = () => {
+            // CRITICAL: Check if we should still be scanning
+            if (!this.isScanning || !this.videoStream) {
+                console.log('🛑 Scanning stopped - cleaning up animation loop');
+                if (this.scanAnimationId) {
+                    cancelAnimationFrame(this.scanAnimationId);
+                    this.scanAnimationId = null;
+                }
+                return; // Exit the loop completely
             }
-            
-            this.cameraContainer.style.display = 'none';
-            this.receiverCode.style.display = 'block';
-            this.scanBtn.style.display = 'block';
-            this.videoElement.srcObject = null;
+
+            // Wait for video to have dimensions
+            if (!this.videoElement || !this.videoElement.videoWidth) {
+                this.scanAnimationId = requestAnimationFrame(scanFrame);
+                return;
+            }
+
+            canvas.width = this.videoElement.videoWidth;
+            canvas.height = this.videoElement.videoHeight;
+            context.drawImage(this.videoElement, 0, 0, canvas.width, canvas.height);
+
+            try {
+                const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                if (code && code.data) {
+                    console.log('✅ QR Code detected:', code.data);
+                    
+                    // IMMEDIATELY stop scanning to prevent multiple detections
+                    this.isScanning = false;
+                    
+                    // Fill the input
+                    this.receiverCode.value = code.data;
+                    
+                    // Show success feedback
+                    showToast(`📱 QR Code Detected: ${code.data}`);
+                    
+                    // Close camera
+                    this.stopCameraScan();
+                    
+                    // Auto-connect
+                    setTimeout(() => {
+                        this.connectToPeer();
+                    }, 500); // Small delay for user feedback
+                    
+                    return; // Exit completely - no more animation frames
+                }
+            } catch (e) {
+                console.error('QR scanning error:', e);
+                // Continue scanning even if one frame fails
+            }
+
+            // Continue scanning only if still active
+            if (this.isScanning) {
+                this.scanAnimationId = requestAnimationFrame(scanFrame);
+            }
+        };
+
+        // Start the scanning loop
+        this.scanAnimationId = requestAnimationFrame(scanFrame);
+    }
+        
+    stopCameraScan() {
+        console.log('🔄 Stopping camera scan');
+        
+        // Stop the scanning loop
+        this.isScanning = false;
+        
+        // Cancel any pending animation frame
+        if (this.scanAnimationId) {
+            cancelAnimationFrame(this.scanAnimationId);
+            this.scanAnimationId = null;
         }
+
+        // Stop all video tracks
+        if (this.videoStream) {
+            this.videoStream.getTracks().forEach(track => {
+                console.log('🛑 Stopping track:', track.kind);
+                track.stop();
+            });
+            this.videoStream = null;
+        }
+
+        // Clean up video element
+        if (this.videoElement) {
+            this.videoElement.srcObject = null;
+            this.videoElement.pause();
+        }
+
+        // Update UI
+        this.cameraContainer.style.display = 'none';
+        this.receiverCode.style.display = 'block';
+        this.scanBtn.style.display = 'block';
+    }
         
         connectToPeer() {
             const peerId = this.receiverCode.value.trim().toUpperCase();
@@ -2644,22 +2673,22 @@ function loadClimbSmartSettings() {
     // Load settings from localStorage
     const settings = JSON.parse(localStorage.getItem('climbSmartSettings') || '{}');
     
-    // Apply loaded settings to UI - only for elements that exist
+    // Apply loaded settings to UI - with defaults
     const autoSaveEl = document.getElementById('autoSaveFrequency');
-    if (autoSaveEl && settings.autoSave) {
-        autoSaveEl.value = settings.autoSave;
+    if (autoSaveEl) {
+        // Set default to 5 minutes (300 seconds) instead of 1 minute
+        autoSaveEl.value = settings.autoSave || '300'; // DEFAULT: Every 5 minutes
     }
     
     const animationsEl = document.getElementById('animationsToggle');
-    if (animationsEl && settings.animations !== undefined) {
-        animationsEl.checked = settings.animations;
+    if (animationsEl) {
+        animationsEl.checked = settings.animations !== undefined ? settings.animations : true; // DEFAULT: enabled
     }
     
     const successNotificationsEl = document.getElementById('successNotificationsToggle');
-    if (successNotificationsEl && settings.successNotifications !== undefined) {
-        successNotificationsEl.checked = settings.successNotifications;
+    if (successNotificationsEl) {
+        successNotificationsEl.checked = settings.successNotifications !== undefined ? settings.successNotifications : true; // DEFAULT: enabled
     }
-    
 }
 
 function addSettingsEventListeners() {
