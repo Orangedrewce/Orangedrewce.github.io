@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ClimbSmart - Training Readiness Tracker</title>
+    <title>ClimbSmart - Training & Tools</title>
+
+    <!-- Original ClimbSmart Scripts & Styles -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.4.7/peerjs.min.js"></script>
@@ -11,6 +13,483 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="main.css">
 
+    <!-- Added for Anchor & COD Calculators -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .calculator-body {
+        /* Styles for new calculator tabs */
+            font-family: 'Inter', sans-serif;
+        }
+        .slider-thumb::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #3b82f6;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        .slider-thumb::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: #3b82f6;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        /* Ensure new tabs are hidden by default */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ===================================================================
+           ✨ "AWAKE SKETCH" STYLING FOR HISTORY & CALCULATOR TABS ✨
+           =================================================================== */
+
+        /* ✨ TRANSPARENT HISTORY SECTIONS - Keep existing styling, just make backgrounds transparent */
+
+        /* --- History Navigation --- */
+        .history-nav {
+            background: transparent; /* ✅ Only change: make background invisible */
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            transition: all 0.4s ease;
+            overflow: hidden;
+            filter: grayscale(100%) contrast(1.1) brightness(0.95);
+            background-image: none; /* ✅ Remove texture */
+            box-shadow: none; /* ✅ Remove shadow */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Keep existing dashed border and all other styling exactly the same */
+        .history-nav::before {
+            content: ''; 
+            position: absolute; 
+            top: 5px; 
+            left: 5px; 
+            right: 5px; 
+            bottom: 5px; 
+            border: 2px dashed #7f8c8d; 
+            border-radius: 6px; 
+            pointer-events: none; 
+            z-index: 1; 
+            opacity: 0.6;
+        }
+
+        /* --- Export Section & Backup Section --- */
+        .export-section, .backup-section {
+            background: transparent; /* ✅ Only change: make background invisible */
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            transition: all 0.4s ease;
+            overflow: hidden;
+            filter: grayscale(100%) contrast(1.1) brightness(0.95);
+            background-image: none; /* ✅ Remove texture */
+            box-shadow: none; /* ✅ Remove shadow */
+        }
+
+        /* Keep existing dashed border and all other styling exactly the same */
+        .export-section::before, .backup-section::before {
+            content: ''; 
+            position: absolute; 
+            top: 8px; 
+            left: 8px; 
+            right: 8px; 
+            bottom: 8px; 
+            border: 2px dashed #7f8c8d; 
+            border-radius: 6px; 
+            pointer-events: none; 
+            z-index: 1; 
+            opacity: 0.5;
+        }
+
+        /* --- Log Entries --- */
+        .log-entry {
+            background: transparent; /* ✅ Only change: make background invisible */
+            border: 2px solid transparent; 
+            border-radius: 10px; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            position: relative; 
+            transition: filter 0.2s ease, background 0.2s ease, box-shadow 0.2s ease; 
+            overflow: hidden; 
+            filter: grayscale(100%) contrast(1.1) brightness(0.95);
+            background-image: none; /* ✅ Remove texture */
+            box-shadow: none; /* ✅ Remove shadow */
+        }
+
+        /* Keep existing dashed border and all other styling exactly the same */
+        .log-entry::before { 
+            content: ''; 
+            position: absolute; 
+            top: 5px; 
+            left: 5px; 
+            right: 5px; 
+            bottom: 5px; 
+            border: 2px dashed #7f8c8d; 
+            border-radius: 6px; 
+            pointer-events: none; 
+            z-index: 1; 
+            opacity: 0.6; 
+            transition: opacity 0.2s ease; 
+        }
+
+        /* ✅ PRESERVE EXISTING LOG STRUCTURE - Don't override existing grid layout */
+        .log-metrics { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+            gap: 10px; 
+        }
+
+        /* ✨ INDIVIDUAL DASHED BORDERS FOR LOG CONTENT */
+        .log-metric, .log-recommendation, .log-notes {
+            background: rgba(248, 249, 250, 0.4); 
+            border: 2px dashed #bdc3c7; 
+            border-radius: 4px; 
+            padding: 8px; 
+            font-style: italic; 
+            color: #34495e; 
+            position: relative; 
+            z-index: 2; 
+            backdrop-filter: blur(1px); 
+            transition: all 0.6s ease;
+            opacity: 1; /* ✅ Fully visible */
+            margin: 2px; /* Small margin for spacing */
+        }
+
+        .log-recommendation, .log-notes { 
+            margin-top: 10px; 
+            padding: 10px; 
+        }
+
+        .log-notes { 
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+        }
+
+
+        /* ✅ EXPORT SECTION - Keep original layout, just transparent background */
+        .export-buttons-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            gap: 15px; 
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            padding: 0 5px; /* Add small padding to prevent overflow */
+        }
+
+        .export-buttons-row .export-btn { 
+            flex: 1 1 auto; /* Allow buttons to shrink */
+            min-width: 120px; /* Reduced from 140px */
+            max-width: 180px; /* Prevent buttons from getting too wide */
+            margin: 0; 
+            box-sizing: border-box; /* Include padding and border in width calculation */
+        }
+
+        /* Keep original button styling exactly */
+        .export-section .export-btn {
+            background: rgba(189, 195, 199, 0.6) !important; 
+            color: #2c3e50 !important; 
+            border: 2px dashed #7f8c8d !important; 
+            border-radius: 4px !important; 
+            font-style: italic; 
+            transform: rotate(-0.1deg); 
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); 
+            transition: all 0.3s ease !important; 
+            position: relative; 
+            z-index: 2; 
+            backdrop-filter: blur(1px);
+        }
+
+        /* Original hover transformations for export section */
+        .export-section:hover, .export-section:focus-within {
+            filter: none; 
+            background: white; 
+            background-image: none; 
+            border: 2px solid #ecf0f1; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        .export-section:hover::before, .export-section:focus-within::before { 
+            opacity: 0; 
+        }
+
+        .export-section:hover .export-btn, .export-section:focus-within .export-btn { 
+            font-style: italic !important; 
+            transform: rotate(0deg) !important; 
+            text-shadow: none !important; 
+            border-style: solid !important; 
+            border-radius: 20px !important; 
+            backdrop-filter: none !important; 
+        }
+
+        .export-section:hover #exportCsvBtn, .export-section:focus-within #exportCsvBtn { 
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%) !important; 
+            color: white !important; 
+            border: 2px solid #27ae60 !important; 
+        }
+
+        .export-section:hover #clearAllDataBtn, .export-section:focus-within #clearAllDataBtn { 
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important; 
+            color: white !important; 
+            border: 2px solid #e74c3c !important; 
+        }
+
+        /* ✅ BACKUP SECTION - Keep original layout, just transparent background */
+        .backup-section h3 {
+            color: #2c3e50; font-style: italic; transform: rotate(-0.1deg);
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); border-bottom: 2px dashed #7f8c8d;
+            padding-bottom: 8px; margin-bottom: 15px; position: relative;
+            z-index: 2; display: flex; align-items: center;
+        }
+
+        .backup-section h3::before { content: "🔐"; margin-right: 10px; font-size: 1.2em; font-style: normal; }
+
+        .backup-input { 
+            background: rgba(255, 255, 255, 0.3); border: 2px dashed #7f8c8d; 
+            border-radius: 4px; color: #2c3e50; font-family: 'Courier New', monospace; 
+            font-style: italic; transform: rotate(-0.1deg); backdrop-filter: blur(1px); 
+            position: relative; z-index: 2; transition: all 0.3s ease; width: 100%; 
+        }
+
+        .backup-buttons-row { 
+            display: flex; justify-content: space-between; align-items: center; 
+            gap: 15px; margin-top: 15px; flex-direction: row-reverse;
+            flex-wrap: wrap; /* ✅ Add this for consistency */
+        }
+
+        .backup-buttons-row .export-btn { flex: 0 0 auto; min-width: 140px; margin: 0; }
+
+        .backup-section .export-btn {
+            background: rgba(189, 195, 199, 0.6) !important; color: #2c3e50 !important; 
+            border: 2px dashed #7f8c8d !important; border-radius: 4px !important; font-style: italic; 
+            transform: rotate(-0.1deg); text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); 
+            transition: all 0.3s ease !important; position: relative; z-index: 2; backdrop-filter: blur(1px);
+        }
+
+        /* Original hover transformations for backup section */
+        .backup-section:hover, .backup-section:focus-within {
+            filter: none; background: white; background-image: none; 
+            border: 2px solid #ecf0f1; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        .backup-section:hover::before, .backup-section:focus-within::before { opacity: 0; }
+
+        .backup-section:hover h3, .backup-section:focus-within h3 { 
+            font-style: italic; transform: rotate(0deg); text-shadow: none; 
+            border-bottom: none; border-left: 4px solid #3498db; 
+            padding-left: 12px; margin-left: -16px; 
+        }
+
+        .backup-section:hover .backup-input, .backup-section:focus-within .backup-input { 
+            background: white; border: 2px solid #ecf0f1; border-style: solid; 
+            font-style: italic; transform: rotate(0deg); backdrop-filter: none; 
+        }
+
+        .backup-section:hover .export-btn, .backup-section:focus-within .export-btn { 
+            font-style: italic !important; transform: rotate(0deg) !important; text-shadow: none !important; 
+            border-style: solid !important; border-radius: 20px !important; backdrop-filter: none !important; 
+        }
+
+        .backup-section:hover #exportBackupBtn, .backup-section:focus-within #exportBackupBtn { 
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%) !important; color: white !important; 
+            border: 2px solid #3498db !important; 
+        }
+
+        .backup-section:hover #importBackupBtn, .backup-section:focus-within #importBackupBtn { 
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%) !important; color: white !important; 
+            border: 2px solid #9b59b6 !important; 
+        }
+
+        /* Delete Button - Individual wake effect (keep existing positioning) */
+        .delete-btn {
+            background: rgba(231, 76, 60, 0.6); color: #2c3e50; border: 2px dashed #c0392b;
+            border-radius: 4px; font-style: italic; transform: rotate(-0.1deg);
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); position: relative;
+            z-index: 2; backdrop-filter: blur(1px); transition: all 0.3s ease;
+            padding: 8px 15px;
+        }
+
+        .delete-btn:hover {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important; color: white !important;
+            border: 2px solid #e74c3c !important; border-style: solid !important; border-radius: 20px !important;
+            font-style: normal !important; transform: translateY(-4px) scale(1.05) rotate(0deg) !important;
+            text-shadow: none !important; backdrop-filter: none !important;
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .log-date {
+            color: #2c3e50; font-style: italic; transform: rotate(-0.1deg); 
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); position: relative; 
+            z-index: 2; transition: all 0.6s ease; display: flex; 
+            justify-content: space-between; align-items: center; flex-wrap: wrap; 
+            gap: 10px; margin-bottom: 10px;
+        }
+
+        /* ✅ BUTTON POSITIONING - Only affect export and backup sections */
+        .export-buttons-row { flex-direction: row-reverse; }
+        .backup-buttons-row { flex-direction: row-reverse; }
+
+        /* Keep ALL existing hover transformations exactly the same - just restore the backgrounds on hover */
+        .history-nav:hover, .history-nav:focus-within,
+        .export-section:hover, .export-section:focus-within,
+        .backup-section:hover, .backup-section:focus-within {
+            filter: none; background: white; background-image: none; 
+            border: 2px solid #ecf0f1; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+        }
+        .log-entry:hover, .log-entry:focus-within { 
+            filter: none; background: white; background-image: none; 
+            border-color: #ecf0f1; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12); 
+        }
+
+/* ===================================================================
+   ✨ CLEANED: "Awake Sketch" for Individual Calculator Cards ✨
+   =================================================================== */
+
+/* Make the main calculator container a simple, transparent layout tool */
+.calculator-container {
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+    border: none;
+    filter: none;
+}
+.calculator-container::before {
+    display: none;
+}
+
+/* ✨ CARD STYLING (SLEEPING STATE) */
+.calculator-card {
+    background: transparent;
+    border: none;
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+    transition: all 0.6s ease;
+    overflow: hidden;
+    filter: grayscale(100%) contrast(1.1) brightness(0.95);
+    box-shadow: none;
+    margin-bottom: 2rem;
+}
+
+.calculator-card::before {
+    content: '';
+    position: absolute;
+    top: 5px; left: 5px; right: 5px; bottom: 5px;
+    border: 2px dashed #7f8c8d;
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.6;
+    transition: all 0.6s ease;
+}
+
+/* Sketch styling for headers */
+.calculator-card h1, .calculator-card h2, .calculator-card h3 {
+    color: #2c3e50;
+    position: relative;
+    z-index: 2;
+    font-style: italic;
+    transform: rotate(-0.1deg);
+    border-bottom: 1px dashed #7f8c8d;
+    padding-bottom: 8px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    transition: all 0.6s ease;
+}
+
+/* Sketch styling for text & labels */
+.calculator-card p, .calculator-card label, .calculator-card span, .calculator-card li {
+    color: #34495e;
+    font-weight: 500;
+    position: relative;
+    z-index: 2;
+    transform: rotate(-0.2deg);
+    font-style: italic;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    transition: all 0.6s ease;
+}
+.force-display-card p {
+    transform: rotate(0deg);
+}
+
+/* ✨ CARD STYLING (AWAKE/HOVER STATE) */
+.calculator-card:hover, .calculator-card:focus-within {
+    filter: none;
+    background: white;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.calculator-card:hover::before, .calculator-card:focus-within::before {
+    opacity: 0;
+    transform: scale(0.98);
+}
+
+/* Modern headers on hover */
+.calculator-card:hover h1, .calculator-card:focus-within h1,
+.calculator-card:hover h2, .calculator-card:focus-within h2,
+.calculator-card:hover h3, .calculator-card:focus-within h3 {
+    color: #2c3e50;
+    transform: rotate(0deg);
+    font-style: italic;
+    border-bottom: none;
+    padding-bottom: 15px;
+    text-shadow: none;
+    padding-left: 12px;
+    margin-left: -16px;
+    border-left: 4px solid #3498db;
+}
+
+/* Modern text on hover */
+.calculator-card:hover p, .calculator-card:focus-within p,
+.calculator-card:hover label, .calculator-card:focus-within label,
+.calculator-card:hover span, .calculator-card:focus-within span,
+.calculator-card:hover li, .calculator-card:focus-within li {
+    transform: rotate(0deg);
+    text-shadow: none;
+    font-style: normal;
+}
+.calculator-card:hover strong, .calculator-card:focus-within strong {
+    font-style: normal;
+}
+
+/* Keep dynamic force border color on hover */
+#anchor-force-display:hover, #anchor-force-display:focus-within { border-left-color: inherit !important; }
+#cod-force-display:hover, #cod-force-display:focus-within { border-left-color: inherit !important; }
+        
+        /* ===================================================================
+           ✨ RESPONSIVE FIX: Stack buttons on small screens
+           =================================================================== */
+
+        /* On screens 600px wide or less, apply these styles */
+        @media (max-width: 600px) {
+            /* Target both button containers */
+            .export-buttons-row,
+            .backup-buttons-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .export-buttons-row .export-btn,
+            .backup-buttons-row .export-btn {
+                max-width: none;
+            }
+        }
+    </style>
 </head>
 <body>
     <div id="toast"></div>
@@ -42,33 +521,34 @@
                     Press or scan the QR code to give me your 2 cents! Id love to hear about any experiences or feedback you want to share!
                 </p>
             </div>
-
             <button class="close-welcome-btn" id="closeWelcomeBtn">Start Tracking</button>
-
         </div> 
     </div>
 </div>
 
     <div class="container">
         <div style="position: relative; text-align: center;">
-    <h1 id="appTitle" class="animated-title">ClimbSmart</h1>
-    <button id="helpBtn" class="help-button">?</button>
-</div>
+            <h1 id="appTitle" class="animated-title">ClimbSmart</h1>
+            <button id="helpBtn" class="help-button">?</button>
+        </div>
 
         <div class="nav-tabs" role="tablist">
             <button class="tab-button active" data-tab="daily" role="tab" aria-selected="true">Daily Entry</button>
             <button class="tab-button" data-tab="history" role="tab" aria-selected="false">History</button>
             <button class="tab-button" data-tab="analytics" role="tab" aria-selected="false">Analytics</button>
             <button class="tab-button" data-tab="sync" role="tab" aria-selected="false">Sync</button>
+            <button class="tab-button" data-tab="anchor" role="tab" aria-selected="false">Anchor</button>
+            <button class="tab-button" data-tab="cod" role="tab" aria-selected="false">COD</button>
             <button class="tab-button" data-tab="settings" role="tab" aria-selected="false">Settings</button>
         </div>
+
+        <!-- ORIGINAL TABS -->
         <div id="daily" class="tab-content active" role="tabpanel">
             <div class="date-selector">
                 <label for="currentDate">Date:</label>
                 <input type="date" id="currentDate">
                 <button class="update-btn" id="loadDateBtn">Load Date</button>
             </div>
-
             <div class="dashboard">
                 <div class="input-section">
                     <h3>Recovery Metrics</h3>
@@ -233,45 +713,33 @@
                 <div class="recommendation-text" id="recommendationText">Enter your metrics above to get a recommendation</div>
                 <div class="metrics-grid" id="metricsGrid"></div>
             </div>
-
-
         </div>
-
         <div id="history" class="tab-content" role="tabpanel">
             <div class="history-nav">
                 <button class="nav-btn" id="prevWeekBtn">◀ Previous</button>
                 <div class="current-week" id="currentWeek">Current Week</div>
                 <button class="nav-btn" id="nextWeekBtn">Next ▶</button>
             </div>
-
-
-
-<div id="historyList" style="padding: 20px 0;"></div>
-
-<div class="export-section">
-    <div class="export-buttons-row">
-        <button class="export-btn export-btn-left" id="exportCsvBtn">Export to CSV</button>
-        <button class="export-btn export-btn-right" id="clearAllDataBtn" style="background: #e74c3c;">Clear All Data</button>
-    </div>
-</div>
-
-<div class="backup-section">
-    <h3>Data Backup & Restore</h3>
-    <div class="backup-input-row">
-        <input type="text" class="backup-input" id="backupCode" placeholder="Backup code">
-    </div>
-    <div class="backup-buttons-row">
-        <button class="export-btn export-btn-left" id="exportBackupBtn">Generate Backup</button>
-        <button class="export-btn export-btn-right" id="importBackupBtn">Restore Backup</button>
-    </div>
-</div>
-
             <div id="historyList" style="padding: 20px 0;"></div>
+            <div class="export-section">
+                <div class="export-buttons-row">
+                    <button class="export-btn export-btn-left" id="exportCsvBtn">Export to CSV</button>
+                    <button class="export-btn export-btn-right" id="clearAllDataBtn" style="background: #e74c3c;">Clear All Data</button>
+                </div>
+            </div>
+            <div class="backup-section">
+                <h3>Data Backup & Restore</h3>
+                <div class="backup-input-row">
+                    <input type="text" class="backup-input" id="backupCode" placeholder="Backup code">
+                </div>
+                <div class="backup-buttons-row">
+                    <button class="export-btn export-btn-left" id="exportBackupBtn">Generate Backup</button>
+                    <button class="export-btn export-btn-right" id="importBackupBtn">Restore Backup</button>
+                </div>
+            </div>
         </div>
-
         <div id="analytics" class="tab-content" role="tabpanel">
             <div class="chart-controls" id="chartControls"></div>
-
             <div class="charts-section">
                 <div class="chart-container weekly-chart">
                     <canvas id="weeklyTrendChart"></canvas>
@@ -282,7 +750,6 @@
                 </div>
             </div>
                         <div style="height: 40px;"></div>
-                            <!-- Statistics Section -->
                 <div class="settings-section">
                     <h3>📊 Your Statistics</h3>
                     <div class="stats-grid">
@@ -320,19 +787,16 @@
                     </div>
                 </div>
             </div>
-          </div>
-
+        </div>
         <div id="sync" class="tab-content" role="tabpanel">
             <div class="sync-container">
                 <div class="sync-tabs">
                     <div class="sync-tab active" data-tab="send">Send Data</div>
                     <div class="sync-tab" data-tab="receive">Receive Data</div>
                 </div>
-
                 <div class="sync-content active" id="sendContent">
                     <h2 class="sync-title">Send Your Training Data</h2>
                     <p class="sync-description">Share your training data securely with another device using QR code or code</p>
-
                     <div class="sync-steps">
                         <div class="sync-step active">
                             <div class="sync-step-icon">1</div>
@@ -347,30 +811,24 @@
                             <div class="sync-step-text">Transfer Data</div>
                         </div>
                     </div>
-
                     <div class="qr-section">
                         <div class="qr-container" id="sendQrContainer">
                             <div class="qr-placeholder"></div>
                         </div>
                         <div class="peer-id-display" id="peerIdDisplay">CLICK "GENERATE CODE"</div>
                     </div>
-
                     <div class="sync-progress">
                         <div class="sync-progress-bar" id="sendProgress"></div>
                     </div>
-
                     <div class="sync-status" id="sendStatus">Ready to generate sync code</div>
-
                     <div class="sync-actions">
                         <button class="sync-btn secondary" id="copyPeerIdBtn">Copy Code</button>
                         <button class="sync-btn primary" id="generateCodeBtn">Generate Code</button>
                     </div>
                 </div>
-
                 <div class="sync-content" id="receiveContent">
                     <h2 class="sync-title">Receive Training Data</h2>
                     <p class="sync-description">Enter the code from the sender to receive training data</p>
-
                     <div class="sync-steps">
                         <div class="sync-step active">
                             <div class="sync-step-icon">1</div>
@@ -385,7 +843,6 @@
                             <div class="sync-step-text">Receive Data</div>
                         </div>
                     </div>
-
                     <div class="sync-input-group">
                         <div style="display: flex; gap: 10px; align-items: center;">
                             <input type="text" class="sync-input" id="receiverCode" placeholder="Tap the camera to scan or click here to Enter 6-digit code" maxlength="6" style="flex: 1;">
@@ -398,7 +855,6 @@
                             </button>
                         </div>
                     </div>
-
                     <div class="camera-container" id="cameraContainer">
                         <video id="qrScanner" width="100%"></video>
                         <div class="scan-overlay">
@@ -410,13 +866,10 @@
                             <button id="cancelScanBtn" class="camera-btn danger">Cancel Scan</button>
                         </div>
                     </div>
-
                     <div class="sync-progress">
                         <div class="sync-progress-bar" id="receiveProgress"></div>
                     </div>
-
                     <div class="sync-status" id="receiveStatus">Enter code or scan QR to connect</div>
-
                     <div class="sync-actions">
                         <button class="sync-btn secondary" id="cancelSyncBtn">Cancel</button>
                         <button class="sync-btn primary" id="connectToPeerBtn">Connect</button>
@@ -424,14 +877,10 @@
                 </div>
             </div>
         </div>
-
         <div id="settings" class="tab-content" role="tabpanel">
             <div class="settings-container">
-                
-                <!-- User Preferences Section -->
                 <div class="settings-section">
                     <h3>⚙️ User Preferences</h3>
-                    
                     <div class="setting-item">
                         <div class="setting-info">
                             <div class="setting-title">Auto-Save Frequency</div>
@@ -449,8 +898,6 @@
                             </select>
                         </div>
                     </div>
-
-
                     <div class="setting-item">
                         <div class="setting-info">
                             <div class="setting-title">Animations</div>
@@ -464,11 +911,8 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Notifications Section -->
                 <div class="settings-section">
                     <h3>🔔 Notifications</h3>
-                    
                     <div class="setting-item">
                         <div class="setting-info">
                             <div class="setting-title">Success Notifications</div>
@@ -482,11 +926,8 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Danger Zone Section -->
                 <div class="settings-section danger-zone">
                     <h3>⚠️ Danger Zone</h3>
-                    
                     <div class="setting-item">
                         <div class="setting-info">
                             <div class="setting-title">Clear Browser Cache</div>
@@ -496,7 +937,6 @@
                             <button class="settings-action-btn btn-secondary" id="clearCacheBtn">Clear Cache</button>
                         </div>
                     </div>
-
                     <div class="setting-item">
                         <div class="setting-info">
                             <div class="setting-title">Reset All Settings</div>
@@ -506,7 +946,6 @@
                             <button class="settings-action-btn btn-secondary" id="resetSettingsBtn">Reset Settings</button>
                         </div>
                     </div>
-
                     <div class="setting-item">
                         <div class="setting-info">
                             <div class="setting-title">Delete All Data</div>
@@ -517,11 +956,110 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
+
+        <!-- NEW ANCHOR TAB -->
+        <div id="anchor" class="tab-content calculator-body" role="tabpanel">
+            <div class="flex flex-col items-center justify-center p-4"> <!-- Removed  text-gray-200 -->
+                <div class="w-full max-w-4xl rounded-2xl shadow-2xl p-6 md:p-8 calculator-container"> <!-- Removed  -->
+                    <header class="text-center mb-6">
+                        <h1 class="text-3xl md:text-4xl font-bold text-white">Climbing Anchor Force Calculator</h1>
+                        <p class="text-gray-400 mt-2">An interactive tool to understand forces on multi-point climbing anchors.</p>
+                    </header>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                        <div class=" p-6 rounded-xl border border-gray-700 calculator-card">
+                            <canvas id="anchorCanvas" class="w-full rounded-lg /50"></canvas>
+                            <div class="mt-6">
+                                <label for="anchorAngleSlider" class="block mb-2 text-lg font-medium text-white">Adjust Anchor Angle: <span id="anchorAngleValue" class="font-bold text-blue-400">90°</span></label>
+                                <input id="anchorAngleSlider" type="range" min="0" max="179" value="90" class="w-full h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-thumb">
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-center space-y-6">
+                            <div class=" p-6 rounded-lg calculator-card">
+                                <label for="anchorWeightSlider" class="block mb-2 text-lg font-medium text-white">Adjust Weight: <span id="anchorWeightValue" class="font-bold text-blue-400">80 kg</span></label>
+                                <input id="anchorWeightSlider" type="range" min="20" max="1000" value="80" class="w-full h-3 bg-gray-600 rounded-lg appearance-none cursor-pointer slider-thumb">
+                            </div>
+                            <div id="anchor-force-display" class=" border-l-4 border-blue-500 p-6 rounded-lg shadow-md transition-all duration-300 calculator-card force-display-card">
+                                <h2 class="text-xl font-semibold text-white mb-2">Force on Each Anchor</h2>
+                                <p class="text-4xl md:text-5xl font-bold text-blue-400" id="anchorForceValue">0.55 kN</p>
+                                <p class="text-gray-400 mt-1">on each anchor leg</p>
+                            </div>
+                            <div class=" p-6 rounded-lg calculator-card">
+                                <h3 class="text-lg font-semibold text-white mb-3">Key Principles</h3>
+                                <ul class="space-y-3 text-gray-300">
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 mr-3 mt-1 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        <span><strong class="font-semibold text-black">Safe Zone (Angle ≤ 90°):</strong> Forces are distributed effectively, minimizing stress on each anchor point.</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 mr-3 mt-1 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                        <span><strong class="font-semibold text-black">Caution Zone (90° - 120°):</strong> Force on each leg begins to multiply significantly.</span>
+                                    </li>
+                                     <li class="flex items-start">
+                                        <svg class="w-5 h-5 mr-3 mt-1 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                        <span><strong class="font-semibold text-black">Danger Zone (Angle > 120°):</strong> The force on each anchor exceeds the total load, creating a hazardous situation.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW COD TAB -->
+        <div id="cod" class="tab-content calculator-body" role="tabpanel">
+            <div class="flex flex-col items-center justify-center p-4"> <!-- Removed  text-gray-200 -->
+                <div class="w-full max-w-4xl rounded-2xl shadow-2xl p-6 md:p-8 calculator-container"> <!-- Removed  -->
+                    <header class="text-center mb-6">
+                        <h1 class="text-3xl md:text-4xl font-bold text-white">Change of Direction (COD) Anchor Force Calculator</h1>
+                        <p class="text-gray-400 mt-2">An interactive tool to understand forces on directional anchors.</p>
+                    </header>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                        <div class=" p-6 rounded-xl border border-gray-700 calculator-card">
+                            <canvas id="codCanvas" class="w-full rounded-lg /50"></canvas>
+                            <div class="mt-6">
+                                <label for="codAngleSlider" class="block mb-2 text-lg font-medium text-white">Adjust Rope Angle: <span id="codAngleValue" class="font-bold text-blue-400">120°</span></label>
+                                <input id="codAngleSlider" type="range" min="0" max="180" value="120" class="w-full h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-thumb">
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-center space-y-6">
+                            <div class=" p-6 rounded-lg calculator-card">
+                                <label for="codWeightSlider" class="block mb-2 text-lg font-medium text-white">Adjust Load: <span id="codWeightValue" class="font-bold text-blue-400">80 kg</span></label>
+                                <input id="codWeightSlider" type="range" min="20" max="1000" value="80" class="w-full h-3 bg-gray-600 rounded-lg appearance-none cursor-pointer slider-thumb">
+                            </div>
+                            <div id="cod-force-display" class=" border-l-4 border-green-500 p-6 rounded-lg shadow-md transition-all duration-300 calculator-card force-display-card">
+                                <h2 class="text-xl font-semibold text-white mb-2">Force on Directional Anchor</h2>
+                                <p class="text-4xl md:text-5xl font-bold text-green-400" id="codForceValue">0.78 kN</p>
+                                <p class="text-gray-400 mt-1">on the directional anchor</p>
+                            </div>
+                            <div class=" p-6 rounded-lg calculator-card">
+                                <h3 class="text-lg font-semibold text-white mb-3">Key Principles</h3>
+                                <ul class="space-y-3 text-gray-300">
+                                     <li class="flex items-start">
+                                        <svg class="w-5 h-5 mr-3 mt-1 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                        <span><strong class="font-semibold text-black">Danger Zone (Angle &lt; 90°):</strong> Force is significantly multiplied, exceeding 141% of the rope's load. Narrow angles are hazardous.</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                         <svg class="w-5 h-5 mr-3 mt-1 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                        <span><strong class="font-semibold text-black">Caution Zone (90° - 120°):</strong> The force on the anchor is greater than the load in the rope.</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 mr-3 mt-1 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                         <span><strong class="font-semibold text-black">Safe Zone (Angle > 120°):</strong> The force on the anchor is less than the load in the rope. Wider angles are safer.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
+    <!-- MODALS -->
     <div id="customModal" class="modal-overlay">
         <div class="modal-content">
             <h3 id="modalTitle">Confirmation</h3>
@@ -532,7 +1070,6 @@
             </div>
         </div>
     </div>
-
     <div id="validationModal" class="modal-overlay validation-modal">
         <div class="modal-content">
             <h3>Missing Required Fields</h3>
@@ -542,7 +1079,6 @@
             </div>
         </div>
     </div>
-
     <div id="helpModal" class="modal-overlay">
         <div class="modal-content help-modal-content">
             <h3>How to Use ClimbSmart</h3>
@@ -579,6 +1115,274 @@
             </div>
         </div>
     </div>
+    
+    <!-- ORIGINAL SCRIPT (if you have one) -->
     <script src="script.js"></script>
+
+    <!-- INTEGRATED SCRIPTS FOR NEW FUNCTIONALITY -->
+    <script>
+        // --- MASTER TAB SWITCHING LOGIC ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab-button');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetId = tab.dataset.tab;
+                    
+                    // Deactivate all tabs and contents
+                    tabs.forEach(t => {
+                        t.classList.remove('active');
+                        t.setAttribute('aria-selected', 'false');
+                    });
+                    contents.forEach(c => c.classList.remove('active'));
+
+                    // Activate the clicked tab and corresponding content
+                    tab.classList.add('active');
+                    tab.setAttribute('aria-selected', 'true');
+                    const targetContent = document.getElementById(targetId);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                    
+                    // If the activated tab is a calculator, trigger a resize to force redraw
+                    if (targetId === 'anchor' || targetId === 'cod') {
+                        window.dispatchEvent(new Event('resize'));
+                    }
+                });
+            });
+
+            // Initialize calculators
+            initAnchorCalculator();
+            initCodCalculator();
+        });
+
+        // --- ANCHOR CALCULATOR SCRIPT (ISOLATED) ---
+        function initAnchorCalculator() {
+            const canvas = document.getElementById('anchorCanvas');
+            if (!canvas) return; // Don't run if element not found
+            
+            const ctx = canvas.getContext('2d');
+            const slider = document.getElementById('anchorAngleSlider');
+            const angleValueDisplay = document.getElementById('anchorAngleValue');
+            const weightSlider = document.getElementById('anchorWeightSlider');
+            const weightValueDisplay = document.getElementById('anchorWeightValue');
+            const forceValueDisplay = document.getElementById('anchorForceValue');
+            const forceDisplayCard = document.getElementById('anchor-force-display');
+
+            let angle = 90;
+            let weight = 80;
+
+            function resizeCanvas() {
+                const container = canvas.parentElement;
+                if (container.clientWidth === 0) return; // Don't resize if hidden
+                const size = container.clientWidth;
+                canvas.width = size;
+                canvas.height = size * 0.75;
+                draw();
+            }
+
+            function calculateForce(totalAngle, weightKg) {
+                if (totalAngle === 180) return Infinity;
+                const angleFromVertical = (totalAngle / 2) * (Math.PI / 180);
+                const totalForceKN = weightKg * 0.00980665;
+                const forceOnLegKN = (totalForceKN / 2) / Math.cos(angleFromVertical);
+                return forceOnLegKN;
+            }
+
+            function draw() {
+                const width = canvas.width;
+                const height = canvas.height;
+                ctx.clearRect(0, 0, width, height);
+
+                const masterPoint = { x: width / 2, y: height * 0.75 };
+                const legLength = width * 0.45;
+                const angleRad = angle * (Math.PI / 180);
+
+                const anchor1 = { x: masterPoint.x - legLength * Math.sin(angleRad / 2), y: masterPoint.y - legLength * Math.cos(angleRad / 2) };
+                const anchor2 = { x: masterPoint.x + legLength * Math.sin(angleRad / 2), y: masterPoint.y - legLength * Math.cos(angleRad / 2) };
+                
+                const force = calculateForce(angle, weight);
+                let forceColor = '#3b82f6';
+                if (angle > 90 && angle <= 120) forceColor = '#facc15';
+                else if (angle > 120) forceColor = '#f87171';
+
+                ctx.beginPath();
+                ctx.moveTo(masterPoint.x, masterPoint.y); ctx.lineTo(anchor1.x, anchor1.y);
+                ctx.moveTo(masterPoint.x, masterPoint.y); ctx.lineTo(anchor2.x, anchor2.y);
+                ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 4; ctx.stroke();
+                
+                ctx.fillStyle = '#e5e7eb';
+                ctx.beginPath(); ctx.arc(anchor1.x, anchor1.y, 8, 0, 2 * Math.PI); ctx.fill();
+                ctx.beginPath(); ctx.arc(anchor2.x, anchor2.y, 8, 0, 2 * Math.PI); ctx.fill();
+
+                ctx.fillStyle = forceColor;
+                ctx.beginPath(); ctx.arc(masterPoint.x, masterPoint.y, 10, 0, 2 * Math.PI); ctx.fill();
+                
+                drawArrow(masterPoint.x, masterPoint.y, masterPoint.x, masterPoint.y + height * 0.2, '#60a5fa', 6);
+                
+                const forceVectorLength = Math.min((force / (weight * 0.00980665)) * 100, height * 0.5);
+                drawArrow(masterPoint.x, masterPoint.y, anchor1.x, anchor1.y, forceColor, 6, forceVectorLength);
+                drawArrow(masterPoint.x, masterPoint.y, anchor2.x, anchor2.y, forceColor, 6, forceVectorLength);
+
+                ctx.beginPath();
+                const startAngle = -Math.PI / 2 - angleRad / 2, endAngle = -Math.PI / 2 + angleRad / 2;
+                ctx.arc(masterPoint.x, masterPoint.y, 40, startAngle, endAngle);
+                ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 2; ctx.stroke();
+
+                ctx.fillStyle = '#d1d5db'; ctx.font = '16px Inter';
+                ctx.textAlign = 'center'; ctx.fillText(`${angle}°`, masterPoint.x, masterPoint.y - 45);
+            }
+            
+            function drawArrow(fromx, fromy, tox, toy, color, width, length) {
+                const angle = Math.atan2(toy - fromy, tox - fromx);
+                const headlen = 15;
+                if (length) { tox = fromx + length * Math.cos(angle); toy = fromy + length * Math.sin(angle); }
+                ctx.strokeStyle = color; ctx.lineWidth = width;
+                ctx.beginPath(); ctx.moveTo(fromx, fromy); ctx.lineTo(tox, toy); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(tox, toy);
+                ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 7), toy - headlen * Math.sin(angle - Math.PI / 7));
+                ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 7), toy - headlen * Math.sin(angle + Math.PI / 7));
+                ctx.lineTo(tox, toy);
+                ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 7), toy - headlen * Math.sin(angle - Math.PI / 7));
+                ctx.fillStyle = color; ctx.fill();
+            }
+
+            function updateUI() {
+                angle = parseInt(slider.value);
+                weight = parseInt(weightSlider.value);
+                angleValueDisplay.textContent = `${angle}°`;
+                weightValueDisplay.textContent = `${weight} kg`;
+                const force = calculateForce(angle, weight);
+                let forceText, colorClass, borderClass;
+                forceText = isFinite(force) ? `${force.toFixed(2)} kN` : '∞ kN';
+                if (angle <= 90) { colorClass = 'text-blue-400'; borderClass = 'border-blue-500'; }
+                else if (angle > 90 && angle <= 120) { colorClass = 'text-yellow-400'; borderClass = 'border-yellow-500'; }
+                else { colorClass = 'text-red-400'; borderClass = 'border-red-500'; }
+                forceValueDisplay.textContent = forceText;
+                forceValueDisplay.className = `text-4xl md:text-5xl font-bold transition-colors duration-300 ${colorClass}`;
+                forceDisplayCard.className = ` border-l-4 p-6 rounded-lg shadow-md transition-all duration-300 calculator-card force-display-card ${borderClass}`;
+                draw();
+            }
+
+            slider.addEventListener('input', updateUI);
+            weightSlider.addEventListener('input', updateUI);
+            window.addEventListener('resize', resizeCanvas);
+            
+            // Initial setup
+            resizeCanvas();
+            updateUI();
+        }
+
+        // --- COD CALCULATOR SCRIPT (ISOLATED) ---
+        function initCodCalculator() {
+            const canvas = document.getElementById('codCanvas');
+            if (!canvas) return; // Don't run if element not found
+
+            const ctx = canvas.getContext('2d');
+            const slider = document.getElementById('codAngleSlider');
+            const angleValueDisplay = document.getElementById('codAngleValue');
+            const weightSlider = document.getElementById('codWeightSlider');
+            const weightValueDisplay = document.getElementById('codWeightValue');
+            const forceValueDisplay = document.getElementById('codForceValue');
+            const forceDisplayCard = document.getElementById('cod-force-display');
+
+            let angle = 120;
+            let weight = 80;
+
+            function resizeCanvas() {
+                const container = canvas.parentElement;
+                if (container.clientWidth === 0) return; // Don't resize if hidden
+                const size = container.clientWidth;
+                canvas.width = size;
+                canvas.height = size * 0.75;
+                draw();
+            }
+
+            function calculateForce(totalAngle, weightKg) {
+                const angleRad = totalAngle * (Math.PI / 180);
+                const tensionKN = weightKg * 0.00980665;
+                const force = 2 * tensionKN * Math.cos(angleRad / 2);
+                return Math.abs(force);
+            }
+
+            function draw() {
+                const width = canvas.width;
+                const height = canvas.height;
+                ctx.clearRect(0, 0, width, height);
+                const anchorPoint = { x: width / 2, y: height / 2 };
+                const legLength = width * 0.6;
+                const angleRad = angle * (Math.PI / 180);
+                const rope1_end = { x: anchorPoint.x - legLength * Math.sin(angleRad / 2), y: anchorPoint.y - legLength * Math.cos(angleRad / 2) };
+                const rope2_end = { x: anchorPoint.x + legLength * Math.sin(angleRad / 2), y: anchorPoint.y - legLength * Math.cos(angleRad / 2) };
+                const force = calculateForce(angle, weight);
+                let forceColor = '#4ade80';
+                if (angle < 90) forceColor = '#f87171';
+                else if (angle >= 90 && angle < 120) forceColor = '#facc15';
+
+                ctx.beginPath();
+                ctx.moveTo(rope1_end.x, rope1_end.y); ctx.lineTo(anchorPoint.x, anchorPoint.y); ctx.lineTo(rope2_end.x, rope2_end.y);
+                ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 4; ctx.stroke();
+                
+                ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 5;
+                ctx.beginPath(); ctx.arc(anchorPoint.x, anchorPoint.y, 12, Math.PI * 0.2, Math.PI * 1.7); ctx.stroke();
+                
+                const initialLoadKN = weight * 0.00980665;
+                const forceRatio = force / initialLoadKN;
+                const forceVectorLength = Math.min(forceRatio * 100, height * 0.45);
+                const forceVectorEnd = { x: anchorPoint.x, y: anchorPoint.y + forceVectorLength };
+                drawArrow(anchorPoint.x, anchorPoint.y, forceVectorEnd.x, forceVectorEnd.y, forceColor, 6);
+                
+                const arcRadius = 40;
+                const startAngle = (3 * Math.PI / 2) - (angleRad / 2);
+                const endAngle = (3 * Math.PI / 2) + (angleRad / 2);
+                ctx.beginPath(); ctx.arc(anchorPoint.x, anchorPoint.y, arcRadius, startAngle, endAngle);
+                ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 2; ctx.stroke();
+
+                ctx.fillStyle = '#d1d5db'; ctx.font = '16px Inter';
+                ctx.textAlign = 'center';
+                const textY = (angle > 140) ? anchorPoint.y - 15 : anchorPoint.y - arcRadius - 10;
+                ctx.fillText(`${angle}°`, anchorPoint.x, textY);
+            }
+            
+            function drawArrow(fromx, fromy, tox, toy, color, width) {
+                const headlen = 15;
+                const angle = Math.atan2(toy - fromy, tox - fromx);
+                ctx.strokeStyle = color; ctx.lineWidth = width;
+                ctx.beginPath(); ctx.moveTo(fromx, fromy); ctx.lineTo(tox, toy); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(tox, toy);
+                ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 7), toy - headlen * Math.sin(angle - Math.PI / 7));
+                ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 7), toy - headlen * Math.sin(angle + Math.PI / 7));
+                ctx.lineTo(tox, toy);
+                ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 7), toy - headlen * Math.sin(angle - Math.PI / 7));
+                ctx.fillStyle = color; ctx.fill();
+            }
+
+            function updateUI() {
+                angle = parseInt(slider.value);
+                weight = parseInt(weightSlider.value);
+                angleValueDisplay.textContent = `${angle}°`;
+                weightValueDisplay.textContent = `${weight} kg`;
+                const force = calculateForce(angle, weight);
+                let forceText, colorClass, borderClass;
+                forceText = `${force.toFixed(2)} kN`;
+                if (angle < 90) { colorClass = 'text-red-400'; borderClass = 'border-red-500'; }
+                else if (angle >= 90 && angle < 120) { colorClass = 'text-yellow-400'; borderClass = 'border-yellow-500'; }
+                else { colorClass = 'text-green-400'; borderClass = 'border-green-500'; }
+                forceValueDisplay.textContent = forceText;
+                forceValueDisplay.className = `text-4xl md:text-5xl font-bold transition-colors duration-300 ${colorClass}`;
+                forceDisplayCard.className = ` border-l-4 p-6 rounded-lg shadow-md transition-all duration-300 calculator-card force-display-card ${borderClass}`;
+                draw();
+            }
+
+            slider.addEventListener('input', updateUI);
+            weightSlider.addEventListener('input', updateUI);
+            window.addEventListener('resize', resizeCanvas);
+            
+            // Initial setup
+            resizeCanvas();
+            updateUI();
+        }
+    </script>
 </body>
 </html>
