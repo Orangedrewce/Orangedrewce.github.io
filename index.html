@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ClimbSmart - Training & Tools</title>
 
-    <!-- Original ClimbSmart Scripts & Styles -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.4.7/peerjs.min.js"></script>
@@ -13,7 +12,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="main.css">
 
-    <!-- Added for Anchor & COD Calculators -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -469,7 +467,7 @@
 /* Keep dynamic force border color on hover */
 #anchor-force-display:hover, #anchor-force-display:focus-within { border-left-color: inherit !important; }
 #cod-force-display:hover, #cod-force-display:focus-within { border-left-color: inherit !important; }
-        
+       
         /* ===================================================================
            ✨ RESPONSIVE FIX: Stack buttons on small screens
            =================================================================== */
@@ -489,6 +487,383 @@
                 max-width: none;
             }
         }
+
+        /* --- START OF SOAP NOTE STYLES --- */
+        #soap {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: transparent;
+            padding: 20px;
+        }
+
+        #soap * {
+            box-sizing: border-box;
+        }
+
+        #soap .soap-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+
+        #soap .header {
+            background: transparent;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #soap .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        #soap .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        #soap .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        #soap .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            margin-top: 20px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        #soap .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        #soap .content {
+            padding: 40px;
+        }
+
+        #soap .section {
+            margin-bottom: 40px;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid transparent;
+            transition: all 0.3s ease;
+            transform: translateY(10px);
+            opacity: 0;
+            animation: soap-slideIn 0.6s ease forwards;
+        }
+
+        #soap .section.subjective { border-left-color: #e74c3c; }
+        #soap .section.objective { border-left-color: #3498db; }
+        #soap .section.assessment { border-left-color: #f39c12; }
+        #soap .section.plan { border-left-color: #27ae60; }
+
+        #soap .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        @keyframes soap-slideIn {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        #soap .section h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #soap .section-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        #soap .subjective .section-icon { background: #e74c3c; }
+        #soap .objective .section-icon { background: #3498db; }
+        #soap .assessment .section-icon { background: #f39c12; }
+        #soap .plan .section-icon { background: #27ae60; }
+
+        #soap .subsection {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        #soap .subsection h3 {
+            color: #34495e;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #soap .field-group {
+            margin-bottom: 20px;
+        }
+
+        #soap .field-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        #soap .field-group textarea,
+        #soap .field-group input,
+        #soap .field-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        #soap .field-group select {
+            -webkit-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2334495e' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+            padding-right: 2.5rem; /* Make room for arrow */
+        }
+
+        #soap .field-group textarea:focus,
+        #soap .field-group input:focus,
+        #soap .field-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+            transform: scale(1.02);
+        }
+
+        #soap .field-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+       
+        #soap .vitals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        #soap .vitals-status-group {
+            display: flex;
+            flex-wrap: wrap; /* Allows items to wrap onto the next line */
+            gap: 10px 20px; /* Vertical and horizontal gap */
+            margin-top: 10px;
+        }
+
+        #soap .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #soap .vital-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        #soap .vital-item label {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        #soap .vital-item input {
+            width: 100%;
+            padding: 8px;
+            margin: 0;
+        }
+
+        #soap .generate-btn {
+            background: transparent;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        #soap .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        #soap .soap-output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 30px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-top: 30px;
+            white-space: pre-wrap;
+            box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: 2px solid #34495e;
+        }
+
+        #soap .output-actions {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            justify-content: flex-end;
+        }
+
+        #soap .action-btn {
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+       
+        #soap .action-btn:hover {
+             transform: translateY(-2px);
+             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        #soap .copy-btn {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        #soap .clear-btn {
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
+        }
+       
+        /* Modal Styles */
+        #soap .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            animation: soap-fadeIn 0.3s;
+        }
+
+        #soap .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 25px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: soap-slideDown 0.4s;
+        }
+       
+        @keyframes soap-fadeIn { from {opacity: 0;} to {opacity: 1;} }
+        @keyframes soap-slideDown { from {transform: translateY(-50px);} to {transform: translateY(0);} }
+
+        #soap .modal-content h2 { margin-bottom: 15px; color: #333; }
+        #soap .modal-content p { margin-bottom: 25px; color: #666; }
+
+        #soap .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        #soap .modal-btn {
+            padding: 10px 25px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        #soap #confirmClearBtn { background-color: #e74c3c; color: white; }
+        #soap #confirmClearBtn:hover { background-color: #c0392b; }
+        #soap #cancelClearBtn { background-color: #bdc3c7; color: #333; }
+        #soap #cancelClearBtn:hover { background-color: #95a5a6; }
+
+
+        #soap .hidden {
+            display: none;
+        }
+       
+        @media (max-width: 768px) {
+            #soap .content {
+                padding: 20px;
+            }
+           
+            #soap .header h1 {
+                font-size: 2em;
+            }
+           
+            #soap .vitals-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+        }
+        /* --- END OF SOAP NOTE STYLES --- */
     </style>
 </head>
 <body>
@@ -514,7 +889,7 @@
                 <h3>Support the Project ☕</h3>
                 <a href="https://www.paypal.me/futurefusionpcs" target="_blank" rel="noopener noreferrer" class="qr-link">
                     <div class="paypal-qr">
-                        <img src="data:image/png;base64,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" alt="PayPal">                    </div>
+                        <img src="data:image/png;base64,image" alt="PayPal">                    </div>
                 </a>
                 <p style="font-size: 0.9em; color: #7f8c8d; margin-top: 10px;"></p>
                 <p class="support-text">
@@ -539,10 +914,10 @@
             <button class="tab-button" data-tab="sync" role="tab" aria-selected="false">Sync</button>
             <button class="tab-button" data-tab="anchor" role="tab" aria-selected="false">Anchor</button>
             <button class="tab-button" data-tab="cod" role="tab" aria-selected="false">COD</button>
+            <button class="tab-button" data-tab="soap" role="tab" aria-selected="false">SOAP Note</button>
             <button class="tab-button" data-tab="settings" role="tab" aria-selected="false">Settings</button>
         </div>
 
-        <!-- ORIGINAL TABS -->
         <div id="daily" class="tab-content active" role="tabpanel">
             <div class="date-selector">
                 <label for="currentDate">Date:</label>
@@ -771,7 +1146,7 @@
                         </div>
                     </div>
                 </div>
-            
+           
             <div class="personalization-section">
                 <h3>Personalization Factors (Historical)</h3>
                 <div class="personalization-grid">
@@ -959,11 +1334,8 @@
             </div>
         </div>
 
-        <!-- NEW ANCHOR TAB -->
         <div id="anchor" class="tab-content calculator-body" role="tabpanel">
-            <div class="flex flex-col items-center justify-center p-4"> <!-- Removed  text-gray-200 -->
-                <div class="w-full max-w-4xl rounded-2xl shadow-2xl p-6 md:p-8 calculator-container"> <!-- Removed  -->
-                    <header class="text-center mb-6">
+            <div class="flex flex-col items-center justify-center p-4"> <div class="w-full max-w-4xl rounded-2xl shadow-2xl p-6 md:p-8 calculator-container"> <header class="text-center mb-6">
                         <h1 class="text-3xl md:text-4xl font-bold text-white">Climbing Anchor Force Calculator</h1>
                         <p class="text-gray-400 mt-2">An interactive tool to understand forces on multi-point climbing anchors.</p>
                     </header>
@@ -1008,11 +1380,8 @@
             </div>
         </div>
 
-        <!-- NEW COD TAB -->
         <div id="cod" class="tab-content calculator-body" role="tabpanel">
-            <div class="flex flex-col items-center justify-center p-4"> <!-- Removed  text-gray-200 -->
-                <div class="w-full max-w-4xl rounded-2xl shadow-2xl p-6 md:p-8 calculator-container"> <!-- Removed  -->
-                    <header class="text-center mb-6">
+            <div class="flex flex-col items-center justify-center p-4"> <div class="w-full max-w-4xl rounded-2xl shadow-2xl p-6 md:p-8 calculator-container"> <header class="text-center mb-6">
                         <h1 class="text-3xl md:text-4xl font-bold text-white">Change of Direction (COD) Anchor Force Calculator</h1>
                         <p class="text-gray-400 mt-2">An interactive tool to understand forces on directional anchors.</p>
                     </header>
@@ -1057,9 +1426,264 @@
             </div>
         </div>
 
+        <div id="soap" class="tab-content" role="tabpanel">
+            <div class="soap-container">
+                <div class="header">
+                    <h1>🏔️ Wilderness SOAP Note</h1>
+                    <p>Interactive Patient Assessment Documentation</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <div class="content">
+                    <div class="section subjective" style="animation-delay: 0.1s">
+                        <h2>
+                            <span class="section-icon">S</span>
+                            ubjective
+                        </h2>
+
+                        <div class="subsection">
+                            <h3>📋 Introduction & Patient Information</h3>
+                            <div class="field-group">
+                                <label for="rescuerName">Your name and location:</label>
+                                <input type="text" id="rescuerName" placeholder="e.g., Jane Doe at Millcreek Canyon">
+                            </div>
+                            <div class="field-group">
+                                <label for="patientInfo">Patient's age, gender, and chief complaint:</label>
+                                <input type="text" id="patientInfo" placeholder="e.g., 25-year-old male with ankle injury">
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <h3>🎯 OPQRST Assessment</h3>
+                            <div class="field-group">
+                                <label for="onset">Onset - When did this start?</label>
+                                <textarea id="onset" placeholder="Describe when the problem began..."></textarea>
+                            </div>
+                            <div class="field-group">
+                                <label for="provocation">Provocation/Palliation - What makes it better or worse?</label>
+                                <textarea id="provocation" placeholder="What triggers or relieves the symptoms..."></textarea>
+                            </div>
+                            <div class="field-group">
+                                <label for="quality">Quality - What does it feel like?</label>
+                                <textarea id="quality" placeholder="Sharp, dull, throbbing, burning, etc..."></textarea>
+                            </div>
+                            <div class="field-group">
+                                <label for="radiation">Radiation/Region - Where is it? Does it spread?</label>
+                                <textarea id="radiation" placeholder="Location and any radiation of symptoms..."></textarea>
+                            </div>
+                            <div class="field-group">
+                                <label for="severity">Severity - Rate 1-10 or describe intensity:</label>
+                                <input type="text" id="severity" placeholder="e.g., 7/10 or moderate">
+                            </div>
+                            <div class="field-group">
+                                <label for="time">Time - Duration and progression:</label>
+                                <textarea id="time" placeholder="How long, getting better/worse..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <h3>⚡ Mechanism of Injury / History of Present Illness</h3>
+                            <div class="field-group">
+                                <label for="moiHpi">Describe what happened:</label>
+                                <textarea id="moiHpi" placeholder="Detailed description of the incident or illness onset..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <h3>🧠 Level of Responsiveness</h3>
+                            <div class="field-group">
+                                <label for="lor">Current LOR (AVPU):</label>
+                                <select id="lor">
+                                    <option value="">Select LOR...</option>
+                                    <option value="Alert">Alert</option>
+                                    <option value="Verbal">Verbal</option>
+                                    <option value="Painful">Painful</option>
+                                    <option value="Unresponsive">Unresponsive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section objective" style="animation-delay: 0.2s">
+                        <h2>
+                            <span class="section-icon">O</span>
+                            bjective
+                        </h2>
+
+                        <div class="subsection">
+                            <h3>🔍 Physical Examination Findings</h3>
+                            <div class="field-group">
+                                <label for="headToToe">Significant head-to-toe findings:</label>
+                                <textarea id="headToToe" placeholder="Document significant physical findings from your examination..."></textarea>
+                            </div>
+                            <div class="field-group">
+                                <label for="foundPosition">Position patient was found in:</label>
+                                <input type="text" id="foundPosition" placeholder="e.g., supine, prone, sitting against tree">
+                            </div>
+                            <div class="field-group">
+                                <label for="pertinentNegatives">Pertinent negatives:</label>
+                                <textarea id="pertinentNegatives" placeholder="e.g., no loss of consciousness, no spine pain, normal CSMs..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <h3>📊 Vital Signs</h3>
+                            <div class="field-group">
+                                <label>Vital signs status:</label>
+                                <div class="vitals-status-group">
+                                    <label class="radio-label">
+                                        <input type="radio" name="vitalsStatus" value="stable"> Stable
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="vitalsStatus" value="unstable"> Unstable
+                                    </label>
+                                </div>
+                            </div>
+                           
+                            <div class="vitals-grid">
+                                <div class="vital-item">
+                                    <label for="heartRate">Heart Rate:</label>
+                                    <input type="text" id="heartRate" placeholder="e.g., 80 strong">
+                                </div>
+                                <div class="vital-item">
+                                    <label for="respRate">Respiratory Rate:</label>
+                                    <input type="text" id="respRate" placeholder="e.g., 16 normal">
+                                </div>
+                                <div class="vital-item">
+                                    <label for="sctm">SCTM:</label>
+                                    <input type="text" id="sctm" placeholder="e.g., Pink, warm, dry">
+                                </div>
+                                <div class="vital-item">
+                                    <label for="perrl">PERRL:</label>
+                                    <input type="text" id="perrl" placeholder="e.g., 3mm reactive">
+                                </div>
+                                <div class="vital-item">
+                                    <label for="temperature">Temperature:</label>
+                                    <input type="text" id="temperature" placeholder="e.g., Normal to touch">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <h3>📋 SAMPLE History</h3>
+                            <div class="field-group">
+                                <label for="symptoms">Signs/Symptoms:</label>
+                                <textarea id="symptoms" placeholder="Current signs and symptoms..."></textarea>
+                            </div>
+                            <div class="field-group">
+                                <label for="allergies">Allergies:</label>
+                                <input type="text" id="allergies" placeholder="Known allergies or NKDA">
+                            </div>
+                            <div class="field-group">
+                                <label for="medications">Medications:</label>
+                                <textarea id="medications" placeholder="Current medications..."></textarea>
+                            </div>
+                            <div class="field-group">
+                                <label for="pertinentHistory">Pertinent medical history:</label>
+                                <textarea id="pertinentHistory" placeholder="Relevant past medical history..."></textarea>
+                            </div>
+                            <div class="field-group">
+                                <label for="lastInsOuts">Last ins/outs:</label>
+                                <input type="text" id="lastInsOuts" placeholder="Last meal, fluids, urination">
+                            </div>
+                            <div class="field-group">
+                                <label for="events">Events leading up to incident:</label>
+                                <textarea id="events" placeholder="What was happening before the incident..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section assessment" style="animation-delay: 0.3s">
+                        <h2>
+                            <span class="section-icon">A</span>
+                            ssessment
+                        </h2>
+
+                        <div class="subsection">
+                            <h3>🎯 Problem List</h3>
+                            <div class="field-group">
+                                <label for="problemList">List possible problems or diagnoses:</label>
+                                <textarea id="problemList" placeholder="List all identified and suspected problems..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <h3>🦴 Spine Injury Assessment</h3>
+                            <div class="field-group">
+                                <label for="spineAssessment">Based on MOI, is there possible spine injury?</label>
+                                <textarea id="spineAssessment" placeholder="Assess spine injury risk based on mechanism of injury..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section plan" style="animation-delay: 0.4s">
+                        <h2>
+                            <span class="section-icon">P</span>
+                            lan
+                        </h2>
+
+                        <div class="subsection">
+                            <h3>🩹 Treatment Plan</h3>
+                            <div class="field-group">
+                                <label for="treatments">Describe treatment for each problem:</label>
+                                <textarea id="treatments" placeholder="Include FSA or spinal immobilization as needed..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <h3>🚁 Evacuation Plan</h3>
+                            <div class="field-group">
+                                <label for="evacuation">Detail the evacuation plan:</label>
+                                <textarea id="evacuation" placeholder="Method, urgency, destination..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <h3>🤝 Support Requested</h3>
+                            <div class="field-group">
+                                <label for="support">What support is requested?</label>
+                                <textarea id="support" placeholder="Additional resources, personnel, equipment needed..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="subsection">
+                            <h3>⚠️ Anticipated Problems</h3>
+                            <div class="field-group">
+                                <label for="anticipatedProblems">Anticipated problems during treatment or evacuation:</label>
+                                <textarea id="anticipatedProblems" placeholder="Potential complications or challenges..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="generate-btn" onclick="generateSOAP()">
+                        Generate SOAP Note 📄
+                    </button>
+
+                    <div id="soapOutput" class="soap-output hidden"></div>
+                   
+                    <div id="outputActions" class="output-actions hidden">
+                         <button id="copyButton" class="action-btn copy-btn">Copy Report 📋</button>
+                         <button id="clearButton" class="action-btn clear-btn">Clear Form 🗑️</button>
+                    </div>
+                </div>
+            </div>
+           
+            <div id="clearModal" class="modal">
+                <div class="modal-content">
+                    <h2>Confirm Clear</h2>
+                    <p>Are you sure you want to clear all entries? This cannot be undone.</p>
+                    <div class="modal-buttons">
+                        <button id="cancelClearBtn" class="modal-btn">Cancel</button>
+                        <button id="confirmClearBtn" class="modal-btn">Yes, Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <!-- MODALS -->
     <div id="customModal" class="modal-overlay">
         <div class="modal-content">
             <h3 id="modalTitle">Confirmation</h3>
@@ -1091,23 +1715,23 @@
                 <p><strong>DOMS & Tendons:</strong> How sore your muscles and tendons feel. Higher = more pain.</p>
                 <p><strong>Skin Condition:</strong> "Perfect" = ready to grip, "Raw/Burning" = needs recovery.</p>
                 <p><strong>Days Since Last Session:</strong> How many days since you last climbed or trained.</p>
-                <p><strong>Intensity (RPE 1-10, 0=rest):</strong> How hard your last workout felt. Skip if it was a rest day.</p>             
+                <p><strong>Intensity (RPE 1-10, 0=rest):</strong> How hard your last workout felt. Skip if it was a rest day.</p>                  
                 <p><strong>Completed Today:</strong> Check all activities you did today (climbing, weights, cardio, etc).</p>
                 <p><strong>Pre-Training Meal:</strong> Did you eat before training? Affects energy levels.</p>
-                
+               
                 <p><strong>📈 History & Analytics:</strong></p>
                 <p><strong>Training History:</strong> View all your past entries organized by week. Each entry shows your readiness score, metrics, and recommendations.</p>
                 <p><strong>Delete Entries:</strong> Click the "Delete" button on any log entry to remove it permanently.</p>
                 <p><strong>Export Data:</strong> Export your training data as CSV for analysis in other apps.</p>
                 <p><strong>Analytics Charts:</strong> Toggle different metrics on/off to see trends over time. Click the colored buttons to show/hide specific data lines.</p>
                 <p><strong>Personalization Factors:</strong> See how your sleep patterns and injury history affect your recommendations.</p>
-                
+               
                 <p><strong>🔄 Data Sync:</strong></p>
                 <p><strong>Send Data:</strong> Generate a 6-digit code to share your training data with another device. The receiving device scans your QR code or enters the code manually.</p>
                 <p><strong>Receive Data:</strong> Enter a 6-digit code from another device, or use the 📷 camera button to scan a QR code and receive training data.</p>
                 <p><strong>Data Backup:</strong> Create backup codes to save your data safely. Copy the generated code and store it somewhere safe.</p>
                 <p><strong>Restore Data:</strong> Paste a backup code to restore your training history from a previous backup.</p>
-                
+               
                 <p><strong>Data Privacy:</strong> All data stays on your device - nothing is sent to external servers unless you manually sync with another device.</p>
             </div>
             <div class="modal-buttons">
@@ -1115,11 +1739,9 @@
             </div>
         </div>
     </div>
-    
-    <!-- ORIGINAL SCRIPT (if you have one) -->
+   
     <script src="script.js"></script>
 
-    <!-- INTEGRATED SCRIPTS FOR NEW FUNCTIONALITY -->
     <script>
         // --- MASTER TAB SWITCHING LOGIC ---
         document.addEventListener('DOMContentLoaded', () => {
@@ -1129,7 +1751,7 @@
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
                     const targetId = tab.dataset.tab;
-                    
+                   
                     // Deactivate all tabs and contents
                     tabs.forEach(t => {
                         t.classList.remove('active');
@@ -1144,7 +1766,7 @@
                     if (targetContent) {
                         targetContent.classList.add('active');
                     }
-                    
+                   
                     // If the activated tab is a calculator, trigger a resize to force redraw
                     if (targetId === 'anchor' || targetId === 'cod') {
                         window.dispatchEvent(new Event('resize'));
@@ -1161,7 +1783,7 @@
         function initAnchorCalculator() {
             const canvas = document.getElementById('anchorCanvas');
             if (!canvas) return; // Don't run if element not found
-            
+           
             const ctx = canvas.getContext('2d');
             const slider = document.getElementById('anchorAngleSlider');
             const angleValueDisplay = document.getElementById('anchorAngleValue');
@@ -1201,7 +1823,7 @@
 
                 const anchor1 = { x: masterPoint.x - legLength * Math.sin(angleRad / 2), y: masterPoint.y - legLength * Math.cos(angleRad / 2) };
                 const anchor2 = { x: masterPoint.x + legLength * Math.sin(angleRad / 2), y: masterPoint.y - legLength * Math.cos(angleRad / 2) };
-                
+               
                 const force = calculateForce(angle, weight);
                 let forceColor = '#3b82f6';
                 if (angle > 90 && angle <= 120) forceColor = '#facc15';
@@ -1211,16 +1833,16 @@
                 ctx.moveTo(masterPoint.x, masterPoint.y); ctx.lineTo(anchor1.x, anchor1.y);
                 ctx.moveTo(masterPoint.x, masterPoint.y); ctx.lineTo(anchor2.x, anchor2.y);
                 ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 4; ctx.stroke();
-                
+               
                 ctx.fillStyle = '#e5e7eb';
                 ctx.beginPath(); ctx.arc(anchor1.x, anchor1.y, 8, 0, 2 * Math.PI); ctx.fill();
                 ctx.beginPath(); ctx.arc(anchor2.x, anchor2.y, 8, 0, 2 * Math.PI); ctx.fill();
 
                 ctx.fillStyle = forceColor;
                 ctx.beginPath(); ctx.arc(masterPoint.x, masterPoint.y, 10, 0, 2 * Math.PI); ctx.fill();
-                
+               
                 drawArrow(masterPoint.x, masterPoint.y, masterPoint.x, masterPoint.y + height * 0.2, '#60a5fa', 6);
-                
+               
                 const forceVectorLength = Math.min((force / (weight * 0.00980665)) * 100, height * 0.5);
                 drawArrow(masterPoint.x, masterPoint.y, anchor1.x, anchor1.y, forceColor, 6, forceVectorLength);
                 drawArrow(masterPoint.x, masterPoint.y, anchor2.x, anchor2.y, forceColor, 6, forceVectorLength);
@@ -1233,7 +1855,7 @@
                 ctx.fillStyle = '#d1d5db'; ctx.font = '16px Inter';
                 ctx.textAlign = 'center'; ctx.fillText(`${angle}°`, masterPoint.x, masterPoint.y - 45);
             }
-            
+           
             function drawArrow(fromx, fromy, tox, toy, color, width, length) {
                 const angle = Math.atan2(toy - fromy, tox - fromx);
                 const headlen = 15;
@@ -1268,7 +1890,7 @@
             slider.addEventListener('input', updateUI);
             weightSlider.addEventListener('input', updateUI);
             window.addEventListener('resize', resizeCanvas);
-            
+           
             // Initial setup
             resizeCanvas();
             updateUI();
@@ -1323,16 +1945,16 @@
                 ctx.beginPath();
                 ctx.moveTo(rope1_end.x, rope1_end.y); ctx.lineTo(anchorPoint.x, anchorPoint.y); ctx.lineTo(rope2_end.x, rope2_end.y);
                 ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 4; ctx.stroke();
-                
+               
                 ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 5;
                 ctx.beginPath(); ctx.arc(anchorPoint.x, anchorPoint.y, 12, Math.PI * 0.2, Math.PI * 1.7); ctx.stroke();
-                
+               
                 const initialLoadKN = weight * 0.00980665;
                 const forceRatio = force / initialLoadKN;
                 const forceVectorLength = Math.min(forceRatio * 100, height * 0.45);
                 const forceVectorEnd = { x: anchorPoint.x, y: anchorPoint.y + forceVectorLength };
                 drawArrow(anchorPoint.x, anchorPoint.y, forceVectorEnd.x, forceVectorEnd.y, forceColor, 6);
-                
+               
                 const arcRadius = 40;
                 const startAngle = (3 * Math.PI / 2) - (angleRad / 2);
                 const endAngle = (3 * Math.PI / 2) + (angleRad / 2);
@@ -1344,7 +1966,7 @@
                 const textY = (angle > 140) ? anchorPoint.y - 15 : anchorPoint.y - arcRadius - 10;
                 ctx.fillText(`${angle}°`, anchorPoint.x, textY);
             }
-            
+           
             function drawArrow(fromx, fromy, tox, toy, color, width) {
                 const headlen = 15;
                 const angle = Math.atan2(toy - fromy, tox - fromx);
@@ -1378,11 +2000,231 @@
             slider.addEventListener('input', updateUI);
             weightSlider.addEventListener('input', updateUI);
             window.addEventListener('resize', resizeCanvas);
-            
+           
             // Initial setup
             resizeCanvas();
             updateUI();
         }
+    </script>
+    <script>
+        // DOM Elements
+        const clearModal = document.getElementById('clearModal');
+        const confirmClearBtn = document.getElementById('confirmClearBtn');
+        const cancelClearBtn = document.getElementById('cancelClearBtn');
+
+        // Progress tracking
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            if (!progressFill) return; // Don't run if the tab isn't active/elements don't exist yet
+
+            const inputs = document.querySelectorAll('#soap input[type="text"], #soap input[type="radio"]:checked, #soap textarea, #soap select');
+            const totalFields = document.querySelectorAll('#soap input[type="text"], #soap textarea, #soap select').length + (document.querySelectorAll('#soap input[name="vitalsStatus"]').length > 0 ? 1 : 0);
+           
+            let filled = 0;
+            document.querySelectorAll('#soap input[type="text"], #soap textarea, #soap select').forEach(input => {
+                if (input.value.trim() !== '') filled++;
+            });
+
+            if (document.querySelector('#soap input[name="vitalsStatus"]:checked')) {
+                filled++;
+            }
+
+            const progress = totalFields > 0 ? (filled / totalFields) * 100 : 0;
+            progressFill.style.width = progress + '%';
+        }
+
+
+        // Add event listeners to all inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            const soapTab = document.getElementById('soap');
+            if (!soapTab) return; // Exit if the soap tab isn't on the page
+
+            const inputs = soapTab.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                input.addEventListener('input', updateProgress);
+                input.addEventListener('change', updateProgress);
+            });
+           
+            const copyButton = document.getElementById('copyButton');
+            if (copyButton) {
+                copyButton.addEventListener('click', copyReport);
+            }
+           
+            const clearButton = document.getElementById('clearButton');
+            if (clearButton) {
+                clearButton.addEventListener('click', () => {
+                    if (clearModal) clearModal.style.display = 'block';
+                });
+            }
+           
+            // Modal listeners
+            if (cancelClearBtn) {
+                cancelClearBtn.addEventListener('click', () => clearModal.style.display = 'none');
+            }
+            if (confirmClearBtn) {
+                confirmClearBtn.addEventListener('click', clearForm);
+            }
+            window.addEventListener('click', (event) => {
+                if (event.target == clearModal) {
+                    clearModal.style.display = 'none';
+                }
+            });
+
+            loadAutoSave();
+            updateProgress();
+        });
+
+        function generateSOAP() {
+            const vitalsStatus = document.querySelector('#soap input[name="vitalsStatus"]:checked')?.value || '[Not documented]';
+            let vitalsDetails = '';
+            // Only add vitals details if a status is selected
+            if (vitalsStatus !== '[Not documented]') {
+                vitalsDetails = `
+• Heart Rate: ${document.getElementById('heartRate').value || '[Not documented]'}
+• Respiratory Rate: ${document.getElementById('respRate').value || '[Not documented]'}
+• SCTM: ${document.getElementById('sctm').value || '[Not documented]'}
+• PERRL: ${document.getElementById('perrl').value || '[Not documented]'}
+• Temperature: ${document.getElementById('temperature').value || '[Not documented]'}`;
+            }
+
+            const soapNote = `
+WILDERNESS SOAP NOTE
+====================
+
+SUBJECTIVE:
+-----------
+Rescuer: ${document.getElementById('rescuerName').value || '[Not provided]'}
+Patient: ${document.getElementById('patientInfo').value || '[Not provided]'}
+
+OPQRST Assessment:
+• Onset: ${document.getElementById('onset').value || '[Not documented]'}
+• Provocation/Palliation: ${document.getElementById('provocation').value || '[Not documented]'}
+• Quality: ${document.getElementById('quality').value || '[Not documented]'}
+• Radiation/Region: ${document.getElementById('radiation').value || '[Not documented]'}
+• Severity: ${document.getElementById('severity').value || '[Not documented]'}
+• Time: ${document.getElementById('time').value || '[Not documented]'}
+
+Mechanism of Injury/HPI: ${document.getElementById('moiHpi').value || '[Not documented]'}
+Current Level of Responsiveness: ${document.getElementById('lor').value || '[Not documented]'}
+
+OBJECTIVE:
+----------
+Head-to-Toe Findings: ${document.getElementById('headToToe').value || '[Not documented]'}
+Position Found: ${document.getElementById('foundPosition').value || '[Not documented]'}
+Pertinent Negatives: ${document.getElementById('pertinentNegatives').value || '[Not documented]'}
+
+Vital Signs Status: ${vitalsStatus}
+Vital Signs Details:${vitalsDetails}
+
+SAMPLE History:
+• Signs/Symptoms: ${document.getElementById('symptoms').value || '[Not documented]'}
+• Allergies: ${document.getElementById('allergies').value || '[Not documented]'}
+• Medications: ${document.getElementById('medications').value || '[Not documented]'}
+• Pertinent History: ${document.getElementById('pertinentHistory').value || '[Not documented]'}
+• Last Ins/Outs: ${document.getElementById('lastInsOuts').value || '[Not documented]'}
+• Events: ${document.getElementById('events').value || '[Not documented]'}
+
+ASSESSMENT:
+-----------
+Problem List: ${document.getElementById('problemList').value || '[Not documented]'}
+Spine Injury Assessment: ${document.getElementById('spineAssessment').value || '[Not documented]'}
+
+PLAN:
+-----
+Treatment Plan: ${document.getElementById('treatments').value || '[Not documented]'}
+Evacuation Plan: ${document.getElementById('evacuation').value || '[Not documented]'}
+Support Requested: ${document.getElementById('support').value || '[Not documented]'}
+Anticipated Problems: ${document.getElementById('anticipatedProblems').value || '[Not documented]'}
+
+Generated: ${new Date().toLocaleString()}
+            `;
+
+            const outputDiv = document.getElementById('soapOutput');
+            outputDiv.textContent = soapNote.trim();
+            outputDiv.classList.remove('hidden');
+            document.getElementById('outputActions').classList.remove('hidden');
+            outputDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copyReport() {
+            const textToCopy = document.getElementById('soapOutput').textContent;
+            const copyButton = document.getElementById('copyButton');
+           
+            const textArea = document.createElement('textarea');
+            textArea.value = textToCopy;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                copyButton.textContent = 'Copied!';
+                setTimeout(() => { copyButton.textContent = 'Copy Report 📋'; }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                copyButton.textContent = 'Copy Failed';
+                 setTimeout(() => { copyButton.textContent = 'Copy Report 📋'; }, 2000);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function clearForm() {
+            // Clear all form fields
+            document.querySelectorAll('#soap input[type="text"], #soap textarea, #soap select').forEach(input => {
+                input.value = '';
+            });
+            document.querySelectorAll('#soap input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+
+            // Hide the output section and modal
+            document.getElementById('soapOutput').classList.add('hidden');
+            document.getElementById('outputActions').classList.add('hidden');
+            if(clearModal) clearModal.style.display = 'none';
+
+
+            // Clear saved data from localStorage
+            localStorage.removeItem('wildernessSoapNote');
+
+            // Update the progress bar to 0 and scroll to top
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+       
+        // Auto-save functionality
+        function autoSave() {
+            if (!document.getElementById('soap')) return; // Don't save if the tab doesn't exist
+
+            const data = {};
+            document.querySelectorAll('#soap input[type="text"], #soap textarea, #soap select').forEach(input => {
+                data[input.id] = input.value;
+            });
+            document.querySelectorAll('#soap input[type="radio"]').forEach(radio => {
+                if(radio.checked) {
+                    data[radio.name] = radio.value;
+                }
+            });
+            localStorage.setItem('wildernessSoapNote', JSON.stringify(data));
+        }
+
+        function loadAutoSave() {
+            if (!document.getElementById('soap')) return; // Don't load if tab doesn't exist
+           
+            const savedData = localStorage.getItem('wildernessSoapNote');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                for (const key in data) {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = data[key];
+                    } else if (document.querySelector(`#soap input[name="${key}"][value="${data[key]}"]`)) {
+                        document.querySelector(`#soap input[name="${key}"][value="${data[key]}"]`).checked = true;
+                    }
+                }
+            }
+        }
+
+        // Auto-save every 5 seconds
+        setInterval(autoSave, 5000);
+
     </script>
 </body>
 </html>
